@@ -1,38 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouChallenge - Tournament Organizer Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white">
-    <header class="bg-green-800/70 backdrop-blur-sm p-6 shadow-2xl fixed w-full top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{ asset('images/logo.png') }}" alt="Tournament Championship Logo" class="h-12 w-auto mr-4">
-                
-                <span class="text-3xl font-bold text-white">YouChallenge</span>
-            </div>
-            <nav>
-                <ul class="flex space-x-4 items-center">
-                    <li><a href="" class="text-white hover:text-green-300 transition duration-300">Dashboard</a></li>
-                    <li><a href="" class="text-white hover:text-green-300 transition duration-300">Manage Tournaments</a></li>
-                    <li><a href="" class="text-white hover:text-green-300 transition duration-300">Create Tournament</a></li>
-                    <li><a href="" class="text-white hover:text-green-300 transition duration-300">Profile</a></li>
-                    <li>
-                        <a class="text-white hover:text-green-200 flex items-center bg-green-900 px-3 py-2 rounded-lg" href="{{route('logout')}}">
-                          <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                        </a>
-                      </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+@extends('layouts.organisator.master')
+   @section('organisator.title')
+       Organisator|Home 
+   @endsection
+   @section('organisator-main')
 
     <main class="relative">
-        <section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('{{ asset('/project/public/images/backgroundimg.jpg') }}');">
+        <section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url({{ asset('images/background.png') }});">
             <div class="absolute inset-0 bg-black opacity-60"></div>
             <div class="relative z-10 text-center px-4">
                 <h2 class="text-5xl font-bold mb-6 text-white drop-shadow-lg">Tournament Organizer Hub</h2>
@@ -123,13 +96,5 @@
         </section>
     </main>
 
-    <footer class="bg-green-900 p-6 text-center">
-        <p class="text-white">© 2024 YouChallenge Tournament Organizer</p>
-        <div class="mt-4 space-x-4">
-            <a href="#" class="text-green-300 hover:text-white">Support</a>
-            <a href="#" class="text-green-300 hover:text-white">Help Center</a>
-            <a href="#" class="text-green-300 hover:text-white">Contact</a>
-        </div>
-    </footer>
-</body>
-</html>
+           
+   @endsection 

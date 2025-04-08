@@ -31,17 +31,6 @@ Route::get('/home', function () {
     return view('accueil');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('admin/statistics');
-})->name('dashboard')->middleware('role:admin')->middleware('nocache');
-
-Route::get('/organisator/home', function () {
-    return view('organisator/home');
-})->name('organisator.home')->middleware('role:organisator')->middleware('nocache');
-
-Route::get('/participant/home', function () {
-    return view('participant/home');
-})->name('participant.home')->middleware('role:participant')->middleware('nocache');
 
 // Auth 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -51,7 +40,28 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin/statistics');
+    })->name('admin.dashboard')->middleware('nocache');
     Route::get('/admin/manageusers', [UserController::class, 'index'])->name('admin.manageusers')->middleware('nocache');
     Route::patch('/edite/status/{user}', [UserController::class, 'edite'])->name('admin.managestatus');
-    
 });
+
+
+
+// organizer
+Route::get('/organisator/home', function () {
+    return view('organisator/home');
+})->name('organisator.home')->middleware('role:organizator')->middleware('nocache');
+Route::get('/organisator/dashboard', function () {
+    return view('organisator/dashboard');
+})->name('organisator.dashboard')->middleware('role:organizator')->middleware('nocache');
+
+
+
+// participant
+Route::get('/participant/home', function () {
+    return view('participant/home');
+})->name('participant.home')->middleware('role:participant')->middleware('nocache');
+
+

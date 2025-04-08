@@ -1,7 +1,7 @@
 
-    @extends('layouts.master')
+    @extends('layouts.admin.master')
 
-    @section('title')
+    @section('admin-title')
         statistics
     @endsection
     @section('main')

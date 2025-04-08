@@ -22,7 +22,6 @@ class UserController extends Controller
         $users = User::with('roles', 'participant', 'organisator')->whereHas('roles', function ($query) {
             $query->whereIn('name', ['organizator', 'participant']);
         })->paginate(5);
-        dd($users);
         
         return view('admin.manageusers', compact('users'));
     }
@@ -30,7 +29,6 @@ class UserController extends Controller
     public function edite(EditeUserRequest $request, User $user)
     {
         $rederiction = redirect()->route('admin.manageusers')->with('success', 'User status updated successfully!');
-        // dd($user->organisator->status);
         if($user->participant){
             if($request->status == $user->participant->status){
                 return $rederiction ;

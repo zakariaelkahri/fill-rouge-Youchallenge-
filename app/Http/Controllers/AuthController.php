@@ -65,14 +65,13 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $role = $user->roles->first()->name;
             if($role === 'admin'){
-            return redirect()->intended('dashboard');
+            return redirect()->intended(route('admin.dashboard'));
             }elseif($role === 'organizator'){
 
-            return redirect()->intended('organisator.home');
-                
+                return redirect()->intended(route('organisator.home'));                
             }else{
 
-            return redirect()->intended('participant.home');
+            return redirect()->intended(route('participant.home'));
 
             }
 

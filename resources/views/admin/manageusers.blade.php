@@ -1,5 +1,5 @@
-@extends('layouts.master')
-@section('title')
+@extends('layouts.admin.master')
+@section('admin-title')
     manage-users
 @endsection
 @section('main') 

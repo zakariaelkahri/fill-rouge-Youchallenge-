@@ -10,13 +10,13 @@
     <title>youchallenge | @yield('title')</title>
 </head>
 <body>
-    @include('partials.nav')
+    @include('partials.admin.nav')
         <div class="flex">
-        @include('partials.sidebar')
+        @include('partials.admin.sidebar')
         @yield('main')
 
         </div>
-    @include('partials.footer ')
+    @include('partials.admin.footer ')
 
 
 </body>
