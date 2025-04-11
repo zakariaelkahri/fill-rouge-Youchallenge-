@@ -1,4 +1,4 @@
-<!-- 
+<?php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,8 +11,5 @@ class OrganisatorController extends Controller
         return view('organisator.home');
     }
 
-    // public function manageEvents()
-    // {
-    //     return view('organisator.events'); // Make sure this Blade file exists
-    // }
-} -->
+
+}

@@ -5,14 +5,14 @@
    @section('organisator-main')
 
     <main class="relative">
-        <section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url({{ asset('images/background.png') }});">
+        <section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url({{ asset('images/backgroundimg.jpg') }});">
             <div class="absolute inset-0 bg-black opacity-60"></div>
             <div class="relative z-10 text-center px-4">
                 <h2 class="text-5xl font-bold mb-6 text-white drop-shadow-lg">Tournament Organizer Hub</h2>
                 <p class="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
                     Streamline your tournament management, track participants, and create unforgettable gaming experiences.
                 </p>
-                <a href="" class="bg-green-600 text-white py-3 px-6 rounded-full text-lg hover:bg-green-700 transition duration-300 inline-block shadow-xl hover:scale-105 transform">
+                <a href="{{route('organisator.createmytournament')}}" class="bg-green-600 text-white py-3 px-6 rounded-full text-lg hover:bg-green-700 transition duration-300 inline-block shadow-xl hover:scale-105 transform">
                     Create New Tournament
                 </a>
             </div>

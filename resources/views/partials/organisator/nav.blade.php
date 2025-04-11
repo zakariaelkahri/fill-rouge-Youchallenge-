@@ -9,8 +9,8 @@
             <ul class="flex flex-wrap space-x-2 md:space-x-4 items-center">
                 <li><a href="{{route('organisator.home')}}" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Home</a></li>
                 <li><a href="{{route('organisator.dashboard')}}" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Dashboard</a></li>
-                <li><a href="" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Manage Tournaments</a></li>
-                <li><a href="" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Create Tournament</a></li>
+                <li><a href="{{route('organisator.managetournament')}}" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Manage Tournaments</a></li>
+                <li><a href="{{route('organisator.createmytournament')}}" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Create Tournament</a></li>
                 <li><a href="" class="text-white hover:text-green-300 transition duration-300 px-2 py-1">Profile</a></li>
                 <li>
                     <a class="text-white hover:text-green-200 flex items-center bg-green-900 px-3 py-2 rounded-lg" href="{{route('logout')}}">

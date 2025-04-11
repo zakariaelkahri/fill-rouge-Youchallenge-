@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Organisator\TournamentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,13 +51,27 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // organizer
+Route::middleware(['auth','role:organizator'])->middleware('nocache')->group(function(){
 Route::get('/organisator/home', function () {
     return view('organisator/home');
-})->name('organisator.home')->middleware('role:organizator')->middleware('nocache');
+})->name('organisator.home');
 Route::get('/organisator/dashboard', function () {
     return view('organisator/dashboard');
-})->name('organisator.dashboard')->middleware('role:organizator')->middleware('nocache');
+})->name('organisator.dashboard');
 
+Route::get('/organisator/create/tournament', function () {
+    return view('organisator/createtournament');
+})->name('organisator.createmytournament');
+
+Route::get('/organisator/manage/tournament', function () {
+    return view('organisator/managetournament');
+})->name('organisator.managetournament');
+
+Route::post('/organisator/createtournament', [TournamentController::class, 'store'])->name('organisator.tournament.store');
+
+Route::get('/organisator/manage/tournament', [TournamentController::class, 'index'])->name('organisator.managetournament');
+
+});
 
 
 // participant
