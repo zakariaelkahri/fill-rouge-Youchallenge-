@@ -37,6 +37,7 @@ class TournamentController extends Controller
         'reward',
         'rules',
         );
+        
         try {
         $tournement = $this->tournamentService->store($data);
         Log::info('tournament created successfully' . $tournement->name);
