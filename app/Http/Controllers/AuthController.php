@@ -64,12 +64,15 @@ class AuthController extends Controller
             $user= $this->authService->login($credentials);            
             $request->session()->regenerate();
             $role = $user->roles->first()->name;
-            if($role === 'admin'){
+            
+            $status = Auth::user()->status ;
+
+            if($role === 'admin' ){
             return redirect()->intended(route('admin.dashboard'));
-            }elseif($role === 'organizator'){
+            }elseif($role === 'organizator' && $status === 'active'){
 
                 return redirect()->intended(route('organisator.home'));                
-            }else{
+            }elseif($role === 'participant' && $status === 'active'){
 
             return redirect()->intended(route('participant.home'));
 

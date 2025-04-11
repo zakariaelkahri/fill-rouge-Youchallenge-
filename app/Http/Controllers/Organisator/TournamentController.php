@@ -38,7 +38,7 @@ class TournamentController extends Controller
         'rules',
         );
 
-        
+
         try {
         $tournement = $this->tournamentService->store($data);
         Log::info('tournament created successfully' . $tournement->name);
@@ -66,8 +66,16 @@ class TournamentController extends Controller
     public function index(){
         
         $organisator_id = Auth::user()->organisator->id;
-        $tournaments = $this->tournamentService->displayTournament($organisator_id);
-        return view('organisator.managetournament',compact('tournaments'));
+        $tournaments = $this->tournamentService->displayTournaments($organisator_id);
+        return view('organisator/managetournament',compact('tournaments'));
+    }
+
+    public function show($id){
+        $tournament = $this->tournamentService->showTournament($id);
+        // dd($tournament);
+
+        return view('organisator/viewtournament',compact('tournament'));
+        
     }
 
 }

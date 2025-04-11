@@ -9,7 +9,7 @@
     <div class="container mx-auto">
         <!-- Back Button -->
         <div class="mb-6">
-            <a href="{{ route('organisator.tournaments') }}" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-200">
+            <a href="{{route('organisator.managetournament')}}" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-200">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Tournaments
             </a>
@@ -72,12 +72,12 @@
                             
                             <!-- Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-2">
-                                <a href="{{ route('organisator.tournaments.edit', $tournament) }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit
                                 </a>
                                 @if(strtolower($tournament->status) == 'upcoming')
-                                <form action="{{ route('organisator.tournaments.start', $tournament) }}" method="POST">
+                                <form action="#" method="POST">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-play mr-2"></i>
@@ -85,7 +85,7 @@
                                     </button>
                                 </form>
                                 @elseif(strtolower($tournament->status) == 'ongoing')
-                                <form action="{{ route('organisator.tournaments.complete', $tournament) }}" method="POST">
+                                <form action="#" method="POST">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-flag-checkered mr-2"></i>

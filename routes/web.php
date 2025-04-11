@@ -63,13 +63,11 @@ Route::get('/organisator/create/tournament', function () {
     return view('organisator/createtournament');
 })->name('organisator.createmytournament');
 
-Route::get('/organisator/manage/tournament', function () {
-    return view('organisator/managetournament');
-})->name('organisator.managetournament');
-
 Route::post('/organisator/createtournament', [TournamentController::class, 'store'])->name('organisator.tournament.store');
 
 Route::get('/organisator/manage/tournament', [TournamentController::class, 'index'])->name('organisator.managetournament');
+
+Route::get('/organisator/tournament/details/{tournament}', [TournamentController::class, 'show'])->name('organisator.tournamentdetails');
 
 });
 

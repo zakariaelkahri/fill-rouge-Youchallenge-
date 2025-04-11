@@ -109,19 +109,19 @@
                         @endforeach
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($user->participant && strtolower($user->participant->status) == 'active')
+                        @if ($user && strtolower($user->status) == 'active')
                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-900 text-green-300">
-                                {{$user->participant->status}}
+                                {{$user->status}}
                             </span>
-                        @elseif ($user->participant && strtolower($user->participant->status) == 'inactive')
+                        @elseif ($user && strtolower($user->status) == 'inactive')
                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-900 text-yellow-300">
-                                {{$user->participant->status}}
+                                {{$user->status}}
                             </span>
-                        @elseif ($user->participant && strtolower($user->participant->status) == 'banned')
+                        @elseif ($user && strtolower($user->status) == 'banned')
                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-900 text-red-300">
-                                {{$user->participant->status}}
+                                {{$user->status}}
                             </span>
-                        @elseif ($user->organisator)
+                        @elseif ($user)
                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-900 text-indigo-300">
                                 {{$user->organisator->status}}
                             </span>

@@ -71,6 +71,7 @@ class AuthService
         $user = $this->registerUser($data);
         $user->roles()->syncWithoutDetaching(2);
         $organisator = $this->organisatorRepository->create(['user_id' => $user->id]);
+        $organisator->update(['status'=>'inactive']);
         return $user;
     }
 

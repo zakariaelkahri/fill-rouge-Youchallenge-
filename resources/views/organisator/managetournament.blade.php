@@ -101,7 +101,7 @@
                             <span>16/{{$tournament->max_participants}}</span>
                         </div>
                     </div>
-                    <a href="#" class="inline-flex items-center justify-center w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors">
+                    <a href="{{route('organisator.tournamentdetails',['tournament'=>$tournament])}}" class="inline-flex items-center justify-center w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors">
                         <i class="fas fa-eye mr-2"></i>
                         View Details
                     </a>

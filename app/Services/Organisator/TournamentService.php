@@ -64,16 +64,25 @@ class TournamentService
         return $tournement;
     }
 
-    public function displayTournament($organisator_id){
+    public function displayTournaments($organisator_id){
 
-        $tournaments = $tournaments = Tournament::with('organisator')
-        ->where('is_validated', 1)
+        $tournaments = Tournament::where('is_validated', 1)
         ->where('organisator_id', $organisator_id)
         ->paginate(2);
         ;
         return $tournaments;
 
+    }   
+     public function showTournament($id){
+
+         $tournament = Tournament::where('id',$id)->first();
+        
+        return $tournament;
+
     }
+
+
+
 
 
 

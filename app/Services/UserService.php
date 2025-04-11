@@ -39,7 +39,6 @@ class UserService
         $usertype = $user->roles->first()->name;
         if($usertype ==='participant'){
             $participant = $user->participant;
-            // dd($participant);
            $this->participantRepository->edite($status,$participant);
 
            return;
