@@ -71,10 +71,13 @@ Route::get('/organisator/tournament/details/{tournament}', [TournamentController
 
 });
 
-
 // participant
+Route::middleware(['auth','role:organizator'])->middleware('nocache')->group(function(){
+
 Route::get('/participant/home', function () {
     return view('participant/home');
-})->name('participant.home')->middleware('role:participant')->middleware('nocache');
+})->name('participant.home');
 
+
+});
 

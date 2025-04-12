@@ -19,6 +19,14 @@ class UserRepository
 
     }
 
+    public function edite($status,$user)
+{
+    $user->status = $status;
+    $user->save();
+    return ;
+
+}
+
     // public function findByEmail(array $data){
 
     //     return User::find($data);

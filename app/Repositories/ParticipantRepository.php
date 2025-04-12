@@ -15,13 +15,6 @@ class ParticipantRepository
 
 }
 
-public function edite($status,$participant)
-{
-    // dd($parti:cipant->status);
-    $participant->status = $status;
-    $participant->save();
-    return ;
 
-}
 
 }

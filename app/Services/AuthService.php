@@ -48,6 +48,12 @@ class AuthService
         
         $data['password'] = Hash::make($data['password']);
         $user = $this->userRepository->create($data);
+        if($data['role'] === '2'){
+
+            $user->update(['status'=>'inactive']);
+
+        }
+
         
         if ($photoFile && $photoFile->isValid()) {
             try {
@@ -71,7 +77,6 @@ class AuthService
         $user = $this->registerUser($data);
         $user->roles()->syncWithoutDetaching(2);
         $organisator = $this->organisatorRepository->create(['user_id' => $user->id]);
-        $organisator->update(['status'=>'inactive']);
         return $user;
     }
 

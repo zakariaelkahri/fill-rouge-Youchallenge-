@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function edite(EditeUserRequest $request, User $user)
     {
-        $rederiction = redirect()->route('admin.manageusers')->with('success', 'User status updated successfully!');
+        $rederiction = redirect()->route('showloginform')->with('success', 'User status updated successfully!');
         if($user->participant){
             if($request->status == $user->participant->status){
                 return $rederiction ;
@@ -40,7 +40,7 @@ class UserController extends Controller
         }
         $this->userService->edite($request, $user);
         
-        return $rederiction ;
+        return  redirect()->route('admin.manageusers')->with('success', 'User status updated successfully!');        ;
         
     }
 

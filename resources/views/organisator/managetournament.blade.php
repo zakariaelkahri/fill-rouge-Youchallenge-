@@ -93,10 +93,12 @@
                             <span>{{$tournament->format}}</span>
                         </div>
                         <div class="flex items-center text-gray-400">
+                 
                             <i class="far fa-calendar-alt w-5 text-center mr-2"></i>
                             <span>Starts {{$tournament->start_date}}</span>
                         </div>
                         <div class="flex items-center text-gray-400">
+
                             <i class="fas fa-users w-5 text-center mr-2"></i>
                             <span>16/{{$tournament->max_participants}}</span>
                         </div>
