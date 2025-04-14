@@ -75,9 +75,12 @@
                         <!-- Max Participants -->
                         <div class="col-span-1">
                             <label for="max_participants" class="text-lg font-semibold text-green-400 mb-2 block">Maximum Teams</label>
-                            <input type="number" id="max_participants" name="max_participants" value="{{ old('max_participants') }}" min="2" required
-                                class="w-full bg-gray-800 border border-gray-600 focus:border-green-500 rounded-xl py-3 px-4 text-white"
-                                placeholder="e.g. 16">
+                            <select id="max_participants" name="max_participants" required
+                                class="w-full bg-gray-800 border border-gray-600 focus:border-green-500 rounded-xl py-3 px-4 text-white">
+                                <option value="8" {{ old('max_participants') == 8 ? 'selected' : '' }}>8</option>
+                                <option value="16" {{ old('max_participants') == 16 ? 'selected' : '' }}>16</option>
+                                <option value="32" {{ old('max_participants') == 32 ? 'selected' : '' }}>32</option>
+                            </select>
                             @error('max_participants')
                                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                             @enderror
@@ -197,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     document.getElementById('max_participants').addEventListener('input', function() {
-        if (this.value && parseInt(this.value) >= 2) {
+        if (this.value && parseInt(this.value) == 8 || parseInt(this.value) ==16 || parseInt(this.value) == 32) {
             document.getElementById('max_participantsError').classList.add('hidden');
         }
     });
@@ -236,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validate max participants (Unchanged)
         const maxParticipants = document.getElementById('max_participants');
         const maxParticipantsError = document.getElementById('max_participantsError');
-        if (!maxParticipants.value || parseInt(maxParticipants.value) < 2) {
+        if (!maxParticipants.value || parseInt(maxParticipants.value) != 8 || parseInt(maxParticipants.value) != 16 || parseInt(maxParticipants.value) != 32) {
             maxParticipantsError.classList.remove('hidden');
             isValid = false;
         } else {

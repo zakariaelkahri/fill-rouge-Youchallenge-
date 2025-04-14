@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Organisator\TournamentController;
+use App\Http\Controllers\Participant\TeamController;
 use App\Http\Controllers\Participant\TournamentController as ParticipantTournamentController;
 
 /*
@@ -81,7 +82,7 @@ Route::get('/participant/home', function () {
 
 Route::get('/participant/tournaments', [ParticipantTournamentController::class , 'index'])->name('participant.tournaments');
 Route::get('/participant/tournament/details/{tournament}', [ParticipantTournamentController::class , 'show'])->name('participant.tournament.details');
-
+Route::post('participant/create/team',[TeamController::class,'store'])->name('participant.team.create');
 
 
 });

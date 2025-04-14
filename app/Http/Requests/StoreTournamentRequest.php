@@ -30,7 +30,7 @@ class StoreTournamentRequest extends FormRequest
             [
             'name' => 'required|string|max:255',
             'format' => 'required|string|in:FC25,VALORANT,CSGO',
-            'max_participants'=> 'required|integer|max:32',
+            'max_participants'=> 'required|integer|in:8,16,32',
             'start_date' => 'required|date|after:now', 
             'reward' => 'nullable|string',
             'rules' => 'nullable|string',
@@ -40,7 +40,7 @@ class StoreTournamentRequest extends FormRequest
         
         
         // Add conditional validation for max_teams based on format
-        if ($this->format == 'FC25') {
+        if ($this->format == 'FC25' || $this->format == 'eFOOTBALL') {
             $rules['max_participants'] = 'required|integer|min:2';
         } else {
             $rules['max_participants'] = 'required|integer|min:2';

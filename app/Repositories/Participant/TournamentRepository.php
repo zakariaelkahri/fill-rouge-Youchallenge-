@@ -24,7 +24,7 @@ public function displayTournaments()
 
 }
 
-public function showTournament($id)
+public function showTornament($id)
 {
 
     $tournament = Tournament::where('id',$id)->first();
