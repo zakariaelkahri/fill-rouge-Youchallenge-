@@ -8,7 +8,7 @@
             <ul class="flex flex-wrap space-x-2 md:space-x-4 items-center">
                 <li><a href="{{ route('participant.home') }}" class="text-white hover:text-blue-300 transition duration-300 px-2 py-1">Home</a></li>
                 <li><a href="" class="text-white hover:text-blue-300 transition duration-300 px-2 py-1">Tournaments</a></li>
-                <li><a href="" class="text-white hover:text-blue-300 transition duration-300 px-2 py-1"></a></li>
+                {{-- <li><a href="" class="text-white hover:text-blue-300 transition duration-300 px-2 py-1"></a></li> --}}
                 <li><a href="" class="text-white hover:text-blue-300 transition duration-300 px-2 py-1">Matches</a></li>
                 <li><a href="" class="text-white hover:text-blue-300 transition duration-300 px-2 py-1">Profile</a></li>
                 <li>

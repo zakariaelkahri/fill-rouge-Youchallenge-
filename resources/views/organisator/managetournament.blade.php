@@ -112,7 +112,7 @@
             @endforeach
         </div>
         {!! $tournaments->links() !!}
-        {{-- {!! $users->links() !!} --}}
+    
         
     </div>
 </main>

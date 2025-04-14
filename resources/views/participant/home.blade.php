@@ -12,7 +12,7 @@
             <p class="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
                 Discover gaming tournaments, join competitions, and track your performance all in one place.
             </p>
-            <a href="#" class="bg-blue-600 text-white py-3 px-6 rounded-full text-lg hover:bg-blue-700 transition duration-300 inline-block shadow-xl hover:scale-105 transform">
+            <a href="{{route('participant.tournaments')}}" class="bg-blue-600 text-white py-3 px-6 rounded-full text-lg hover:bg-blue-700 transition duration-300 inline-block shadow-xl hover:scale-105 transform">
                 Browse Tournaments
             </a>
         </div>

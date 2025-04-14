@@ -17,6 +17,8 @@ class Tournament extends Model
         'photo',
         'format',
         'max_participants',
+        'team_mode',
+        'particpated_teams',
         'reward',
         'rules',
         'start_date',
@@ -33,6 +35,7 @@ class Tournament extends Model
     {
         return $this->hasMany(Team::class);
     }
+    
 
 
     public function getPhotoUrl()
@@ -44,6 +47,16 @@ class Tournament extends Model
        return asset('storage/images/default.png');
    }
 
+
+   public function isParticipating($userId)
+   {
+       // Check if the user is a member of any team that's participating in this tournament
+       return $this->teams()
+           ->whereHas('participants', function($query) use ($userId) {
+               $query->where('user_id', $userId);
+           })
+           ->exists();
+   }
 
 }
 

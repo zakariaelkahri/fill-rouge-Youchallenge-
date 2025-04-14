@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\organisator;
+namespace App\Services\Organisator;
 
 use App\Models\Role;
 use App\Models\Tournament;
@@ -37,19 +37,25 @@ class TournamentService
 
     public function store(array $data)
     {
+        // dd($data);
+
         $tournamentphoto = null;
 
         if(isset($data['photo'])){
             $tournamentphoto = $data['photo'];
             unset($data['photo']);
         }
+        // if($data['format'] === 'FC25'){
+        //     $data['team_mode'] = 1;
+        // }
+        
+        $data['organisator_id'] = Auth::user()->organisator->id ;
 
         $tournement = $this->tournamentRepository->create($data);
         
         if ($tournamentphoto && $tournamentphoto->isValid()) {
             try {
                 $filename = $tournement->id . '_' . time() . '.' . $tournamentphoto->getClientOriginalExtension();
-            // dd($filename);
                 
                 $path = $tournamentphoto->storeAs('tournament_photos', $filename, 'public');
                 
@@ -66,10 +72,7 @@ class TournamentService
 
     public function displayTournaments($organisator_id){
 
-        $tournaments = Tournament::where('is_validated', 1)
-        ->where('organisator_id', $organisator_id)
-        ->paginate(2);
-        ;
+        $tournaments = $this->tournamentRepository->displayTournaments($organisator_id);
         return $tournaments;
 
     }   

@@ -135,7 +135,7 @@
                             <i class="fas fa-users text-indigo-400 mr-2"></i>
                             Participants
                         </h2>
-                        <span class="text-sm text-gray-400">16/{{ $tournament->max_participants }}</span>
+                        <span class="text-sm text-gray-400">{{ $tournament->max_participants }}/16</span>
                     </div>
                     
                     <div class="space-y-3">

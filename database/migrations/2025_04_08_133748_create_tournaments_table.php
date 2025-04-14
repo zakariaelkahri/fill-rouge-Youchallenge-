@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('organisator_id')->constrained('organisators');
             $table->string('name');
             $table->string('photo')->nullable();
-            $table->enum('format',['FC25','VALORANT','CSGO']);
-            $table->string('max_participants');
+            $table->enum('format',['FC25','VALORANT','CSGO','EFOOTBALL']);
+            $table->enum('max_participants',[8,16,32]);
             $table->text('reward')->nullable();
             $table->text('rules')->nullable();
             $table->enum('status',['upcoming','ongoing','completed'])->default('upcoming');
@@ -29,17 +29,7 @@ return new class extends Migration
             $table->timestamps();
             
         });
-//  - tournament_id: int
-// - name: string
-// - photo: string
-// - format: string
-// - start_date: Date
-// - end_date: Date
-// - max_participants: int
-// - status: string
-// - reward: string
-// - rules: string
-// -deleted:bool
+
     }
 
     /**

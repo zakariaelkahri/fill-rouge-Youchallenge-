@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Organisator\TournamentController;
+use App\Http\Controllers\Participant\TournamentController as ParticipantTournamentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // organizer
-Route::middleware(['auth','role:organizator'])->middleware('nocache')->group(function(){
+Route::middleware(['auth', 'role:organizator'])->group(function(){
 Route::get('/organisator/home', function () {
     return view('organisator/home');
 })->name('organisator.home');
@@ -72,11 +73,15 @@ Route::get('/organisator/tournament/details/{tournament}', [TournamentController
 });
 
 // participant
-Route::middleware(['auth','role:organizator'])->middleware('nocache')->group(function(){
+Route::middleware(['auth', 'role:participant'])->group(function(){
 
 Route::get('/participant/home', function () {
     return view('participant/home');
 })->name('participant.home');
+
+Route::get('/participant/tournaments', [ParticipantTournamentController::class , 'index'])->name('participant.tournaments');
+Route::get('/participant/tournament/details/{tournament}', [ParticipantTournamentController::class , 'show'])->name('participant.tournament.details');
+
 
 
 });

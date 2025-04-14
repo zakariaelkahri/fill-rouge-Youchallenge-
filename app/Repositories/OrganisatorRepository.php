@@ -14,6 +14,7 @@ public function create($user_id):Organisator
 
 }
 
+
 // public function edite($status,$organisator)
 // {
 //     $organisator->status = $status;

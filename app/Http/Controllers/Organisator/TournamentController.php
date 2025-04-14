@@ -27,12 +27,12 @@ class TournamentController extends Controller
     public function store(StoreTournamentRequest $request)
     {
 
-        
         $data = $request->only(       
         'name',
         'photo',
         'format',
         'max_participants',
+        'team_mode',
         'start_date',
         'reward',
         'rules',
@@ -72,8 +72,6 @@ class TournamentController extends Controller
 
     public function show($id){
         $tournament = $this->tournamentService->showTournament($id);
-        // dd($tournament);
-
         return view('organisator/viewtournament',compact('tournament'));
         
     }
