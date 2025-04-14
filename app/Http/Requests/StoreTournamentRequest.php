@@ -38,6 +38,8 @@ class StoreTournamentRequest extends FormRequest
             ]
         ];
         
+
+        
         // Add conditional validation for max_teams based on format
         if ($this->format == 'FC25') {
             $rules['max_participants'] = 'required|integer|min:2';
