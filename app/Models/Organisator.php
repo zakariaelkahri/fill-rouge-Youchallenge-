@@ -21,12 +21,13 @@ class Organisator extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tournaments()
+    public function tournament()
     {
-        
-        return $this->belongsTo(Tournament::class);
+
+        return $this->hasMany(Tournament::class);
 
     }
+
 
 
 }

@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('participants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('teams', function (Blueprint $table) {
+            $table->bigInteger('invitation_code');
+            $table->integer('team_captain');
         });
     }
 
@@ -27,6 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('participants');
+        Schema::table('teams', function (Blueprint $table) {
+            $table->dropColumn('invitation_code');
+            $table->dropColumn('team_captain');
+        });
     }
 };

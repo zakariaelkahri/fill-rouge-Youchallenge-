@@ -36,26 +36,11 @@ class UserService
     public function edite($request,User $user)
     {
         $status = $request->status;
-        $usertype = $user->roles->first()->name;
-        if($usertype ==='participant'){
-            $participant = $user->participant;
-            // dd($participant);
-           $this->participantRepository->edite($status,$participant);
-
-           return;
-        }elseif($usertype ==='organizator'){
-            $organisator = $user->organisator;
-           $this->organisatorRepository->edite($status,$organisator);
-            
-           return;
-         }
-            
-
-
+        $this->userRepository->edite($status,$user);
+        return;
     }
 
 
-
-
+    
 
 }

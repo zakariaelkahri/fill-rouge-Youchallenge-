@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('participant_team', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('password');
-            $table->string('photo')->nullable();
-            $table->rememberToken();
+            $table->foreignId('participant_id')->constrained('participants')->onDelete('cascade');
+            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('participant_team');
     }
 };

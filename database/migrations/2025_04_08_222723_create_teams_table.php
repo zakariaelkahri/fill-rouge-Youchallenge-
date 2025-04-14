@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('password');
-            $table->string('photo')->nullable();
-            $table->rememberToken();
+            $table->foreignId('tournament_id')->constrained('tournaments');
+            $table->foreignId('team_manager')->constrained('participants')->nullable();
+            $table->integer('participated_members')->default(0);
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('teams');
     }
 };

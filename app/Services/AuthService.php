@@ -48,6 +48,12 @@ class AuthService
         
         $data['password'] = Hash::make($data['password']);
         $user = $this->userRepository->create($data);
+        if($data['role'] === '2'){
+
+            $user->update(['status'=>'inactive']);
+
+        }
+
         
         if ($photoFile && $photoFile->isValid()) {
             try {

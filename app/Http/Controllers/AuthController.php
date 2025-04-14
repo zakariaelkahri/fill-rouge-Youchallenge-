@@ -64,18 +64,21 @@ class AuthController extends Controller
             $user= $this->authService->login($credentials);            
             $request->session()->regenerate();
             $role = $user->roles->first()->name;
-            if($role === 'admin'){
-            return redirect()->intended(route('admin.dashboard'));
-            }elseif($role === 'organizator'){
+            $status = Auth::user()->status ;
 
-                return redirect()->intended(route('organisator.home'));                
-            }else{
+            if($role === 'admin' ){
+            return redirect()->intended(route('admin.dashboard'));
+            }elseif($role === 'organizator' && $status === 'active'){
+
+            return redirect()->intended(route('organisator.home'));                
+            }elseif($role === 'participant' && $status === 'active'){
 
             return redirect()->intended(route('participant.home'));
 
             }
 
         }catch (\Illuminate\Auth\AuthenticationException $e) {
+
 
             return redirect()->back()->withInput()->withErrors(['login' => $e->getMessage()]);
         }
@@ -84,7 +87,12 @@ class AuthController extends Controller
         //     return redirect()->route('verification.notice')->with(['verify_email_needed' => 'warning', 'action' => 'need-verify', 'message' => ' It seems that you have not verified your email address yet. Please check your inbox for the verification link.!']);
 
         // }
-    
+        if($status === 'inactive'){
+
+            return back()->withErrors([
+                'login_failed' => "your account is " . $status . " for now ! Try again later",
+            ])->withInput();
+            }
         return back()->withErrors([
             'login_failed' => 'email or password icorrect ',
         ])->withInput();

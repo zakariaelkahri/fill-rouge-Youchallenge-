@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Organisator\TournamentController;
+use App\Http\Controllers\Participant\TournamentController as ParticipantTournamentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,18 +52,37 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // organizer
+Route::middleware(['auth', 'role:organizator'])->group(function(){
 Route::get('/organisator/home', function () {
     return view('organisator/home');
-})->name('organisator.home')->middleware('role:organizator')->middleware('nocache');
+})->name('organisator.home');
 Route::get('/organisator/dashboard', function () {
     return view('organisator/dashboard');
-})->name('organisator.dashboard')->middleware('role:organizator')->middleware('nocache');
+})->name('organisator.dashboard');
 
+Route::get('/organisator/create/tournament', function () {
+    return view('organisator/createtournament');
+})->name('organisator.createmytournament');
 
+Route::post('/organisator/createtournament', [TournamentController::class, 'store'])->name('organisator.tournament.store');
+
+Route::get('/organisator/manage/tournament', [TournamentController::class, 'index'])->name('organisator.managetournament');
+
+Route::get('/organisator/tournament/details/{tournament}', [TournamentController::class, 'show'])->name('organisator.tournamentdetails');
+
+});
 
 // participant
+Route::middleware(['auth', 'role:participant'])->group(function(){
+
 Route::get('/participant/home', function () {
     return view('participant/home');
-})->name('participant.home')->middleware('role:participant')->middleware('nocache');
+})->name('participant.home');
 
+Route::get('/participant/tournaments', [ParticipantTournamentController::class , 'index'])->name('participant.tournaments');
+Route::get('/participant/tournament/details/{tournament}', [ParticipantTournamentController::class , 'show'])->name('participant.tournament.details');
+
+
+
+});
 

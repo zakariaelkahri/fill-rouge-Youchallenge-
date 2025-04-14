@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('participants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->timestamps();
-        });
+        Schema::table('tournaments', function (Blueprint $table) {
+            $table->boolean('is_validated')->default(0)->after('deleted');        });
     }
 
     /**
@@ -27,6 +24,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('participants');
+        Schema::table('tournaments', function (Blueprint $table) {
+            $table->dropColumn('is_validated');
+        });
     }
 };

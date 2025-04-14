@@ -20,7 +20,7 @@ class CheckRole
     public function handle(Request $request, Closure $next , $role)
 
     {
-
+        // dd(Auth::user());
         if(!Auth::check()){
 
             return redirect('showloginform');

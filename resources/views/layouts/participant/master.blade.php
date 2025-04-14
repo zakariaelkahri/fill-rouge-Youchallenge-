@@ -7,17 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <title>youchallenge | @yield('title')</title>
+    <title>youchallenge | @yield('participant.title')</title>
 </head>
-<body>
-    @include('partials.admin.nav')
-        <div class="flex">
-        @include('partials.admin.sidebar')
-        @yield('main')
+<body class='bg-gray-900 text-white min-h-screen flex flex-col'>
+    @include('partials.participant.nav')
+    <div class="flex-grow pt-16">
+
+        @yield('participant-main')
 
         </div>
-    @include('partials.admin.footer ')
-
+    @include('partials.participant.footer')
+    <script>
+        if (performance.navigation.type === 2) {
+            location.reload(); 
+        }
+        
+       
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle functionality could go here
+        });
+    </script>
 
 </body>
 </html>

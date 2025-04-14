@@ -35,6 +35,10 @@
         .card-body {
             @apply p-4;
         }
+        html {
+         scroll-behavior: smooth;
+        }
+
     </style>
 
     <title>YouChallenge | @yield('organisator-title')</title>
