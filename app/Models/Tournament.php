@@ -57,6 +57,7 @@ class Tournament extends Model
                $query->where('user_id', $userId);
            })
            ->exists());
+           
    }
 
 }
