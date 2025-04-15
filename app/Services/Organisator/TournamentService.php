@@ -45,11 +45,11 @@ class TournamentService
             $tournamentphoto = $data['photo'];
             unset($data['photo']);
         }
-        // if($data['format'] === 'FC25'){
-        //     $data['team_mode'] = 1;
-        // }
+        if($data['format'] === 'FC25' ||$data['format'] === 'eFOOTBALL'){
+            $data['team_mode'] = 1;
+        }
         
-        $data['organisator_id'] = Auth::user()->organisator->id ;
+        $data['organisator_id'] = Auth::user()->organisator->id;
 
         $tournement = $this->tournamentRepository->create($data);
         

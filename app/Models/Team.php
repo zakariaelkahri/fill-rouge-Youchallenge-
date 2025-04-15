@@ -10,9 +10,20 @@ class Team extends Model
     use HasFactory;
 
    protected $fillable = [
-    'team_manager',
     'tournament_id',
+    'name',
+    'photo',
+    'team_bio',
+    'participated_members',
+    'invitation_code',
+    'team_captain'
     ];
+    // "tournament_id" => "1"
+    // "name" => "Octavius Conrad"
+    // "team_bio" => "Sunt deserunt neque"
+    // "invitation_code" => 886775
+    // "team_captain" => 1
+  
 
     public function participants(){
 

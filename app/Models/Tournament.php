@@ -51,11 +51,13 @@ class Tournament extends Model
    public function isParticipating($userId)
    {
        // Check if the user is a member of any team that's participating in this tournament
-       return $this->teams()
+    //    return 
+       dd( $this->teams()
            ->whereHas('participants', function($query) use ($userId) {
                $query->where('user_id', $userId);
            })
-           ->exists();
+           ->exists());
+           
    }
 
 }

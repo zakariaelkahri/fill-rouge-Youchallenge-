@@ -120,7 +120,7 @@
                 
                 <!-- Match Schedule Section -->
 <!-- Simplified Match Schedule Section -->
-                @if(true)
+                @if($tournament->status == 'ongoing' || $tournament->status == 'completed')
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-white mb-4">Matches</h2>
                         <div class="overflow-hidden bg-gray-700/50 rounded-xl">
@@ -157,7 +157,8 @@
         
         <!-- Registered Teams -->
         <div class="bg-gray-800 rounded-xl p-6 mb-8">
-            <h2 class="text-2xl font-bold text-white mb-4">Registered Teams ({{ $tournament->current_participants }}/{{ $tournament->max_participants }})</h2>
+
+            <h2 class="text-2xl font-bold text-white mb-4">Registered Teams ({{ $tournament->particpated_teams }}/{{ $tournament->max_participants }})</h2>
             
             {{-- @if(count($participants) > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -190,7 +191,7 @@
     </div>
 </main>
 
-<!-- Create Team Modal -->
+{{-- <!-- Create Team Modal --> --}}
 <div id="createTeamModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
     <div class="bg-gray-800 rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div class="p-6">
@@ -201,19 +202,20 @@
                 </button>
             </div>
             
-            <form action="" method="POST">
+            <form action="{{route('participant.team.create')}}" method="POST" enctype="multipart/form-data">
                 @csrf
+
                 <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
                 
                 <div class="mb-4">
-                    <label for="team_name" class="block text-sm font-medium text-gray-400 mb-1">Team Name</label>
-                    <input type="text" id="team_name" name="team_name" required 
+                    <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Team Name</label>
+                    <input type="text" id="name" name="name" required 
                         class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                 </div>
                 
                 <div class="mb-4">
-                    <label for="team_logo" class="block text-sm font-medium text-gray-400 mb-1">Team Logo (Optional)</label>
-                    <input type="file" id="team_logo" name="team_logo" accept="image/*"
+                    <label for="photo" class="block text-sm font-medium text-gray-400 mb-1">Team Logo (Optional)</label>
+                    <input type="file" id="photo" name="photo" accept="image/*"
                         class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                 </div>
                 
@@ -224,12 +226,12 @@
                 </div>
                 
                 <div class="space-y-3 mb-4">
-                    <label class="block text-sm font-medium text-gray-400">Team Members</label>
+                    <label class="block text-sm font-medium text-gray-400">Team Captain</label>
                     
-                    <!-- You (Captain) -->
+                    {{-- <!-- You (Captain) --> --}}
                     <div class="p-3 bg-gray-700 rounded-lg border border-gray-600 flex items-center">
                         <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-600 mr-3">
-                            <img src="{{ asset('images/default-avatar.png') }}" alt="{{ auth()->user()->name }}" class="h-full w-full object-cover">
+                            <img src="{{ asset('images/default.png') }}" alt="{{ auth()->user()->name }}" class="h-full w-full object-cover">
                         </div>
                         <div class="flex-1">
                             <p class="text-white font-medium">{{ auth()->user()->name }}</p>
@@ -237,23 +239,7 @@
                         </div>
                     </div>
                     
-                    <!-- Member slots -->
-                    @for($i = 1; $i <= 4; $i++)
-                    <div class="p-3 bg-gray-700 rounded-lg border border-gray-600 flex items-center">
-                        <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-600 mr-3 flex items-center justify-center">
-                            <i class="fas fa-user-plus text-gray-500"></i>
-                        </div>
-                        <div class="flex-1">
-                            <input type="email" name="member_email[]" placeholder="Enter teammate's email" 
-                                class="w-full bg-transparent text-white border-0 border-b border-gray-600 focus:border-blue-500 focus:ring-0 px-0 py-1">
-                        </div>
-                    </div>
-                    @endfor
-                    
-                    <p class="text-xs text-gray-400">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        We'll send email invitations to your teammates.
-                    </p>
+
                 </div>
                 
                 <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg py-3 px-4 transition duration-200">

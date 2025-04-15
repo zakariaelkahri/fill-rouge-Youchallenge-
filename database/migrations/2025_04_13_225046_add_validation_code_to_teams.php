@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teams', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('tournament_id')->constrained('tournaments');
-            $table->foreignId('team_captain')->constrained('participants');
-            $table->integer('participated_members')->default(0);
-            $table->timestamps();
+        Schema::table('teams', function (Blueprint $table) {
+            $table->bigInteger('invitation_code');
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teams');
+        Schema::table('teams', function (Blueprint $table) {
+            $table->dropColumn('invitation_code')->after('participated_members');
+        });
     }
 };

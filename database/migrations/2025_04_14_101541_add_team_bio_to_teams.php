@@ -1,5 +1,6 @@
 <?php
 
+use Dom\Text;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +15,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->bigInteger('invitation_code');
-            $table->integer('team_captain');
+          $table->string('name')->after('team_captain');
+          $table->string('photo')->nullable()->after('name');
+          $table->text('team_bio')->after('photo');
         });
     }
 
@@ -27,8 +29,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->dropColumn('invitation_code');
-            $table->dropColumn('team_captain');
+            $table->dropColumn('team_bio');
+            $table->dropColumn('name');
+            $table->dropColumn('photo');
         });
     }
 };
