@@ -25,15 +25,22 @@ class TeamController extends Controller
         // "name" => "Clio Harvey"
         // "photo" => null
         // "team_bio" => "Tempora ad sapiente"
+      
         try
         {
         $data = $request->only('tournament_id','name','photo','team_bio');
 
         $team = $this->teamService->store($data);
+        
         if (!$team) {
+            // dd('error');
             throw new Exception('An error occurred during registration. Please try again.');
         }
+        
+        return redirect()->back()->with('success','team created successfuly !');
         } catch (\Exception $e) {
+            dd('error');
+
             Log::error('Registration error: ' . $e->getMessage());
             return redirect()->back()->withInput()->withErrors([$e->getMessage()]);
         }

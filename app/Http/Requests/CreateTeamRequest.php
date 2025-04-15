@@ -16,7 +16,7 @@ class CreateTeamRequest extends FormRequest
     public function authorize()
     {
         // Check if the user is authenticated
-        return Gate::authorize('participate') ;
+        return Gate::authorize('participate');
     }
 
     /**

@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-          $table->string('name')->after('tournament_id');
+          $table->string('name')->after('team_captain');
           $table->string('photo')->nullable()->after('name');
           $table->text('team_bio')->after('photo');
         });

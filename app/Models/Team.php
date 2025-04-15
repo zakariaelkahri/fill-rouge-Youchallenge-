@@ -15,9 +15,15 @@ class Team extends Model
     'photo',
     'team_bio',
     'participated_members',
-    'invetation_code',
+    'invitation_code',
     'team_captain'
     ];
+    // "tournament_id" => "1"
+    // "name" => "Octavius Conrad"
+    // "team_bio" => "Sunt deserunt neque"
+    // "invitation_code" => 886775
+    // "team_captain" => 1
+  
 
     public function participants(){
 

@@ -48,7 +48,7 @@ class TeamService
         
         // dd($test);
 
-        $data['invitation_code'] =  random_int(100000, 999999) ; 
+        $data['invitation_code'] = random_int(100000, 999999) ; 
         $data['team_captain'] = Auth::user()->participant->id ; 
 
         $team = $this->teamRepository->create($data);

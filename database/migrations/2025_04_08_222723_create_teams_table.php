@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tournament_id')->constrained('tournaments');
-            $table->foreignId('team_captain')->constrained('participants')->nullable();
+            $table->foreignId('team_captain')->constrained('participants');
             $table->integer('participated_members')->default(0);
             $table->timestamps();
         });

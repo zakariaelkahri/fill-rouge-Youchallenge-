@@ -202,8 +202,9 @@
                 </button>
             </div>
             
-            <form action="{{route('participant.team.create')}}" method="POST">
+            <form action="{{route('participant.team.create')}}" method="POST" enctype="multipart/form-data">
                 @csrf
+
                 <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
                 
                 <div class="mb-4">
