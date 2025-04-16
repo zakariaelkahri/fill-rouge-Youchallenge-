@@ -55,7 +55,7 @@ class TeamService
         $tournament = Tournament::where('id',$data['tournament_id'])->first();
         $tournament->particpated_teams++ ;
         $tournament->save();
-        // dd($tournament->particpated_teams);
+        // dd($tournament->particpated_teams); 
         $team = $this->teamRepository->create($data);
         $participant->teams()->syncWithoutDetaching($team->id);
 
