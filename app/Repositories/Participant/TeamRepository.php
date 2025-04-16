@@ -15,9 +15,7 @@ class TeamRepository
 
 public function create($data)
 {
-    // dd($data);
     $team = Team::create($data);
-    // dd($team);
     return $team ;
 
 }

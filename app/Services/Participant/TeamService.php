@@ -4,6 +4,7 @@ namespace App\Services\Participant;
 
 use App\Models\Role;
 use App\Models\team;
+use App\Models\Tournament;
 use App\Models\User;
 use App\Repositories\BuyerRepository;
 use App\Repositories\Participant\TournamentRepository;
@@ -29,7 +30,6 @@ class TeamService
 
     protected $teamRepository;
 
-
     public function __construct(TeamRepository $teamRepository)
     {
         $this->teamRepository = $teamRepository;
@@ -47,11 +47,18 @@ class TeamService
         }
         
         // dd($test);
-
+        $participant = Auth::user()->participant;
         $data['invitation_code'] = random_int(100000, 999999) ; 
-        $data['team_captain'] = Auth::user()->participant->id ; 
+        $data['team_captain'] = $participant->id ; 
+        $data['participated_members'] = 1;
 
+        $tournament = Tournament::where('id',$data['tournament_id'])->first();
+        $tournament->particpated_teams++ ;
+        $tournament->save();
+        // dd($tournament->particpated_teams);
         $team = $this->teamRepository->create($data);
+        $participant->teams()->syncWithoutDetaching($team->id);
+
         
         if ($photoFile && $photoFile->isValid()) {
             try {
@@ -68,7 +75,7 @@ class TeamService
         }
 
 
-        return $team;
+        return $team ;
 
     }   
 

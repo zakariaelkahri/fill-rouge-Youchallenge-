@@ -44,15 +44,16 @@
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-users w-5 text-center mr-2"></i>
-                        <span>{{ $tournament->current_participants }}/{{ $tournament->max_participants }} Teams</span>
+                        <span>{{ $tournament->particpated_teams }}/{{ $tournament->max_participants }} Teams</span>
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-trophy w-5 text-center mr-2"></i>
-                        <span>Prize: ${{ number_format($tournament->prize_pool) }}</span>
+                        <span>Prize: {{$tournament->reward}}</span>
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-user w-5 text-center mr-2"></i>
-                        <span>Organizer: {{ $tournament->organisator->name }}</span>
+
+                        <span>Organizer: {{ $tournament->organisator->user->name }}</span>
                     </div>
                 </div>
                 
@@ -281,7 +282,42 @@
             </form>
         </div>
     </div>
+
+
 </div>
+
+@if (session('success'))
+<script>
+Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "Your Team created successfully 🎮",
+    showConfirmButton: false,
+    timer: 2000,
+    customClass: {
+        popup: 'rounded-xl bg-gray-800 text-white'
+    },
+    background: '#1f2937', 
+});
+</script>
+@endif
+
+@if (session('failed'))
+    <script>
+      Swal.fire({
+  position: "center", 
+  icon: "error",
+  title: "Oops...",
+  text: "Something went wrong!",
+  footer: '<a href="#">Why do I have this issue?</a>',
+  showConfirmButton: true,
+  customClass: {
+    popup: 'rounded-xl shadow-lg'
+  }
+      });
+</script>
+
+@endif
 
 <style>
     .shadow-text {
@@ -411,5 +447,9 @@
             });
         });
     });
+
+
+
 </script>
+
 @endsection

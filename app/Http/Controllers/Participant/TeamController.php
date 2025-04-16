@@ -21,10 +21,6 @@ class TeamController extends Controller
 
     public function store(CreateTeamRequest $request)
     {
-        // "tournament_id" => "1"
-        // "name" => "Clio Harvey"
-        // "photo" => null
-        // "team_bio" => "Tempora ad sapiente"
       
         try
         {
@@ -33,16 +29,14 @@ class TeamController extends Controller
         $team = $this->teamService->store($data);
         
         if (!$team) {
-            // dd('error');
             throw new Exception('An error occurred during registration. Please try again.');
         }
         
-        return redirect()->back()->with('success','team created successfuly !');
+        return redirect()->back()->with('success','team created successfuly , Enjoy !');
         } catch (\Exception $e) {
-            dd('error');
 
             Log::error('Registration error: ' . $e->getMessage());
-            return redirect()->back()->withInput()->withErrors([$e->getMessage()]);
+            return redirect()->back()->with('failed','creating team Failed');
         }
        
     }
