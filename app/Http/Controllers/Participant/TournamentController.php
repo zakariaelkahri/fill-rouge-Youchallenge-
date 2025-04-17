@@ -20,13 +20,16 @@ class TournamentController extends Controller
         $tournaments = $this->tournamentService->displayTournaments();
 
         return view('participant.tournaments',compact('tournaments')) ;
-        
+
     }
 
     public function show($id){
 
-        $tournament = $this->tournamentService->showTournament($id);
-        return view('participant.tournamentdetailes',compact('tournament')) ;
+        $team_tournament = $this->tournamentService->showTournament($id);
+        $tournament = $team_tournament[0];
+        $teams = $team_tournament[1];
+        
+        return view('participant.tournamentdetailes',compact('tournament','teams')) ;
 
     }
 }

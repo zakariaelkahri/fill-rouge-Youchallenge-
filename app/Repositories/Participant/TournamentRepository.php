@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Participant;
 
+use App\Models\Team;
 use App\Models\Tournament;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,8 +29,8 @@ public function showTornament($id)
 {
 
     $tournament = Tournament::where('id',$id)->first();
-
-    return $tournament ;
+    $teams = Team::where('tournament_id',$tournament->id)->get();
+    return [$tournament,$teams] ;
 
 }
 

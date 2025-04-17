@@ -161,23 +161,23 @@
 
             <h2 class="text-2xl font-bold text-white mb-4">Registered Teams ({{ $tournament->particpated_teams }}/{{ $tournament->max_participants }})</h2>
             
-            {{-- @if(count($participants) > 0)
+            @if(count($teams) > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @foreach($participants as $team)
+                    @foreach($teams as $team)
                         <div class="bg-gray-700 rounded-lg p-4 flex items-center">
                             <div class="h-12 w-12 rounded-full bg-gray-600 mr-4 flex-shrink-0">
-                                <img src="{{ $team->logo_url ?? asset('images/default-team.png') }}" alt="{{ $team->name }}" class="h-full w-full object-cover rounded-full">
+                                <img src="{{ $team->getPhotoUrl() ?? asset('images/default.png') }}" alt="{{ $team->name }}" class="h-full w-full object-cover rounded-full">
                             </div>
                             <div>
                                 <div class="text-white font-medium">{{ $team->name }}</div>
-                                <div class="text-xs text-gray-400">Captain: {{ $team->captain->name }}</div>
+                                <div class="text-xs text-gray-400">Captain: {{ $team-> }}</div>
                             </div>
                         </div>
                     @endforeach
                 </div>
-            @else --}}
+            @else
                 <p class="text-gray-400">No teams have registered yet. Be the first!</p>
-            {{-- @endif --}}
+            @endif
         </div>
         
         <!-- Tournament Bracket (for ongoing or completed tournaments) -->

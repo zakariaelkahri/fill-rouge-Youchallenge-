@@ -47,4 +47,10 @@ class Team extends Model
         
         return asset('storage/images/default.png');
     }
+
+    public function getTeamCaptainName(){
+
+        
+
+    }
 }

@@ -46,9 +46,8 @@ class TournamentService
     }   
      public function showTournament($id){
 
-        $tournament = $this->tournamentRepository->showTornament($id);
-        
-        return $tournament;
+        $team_tournament = $this->tournamentRepository->showTornament($id);
+        return $team_tournament;
     }
 
 
