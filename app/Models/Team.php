@@ -39,6 +39,13 @@ class Team extends Model
 
     }
 
+    public function Rounds(){
+
+        return $this->belongsToMany(Round::class);
+
+    }
+    
+
     public function getPhotoUrl()
     {
         if ($this->photo && Storage::disk('public')->exists($this->photo)) {

@@ -65,7 +65,7 @@
                                     
                                     <span class="inline-flex items-center text-gray-400">
                                         <i class="fas fa-users mr-1"></i>
-                                        {{-- {{ $participants_count }} --}}
+                                        {{ $tournament->particpated_teams }}
                                         /{{ $tournament->max_participants }} Participants
                                     </span>
                                 </div>
@@ -73,7 +73,7 @@
                             
                             <!-- Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-2">
-                                <a href="" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit
                                 </a>
@@ -127,7 +127,8 @@
                 @endif
             </div>
             
-            {{-- @if($matches->count() > 0) --}}
+            @if(false)
+            {{-- isset($matches) && count($matches) > 0 --}}
             <!-- Match Form -->
             <form id="matchResultsForm" action="" method="POST">
                 @csrf
@@ -149,33 +150,31 @@
                 <div class="overflow-hidden bg-gray-700/50 rounded-xl">
                     <div class="divide-y divide-gray-700" id="match-list">
                         <!-- Match rows generated from database data -->
-                        {{-- @foreach($matches as $index => $match) --}}
-                        <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row 
-                        {{-- {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }} --}}
-                            ">
+                        @foreach($matches as $index => $match)
+                        <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }}">
                             <div class="flex flex-wrap items-center gap-4">
                                 <!-- Match Info -->
                                 <div class="w-full sm:w-auto flex items-center mb-2 sm:mb-0">
-                                    <span class="text-gray-400 text-sm font-medium">Match #</span>
+                                    <span class="text-gray-400 text-sm font-medium">Match #{{ $match->id }}</span>
                                     <input type="hidden" name="matches[{{ $index }}][id]" value="{{ $match->id }}">
                                 </div>
                                 
                                 <!-- Teams and Scores -->
                                 <div class="flex-1 flex items-center">
                                     <!-- Team A (clickable for winner selection) -->
-                                    {{-- <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
+                                    <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
                                          data-team-id="{{ $match->team_a_id }}" data-match-index="{{ $index }}">
                                         <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
-                                            @if($match->teamA->photo)
+                                            @if(isset($match->teamA->photo) && $match->teamA->photo)
                                                 <img src="{{ $match->teamA->getPhotoUrl() }}" alt="{{ $match->teamA->name }}" class="h-10 w-10 object-cover rounded-full">
                                             @endif
                                         </div>
                                         <div class="font-medium text-white">{{ $match->teamA->name }}</div>
-                                    </div> --}}
+                                    </div>
                                     
                                     <!-- Score Inputs -->
                                     <div class="flex items-center mx-4">
-                                        <input type="number" min="0" name="matches[{{ $index }}][team_a_score]" value="" 
+                                        <input type="number" min="0" name="matches[{{ $index }}][team_a_score]" value="{{ $match->team_a_score }}" 
                                                class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
                                                {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                         <span class="text-gray-400 font-bold mx-2">:</span>
@@ -186,13 +185,11 @@
                                     
                                     <!-- Team B (clickable for winner selection) -->
                                     <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                         data-team-id="" data-match-index="{{ $index }}">
-                                        <div class="font-medium text-white">
-                                            {{-- {{ $match->teamB->name }} --}}
-                                        </div>
+                                         data-team-id="{{ $match->team_b_id }}" data-match-index="{{ $index }}">
+                                        <div class="font-medium text-white">{{ $match->teamB->name }}</div>
                                         <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
-                                            @if($match->teamB->photo)
-                                                <img src="{{ $match->teamB->getPhotoUrl() }}" alt="" class="h-10 w-10 object-cover rounded-full">
+                                            @if(isset($match->teamB->photo) && $match->teamB->photo)
+                                                <img src="{{ $match->teamB->getPhotoUrl() }}" alt="{{ $match->teamB->name }}" class="h-10 w-10 object-cover rounded-full">
                                             @endif
                                         </div>
                                     </div>
@@ -201,24 +198,25 @@
                                 
                                 <!-- Action Button -->
                                 <div>
-                                    {{-- @if($match->status == 'pending') --}}
+                                    @if(true)
+                                    {{-- $match->status == 'pending' --}}
                                         <button type="button" class="save-match-btn inline-flex items-center justify-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
                                                 data-match-index="{{ $index }}" data-match-id="{{ $match->id }}">
                                             <i class="fas fa-check mr-1"></i> Submit
                                         </button>
-                                    {{-- @else --}}
-                                        {{-- <div class="flex items-center space-x-2">
+                                    @else
+                                        <div class="flex items-center space-x-2">
                                             <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
                                             <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
                                                     data-match-index="{{ $index }}" data-match-id="{{ $match->id }}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                        </div> --}}
-                                    {{-- @endif --}}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                        {{-- @endforeach --}}
+                        @endforeach
                     </div>
                 </div>
                 
@@ -230,7 +228,7 @@
                     </button>
                 </div>
             </form>
-            {{-- @else --}}
+            @else
                 @if(strtolower($tournament->status) == 'upcoming')
                     <div class="text-center py-10 text-gray-400">
                         <p>No matches available. Start the tournament to generate matches.</p>
@@ -240,7 +238,7 @@
                         <p>No matches available. Use the "Create Match" button to add matches.</p>
                     </div>
                 @endif
-            {{-- @endif --}}
+            @endif
         </div>
 
         <!-- Main Content Grid -->
@@ -267,42 +265,46 @@
                             <i class="fas fa-users text-indigo-400 mr-2"></i>
                             Participants
                         </h2>
-                        <span class="text-sm text-gray-400">{{ $participants_count }}/{{ $tournament->max_participants }}</span>
+                        <span class="text-sm text-gray-400">
+                            {{ $tournament->particpated_teams }}
+                            /{{ $tournament->max_participants }}</span>
                     </div>
                     
                     <div class="space-y-3">
                         <!-- Progress bar -->
                         <div class="w-full bg-gray-700 rounded-full h-2.5">
                             @php
-                                $participantPercentage = min(100, ($participants_count / $tournament->max_participants) * 100);
+                                $participantPercentage = min(100, ($tournament->particpated_teams/ $tournament->max_participants) * 100);
                             @endphp
                             <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ $participantPercentage }}%"></div>
                         </div>
                         
                         <!-- Participant list -->
                         <div class="divide-y divide-gray-700">
-                            @foreach($participants as $participant)
+                            {{-- @foreach($participants as $participant) --}}
                             <div class="flex items-center py-3">
                                 <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                    @if($participant->photo)
+                                    {{-- @if(isset($participant->photo) && $participant->photo)
                                         <img src="{{ $participant->getPhotoUrl() }}" alt="{{ $participant->name }}" class="w-full h-full object-cover">
-                                    @else
+                                    @else --}}
                                         <div class="w-full h-full bg-gray-600"></div>
-                                    @endif
+                                    {{-- @endif --}}
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-sm font-medium text-white">{{ $participant->name }}</p>
+                                    <p class="text-sm font-medium text-white">
+                                        {{-- {{ $participant->name }} --}}
+                                    </p>
                                 </div>
                             </div>
-                            @endforeach
+                            {{-- @endforeach --}}
                             
-                            @if($participants_count > count($participants))
+                            {{-- @if($participants_count > count($participants)) --}}
                             <div class="text-center py-2">
-                                <a href="{{ route('organisator.tournament.participants', $tournament->id) }}" class="text-indigo-400 hover:text-indigo-300 text-sm">
+                                <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">
                                     View all participants
                                 </a>
                             </div>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </div>
                 </div>
@@ -367,9 +369,10 @@
                     <select id="team_a_id" name="team_a_id" required 
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team A</option>
-                        @foreach($participants as $participant)
-                            <option value="{{ $participant->id }}">{{ $participant->name }}</option>
-                        @endforeach
+                        {{-- @foreach($participants as $participant) --}}
+                        {{-- {{ $participant->id }} --}}
+                            <option value="2">$participant->name</option>
+                        {{-- @endforeach --}}
                     </select>
                 </div>
                 
@@ -378,9 +381,10 @@
                     <select id="team_b_id" name="team_b_id" required 
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team B</option>
-                        @foreach($participants as $participant)
-                            <option value="{{ $participant->id }}">{{ $participant->name }}</option>
-                        @endforeach
+                        {{-- @foreach($participants as $participant) --}}
+                        {{-- {{ $participant->id }} --}}
+                        <option value="2">$participant->name</option>
+                        {{-- @endforeach --}}
                     </select>
                 </div>
                 
@@ -556,11 +560,11 @@
                 this.disabled = true;
                 
                 // AJAX request to update single match
-                fetch(`{{ route('organisator.match.update', '') }}/${matchId}`, {
+                fetch(`/organisator/matches/${matchId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
                         winner_id: winnerId,
@@ -649,11 +653,11 @@
                         this.disabled = true;
                         
                         // AJAX request to update match
-                        fetch(`{{ route('organisator.match.update', '') }}/${matchId}`, {
+                        fetch(`/organisator/matches/${matchId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             },
                             body: JSON.stringify({
                                 winner_id: winnerId,
