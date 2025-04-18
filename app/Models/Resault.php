@@ -23,4 +23,5 @@ class Resault extends Model
 
     }
 
+    
 }
