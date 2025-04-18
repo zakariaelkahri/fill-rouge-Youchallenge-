@@ -22,4 +22,5 @@ class Resault extends Model
         return $this->belongsTo(Matche::class);
 
     }
+    
 }
