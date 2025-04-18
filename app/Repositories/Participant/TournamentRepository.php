@@ -17,7 +17,7 @@ public function displayTournaments()
     $tournaments = Tournament::where('is_validated', 1)
     ->where('status','upcoming')
     ->where('deleted',0)
-    ->paginate(2);
+    ->paginate(4);
     ;
     // dd($tournaments);
 

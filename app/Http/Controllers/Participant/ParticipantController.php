@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Participant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTeamRequest;
+use App\Http\Requests\joinTeamRequest;
 use App\Services\Participant\TeamService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class TeamController extends Controller
+class ParticipantController extends Controller
 {
     
     protected $teamService;
@@ -19,24 +20,24 @@ class TeamController extends Controller
         $this->teamService = $teamService;
     }
 
-    public function store(CreateTeamRequest $request)
+    public function store(joinTeamRequest $request)
     {
       
         try
         {
-        $data = $request->only('tournament_id','name','photo','team_bio');
-
-        $team = $this->teamService->store($data);
+        $data = $request->only('tournament_id','invitation_code');
+        $attach = $this->teamService->join($data);
         
-        if ($team == null) {
-            return redirect()->back()->with('joinfailed','Tournament Full, Can not create team  ');
+        if ($attach == null) {
+            return redirect()->back()->with('joinfailed','The team you try to join is Full ');
         }
         
-        return redirect()->back()->with('success','Team created successfuly , Enjoy');
+        
+        return redirect()->back()->with('success','Join successfuly , Enjoy ');
         } catch (\Exception $e) {
 
             Log::error('Registration error: ' . $e->getMessage());
-            return redirect()->back()->with('joinfailed','creating team Failed');
+            return redirect()->back()->with('joinfailed','joining code incorect');
         }
        
     }

@@ -20,6 +20,13 @@ public function create($data)
 
 }
 
+public function join($team){
+
+    $participant = Auth::user()->participant;
+    $attach = $participant->teams()->syncWithoutDetaching($team->id);
+    return $attach ;
+}
+
 
 
 

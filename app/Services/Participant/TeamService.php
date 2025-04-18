@@ -46,19 +46,28 @@ class TeamService
             unset($data['photo']);
         }
         
-        // dd($test);
+        
+
+        $tournament = Tournament::where('id',$data['tournament_id'])->first();
+ 
+        if($tournament->particpated_teams < $tournament->max_participants )
+        {
+        $tournament->particpated_teams++ ;
+        $tournament->save();
+
         $participant = Auth::user()->participant;
+
         $data['invitation_code'] = random_int(100000, 999999) ; 
         $data['team_captain'] = $participant->id ; 
         $data['participated_members'] = 1;
 
-        $tournament = Tournament::where('id',$data['tournament_id'])->first();
-        $tournament->particpated_teams++ ;
-        $tournament->save();
-        // dd($tournament->particpated_teams); 
         $team = $this->teamRepository->create($data);
         $participant->teams()->syncWithoutDetaching($team->id);
+        }else{
 
+            return null;
+
+        }
         
         if ($photoFile && $photoFile->isValid()) {
             try {
@@ -77,7 +86,35 @@ class TeamService
 
         return $team ;
 
-    }   
+    }  
+    
+    public function join(array $data){
+
+        $tournament = Tournament::where('id',$data['tournament_id'])->first();
+        $teams = $tournament->teams()->get();
+        if($teams){
+
+            foreach($teams as $team){
+
+                if($team->invitation_code == $data['invitation_code']){
+                    if($team->participated_members < $tournament->team_mode){
+                    $team->participated_members++;
+                    $team->save();
+                    $attach = $this->teamRepository->join($team);
+                    return $attach ; 
+                }else{
+
+                    return null;
+                    
+                }
+                    
+                }
+
+            }
+
+        }
+
+    }
 
 
     }

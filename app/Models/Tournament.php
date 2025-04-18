@@ -55,8 +55,8 @@ class Tournament extends Model
            ->whereHas('participants', function($query) use ($userId) {
                $query->where('user_id', $userId);
            })
-           ->exists();
-           
+           ->exists();           
+
    }
 
 }

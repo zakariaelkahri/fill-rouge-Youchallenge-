@@ -65,19 +65,20 @@
                                     
                                     <span class="inline-flex items-center text-gray-400">
                                         <i class="fas fa-users mr-1"></i>
-                                        16/{{ $tournament->max_participants }} Participants
+                                        {{-- {{ $participants_count }} --}}
+                                        /{{ $tournament->max_participants }} Participants
                                     </span>
                                 </div>
                             </div>
                             
                             <!-- Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-2">
-                                <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                <a href="" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit
                                 </a>
                                 @if(strtolower($tournament->status) == 'upcoming')
-                                <form action="#" method="POST">
+                                <form action="" method="POST">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-play mr-2"></i>
@@ -85,7 +86,7 @@
                                     </button>
                                 </form>
                                 @elseif(strtolower($tournament->status) == 'ongoing')
-                                <form action="#" method="POST">
+                                <form action="" method="POST">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-flag-checkered mr-2"></i>
@@ -118,12 +119,15 @@
                     <i class="fas fa-gamepad text-indigo-400 mr-2"></i>
                     Match Management
                 </h2>
+                @if(strtolower($tournament->status) == 'ongoing')
                 <button id="createMatchBtn" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200">
                     <i class="fas fa-plus mr-2"></i>
                     Create Match
                 </button>
+                @endif
             </div>
             
+            {{-- @if($matches->count() > 0) --}}
             <!-- Match Form -->
             <form id="matchResultsForm" action="" method="POST">
                 @csrf
@@ -144,76 +148,99 @@
                 <!-- Match List -->
                 <div class="overflow-hidden bg-gray-700/50 rounded-xl">
                     <div class="divide-y divide-gray-700" id="match-list">
-                        <!-- Match rows will be populated here -->
-                        @for($i = 1; $i <= 4; $i++)
-                        <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row {{ $i < 3 ? 'pending' : 'completed' }}" data-match-id="{{ $i }}">
+                        <!-- Match rows generated from database data -->
+                        {{-- @foreach($matches as $index => $match) --}}
+                        <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row 
+                        {{-- {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }} --}}
+                            ">
                             <div class="flex flex-wrap items-center gap-4">
                                 <!-- Match Info -->
                                 <div class="w-full sm:w-auto flex items-center mb-2 sm:mb-0">
-                                    <span class="text-gray-400 text-sm font-medium">Match #{{ $i }}</span>
-                                    <input type="hidden" name="matches[{{ $i-1 }}][id]" value="{{ $i }}">
+                                    <span class="text-gray-400 text-sm font-medium">Match #</span>
+                                    <input type="hidden" name="matches[{{ $index }}][id]" value="{{ $match->id }}">
                                 </div>
                                 
                                 <!-- Teams and Scores -->
                                 <div class="flex-1 flex items-center">
                                     <!-- Team A (clickable for winner selection) -->
-                                    <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $i == 3 ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                         data-team-id="team-a-{{ $i }}" data-match-index="{{ $i-1 }}">
-                                        <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0"></div>
-                                        <div class="font-medium text-white">Team Alpha</div>
-                                    </div>
+                                    {{-- <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
+                                         data-team-id="{{ $match->team_a_id }}" data-match-index="{{ $index }}">
+                                        <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
+                                            @if($match->teamA->photo)
+                                                <img src="{{ $match->teamA->getPhotoUrl() }}" alt="{{ $match->teamA->name }}" class="h-10 w-10 object-cover rounded-full">
+                                            @endif
+                                        </div>
+                                        <div class="font-medium text-white">{{ $match->teamA->name }}</div>
+                                    </div> --}}
                                     
                                     <!-- Score Inputs -->
                                     <div class="flex items-center mx-4">
-                                        <input type="number" min="0" name="matches[{{ $i-1 }}][team_a_score]" value="{{ $i == 3 ? 3 : ($i == 4 ? 1 : 0) }}" 
+                                        <input type="number" min="0" name="matches[{{ $index }}][team_a_score]" value="" 
                                                class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                               {{ $i >= 3 ? 'disabled' : '' }}>
+                                               {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                         <span class="text-gray-400 font-bold mx-2">:</span>
-                                        <input type="number" min="0" name="matches[{{ $i-1 }}][team_b_score]" value="{{ $i == 3 ? 1 : ($i == 4 ? 3 : 0) }}" 
+                                        <input type="number" min="0" name="matches[{{ $index }}][team_b_score]" value="{{ $match->team_b_score }}" 
                                                class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                               {{ $i >= 3 ? 'disabled' : '' }}>
+                                               {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                     </div>
                                     
                                     <!-- Team B (clickable for winner selection) -->
-                                    <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $i == 4 ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                         data-team-id="team-b-{{ $i }}" data-match-index="{{ $i-1 }}">
-                                        <div class="font-medium text-white">Team Omega</div>
-                                        <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0"></div>
+                                    <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
+                                         data-team-id="" data-match-index="{{ $index }}">
+                                        <div class="font-medium text-white">
+                                            {{-- {{ $match->teamB->name }} --}}
+                                        </div>
+                                        <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
+                                            @if($match->teamB->photo)
+                                                <img src="{{ $match->teamB->getPhotoUrl() }}" alt="" class="h-10 w-10 object-cover rounded-full">
+                                            @endif
+                                        </div>
                                     </div>
-                                    <input type="hidden" name="matches[{{ $i-1 }}][winner_id]" value="{{ $i == 3 ? 'team-a-'.$i : ($i == 4 ? 'team-b-'.$i : '') }}">
+                                    <input type="hidden" name="matches[{{ $index }}][winner_id]" value="{{ $match->winner_id }}">
                                 </div>
                                 
                                 <!-- Action Button -->
                                 <div>
-                                    @if($i < 3)
+                                    {{-- @if($match->status == 'pending') --}}
                                         <button type="button" class="save-match-btn inline-flex items-center justify-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                data-match-index="{{ $i-1 }}">
+                                                data-match-index="{{ $index }}" data-match-id="{{ $match->id }}">
                                             <i class="fas fa-check mr-1"></i> Submit
                                         </button>
-                                    @else
-                                        <div class="flex items-center space-x-2">
+                                    {{-- @else --}}
+                                        {{-- <div class="flex items-center space-x-2">
                                             <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
                                             <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                    data-match-index="{{ $i-1 }}">
+                                                    data-match-index="{{ $index }}" data-match-id="{{ $match->id }}">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                        </div>
-                                    @endif
+                                        </div> --}}
+                                    {{-- @endif --}}
                                 </div>
                             </div>
                         </div>
-                        @endfor
+                        {{-- @endforeach --}}
                     </div>
                 </div>
                 
                 <!-- Submit All Button -->
                 <div class="mt-4 flex justify-end">
-                    <button id="saveAllResultsBtn" type="button" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
+                    <button id="saveAllResultsBtn" type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
                         <i class="fas fa-save mr-2"></i>
                         Save All Changes
                     </button>
                 </div>
             </form>
+            {{-- @else --}}
+                @if(strtolower($tournament->status) == 'upcoming')
+                    <div class="text-center py-10 text-gray-400">
+                        <p>No matches available. Start the tournament to generate matches.</p>
+                    </div>
+                @else
+                    <div class="text-center py-10 text-gray-400">
+                        <p>No matches available. Use the "Create Match" button to add matches.</p>
+                    </div>
+                @endif
+            {{-- @endif --}}
         </div>
 
         <!-- Main Content Grid -->
@@ -240,36 +267,40 @@
                             <i class="fas fa-users text-indigo-400 mr-2"></i>
                             Participants
                         </h2>
-                        <span class="text-sm text-gray-400">{{ $tournament->max_participants }}/16</span>
+                        <span class="text-sm text-gray-400">{{ $participants_count }}/{{ $tournament->max_participants }}</span>
                     </div>
                     
                     <div class="space-y-3">
                         <!-- Progress bar -->
                         <div class="w-full bg-gray-700 rounded-full h-2.5">
                             @php
-                                $participantPercentage = min(100, (16 / $tournament->max_participants) * 100);
+                                $participantPercentage = min(100, ($participants_count / $tournament->max_participants) * 100);
                             @endphp
                             <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ $participantPercentage }}%"></div>
                         </div>
                         
                         <!-- Participant list -->
                         <div class="divide-y divide-gray-700">
-                            @for ($i = 1; $i <= 5; $i++)
+                            @foreach($participants as $participant)
                             <div class="flex items-center py-3">
                                 <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                    <img src="/placeholder/avatar{{ $i }}.jpg" alt="Participant {{ $i }}" class="w-full h-full object-cover">
+                                    @if($participant->photo)
+                                        <img src="{{ $participant->getPhotoUrl() }}" alt="{{ $participant->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gray-600"></div>
+                                    @endif
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-sm font-medium text-white">Team {{ $i }}</p>
+                                    <p class="text-sm font-medium text-white">{{ $participant->name }}</p>
                                 </div>
                             </div>
-                            @endfor
+                            @endforeach
                             
-                            @if(16 > 5)
+                            @if($participants_count > count($participants))
                             <div class="text-center py-2">
-                                <button class="text-indigo-400 hover:text-indigo-300 text-sm">
+                                <a href="{{ route('organisator.tournament.participants', $tournament->id) }}" class="text-indigo-400 hover:text-indigo-300 text-sm">
                                     View all participants
-                                </button>
+                                </a>
                             </div>
                             @endif
                         </div>
@@ -295,7 +326,7 @@
                         </div>
                         
                         <div class="relative pl-10 pb-6">
-                            <div class="absolute left-0 top-1 rounded-full h-8 w-8 flex items-center justify-center bg-indigo-900 text-indigo-300">
+                            <div class="absolute left-0 top-1 rounded-full h-8 w-8 flex items-center justify-center {{ strtolower($tournament->status) == 'upcoming' ? 'bg-gray-700 text-gray-400' : 'bg-indigo-900 text-indigo-300' }}">
                                 <i class="fas fa-flag"></i>
                             </div>
                             <h3 class="text-md font-semibold text-white">Tournament Starts</h3>
@@ -303,7 +334,7 @@
                         </div>
                         
                         <div class="relative pl-10">
-                            <div class="absolute left-0 top-1 rounded-full h-8 w-8 flex items-center justify-center bg-gray-700 text-gray-400">
+                            <div class="absolute left-0 top-1 rounded-full h-8 w-8 flex items-center justify-center {{ strtolower($tournament->status) == 'completed' ? 'bg-purple-900 text-purple-300' : 'bg-gray-700 text-gray-400' }}">
                                 <i class="fas fa-trophy"></i>
                             </div>
                             <h3 class="text-md font-semibold text-white">Finals</h3>
@@ -336,9 +367,9 @@
                     <select id="team_a_id" name="team_a_id" required 
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team A</option>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option value="team-a-{{ $i }}">Team {{ $i }}</option>
-                        @endfor
+                        @foreach($participants as $participant)
+                            <option value="{{ $participant->id }}">{{ $participant->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 
@@ -347,9 +378,9 @@
                     <select id="team_b_id" name="team_b_id" required 
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team B</option>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option value="team-b-{{ $i }}">Team {{ $i }}</option>
-                        @endfor
+                        @foreach($participants as $participant)
+                            <option value="{{ $participant->id }}">{{ $participant->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 
@@ -508,8 +539,11 @@
         saveMatchButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const matchIndex = this.getAttribute('data-match-index');
+                const matchId = this.getAttribute('data-match-id');
                 const matchRow = this.closest('.match-row');
                 const winnerId = matchRow.querySelector(`input[name="matches[${matchIndex}][winner_id]"]`).value;
+                const teamAScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_a_score]"]`).value;
+                const teamBScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_b_score]"]`).value;
                 
                 if (!winnerId) {
                     alert('Please select a winner by clicking on a team.');
@@ -521,31 +555,56 @@
                 this.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
                 this.disabled = true;
                 
-                // Simulate API call
-                setTimeout(() => {
-                    // Update match status
-                    matchRow.classList.remove('pending');
-                    matchRow.classList.add('completed');
-                    
-                    // Disable inputs
-                    matchRow.querySelectorAll('input[type="number"]').forEach(input => {
-                        input.disabled = true;
-                    });
-                    
-                    // Replace button with completed status
-                    this.parentNode.innerHTML = `
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
-                            <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                    data-match-index="${matchIndex}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                    `;
-                    
-                    // Add event listener to new edit button
-                    addEditButtonListeners();
-                }, 1000);
+                // AJAX request to update single match
+                fetch(`{{ route('organisator.match.update', '') }}/${matchId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        winner_id: winnerId,
+                        team_a_score: teamAScore,
+                        team_b_score: teamBScore
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update match status
+                        matchRow.classList.remove('pending');
+                        matchRow.classList.add('completed');
+                        
+                        // Disable inputs
+                        matchRow.querySelectorAll('input[type="number"]').forEach(input => {
+                            input.disabled = true;
+                        });
+                        
+                        // Replace button with completed status
+                        this.parentNode.innerHTML = `
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
+                                <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                                        data-match-index="${matchIndex}" data-match-id="${matchId}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        `;
+                        
+                        // Add event listener to new edit button
+                        addEditButtonListeners();
+                    } else {
+                        alert('Error updating match: ' + data.message);
+                        this.innerHTML = originalHtml;
+                        this.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the match.');
+                    this.innerHTML = originalHtml;
+                    this.disabled = false;
+                });
             });
         });
         
@@ -554,6 +613,7 @@
             document.querySelectorAll('.edit-match-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const matchIndex = this.getAttribute('data-match-index');
+                    const matchId = this.getAttribute('data-match-id');
                     const matchRow = this.closest('.match-row');
                     
                     // Enable editing
@@ -567,7 +627,7 @@
                     // Replace edit button with save button
                     this.parentNode.innerHTML = `
                         <button type="button" class="save-match-btn inline-flex items-center justify-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                data-match-index="${matchIndex}">
+                                data-match-index="${matchIndex}" data-match-id="${matchId}">
                             <i class="fas fa-check mr-1"></i> Update
                         </button>
                     `;
@@ -576,6 +636,8 @@
                     const newSaveBtn = matchRow.querySelector('.save-match-btn');
                     newSaveBtn.addEventListener('click', function() {
                         const winnerId = matchRow.querySelector(`input[name="matches[${matchIndex}][winner_id]"]`).value;
+                        const teamAScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_a_score]"]`).value;
+                        const teamBScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_b_score]"]`).value;
                         
                         if (!winnerId) {
                             alert('Please select a winner by clicking on a team.');
@@ -586,30 +648,55 @@
                         this.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
                         this.disabled = true;
                         
-                        // Simulate API call
-                        setTimeout(() => {
-                            // Disable editing
-                            matchRow.classList.remove('editing');
-                            
-                            // Disable inputs
-                            matchRow.querySelectorAll('input[type="number"]').forEach(input => {
-                                input.disabled = true;
-                            });
-                            
-                            // Replace with completed status
-                            this.parentNode.innerHTML = `
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
-                                    <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                            data-match-index="${matchIndex}">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </div>
-                            `;
-                            
-                            // Re-add edit button listeners
-                            addEditButtonListeners();
-                        }, 1000);
+                        // AJAX request to update match
+                        fetch(`{{ route('organisator.match.update', '') }}/${matchId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                winner_id: winnerId,
+                                team_a_score: teamAScore,
+                                team_b_score: teamBScore
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Disable editing
+                                matchRow.classList.remove('editing');
+                                
+                                // Disable inputs
+                                matchRow.querySelectorAll('input[type="number"]').forEach(input => {
+                                    input.disabled = true;
+                                });
+                                
+                                // Replace with completed status
+                                this.parentNode.innerHTML = `
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
+                                        <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                                                data-match-index="${matchIndex}" data-match-id="${matchId}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                `;
+                                
+                                // Re-add edit button listeners
+                                addEditButtonListeners();
+                            } else {
+                                alert('Error updating match: ' + data.message);
+                                this.innerHTML = '<i class="fas fa-check mr-1"></i> Update';
+                                this.disabled = false;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while updating the match.');
+                            this.innerHTML = '<i class="fas fa-check mr-1"></i> Update';
+                            this.disabled = false;
+                        });
                     });
                 });
             });
@@ -617,33 +704,6 @@
         
         // Initialize edit button listeners
         addEditButtonListeners();
-        
-        // Save all button
-        const saveAllBtn = document.getElementById('saveAllResultsBtn');
-        if (saveAllBtn) {
-            saveAllBtn.addEventListener('click', function() {
-                // Validate all pending matches have winners
-                const pendingMatches = document.querySelectorAll('.match-row.pending');
-                let allValid = true;
-                
-                pendingMatches.forEach(match => {
-                    const matchIndex = match.querySelector('.team-select').getAttribute('data-match-index');
-                    const winnerId = match.querySelector(`input[name="matches[${matchIndex}][winner_id]"]`).value;
-                    
-                    if (!winnerId) {
-                        allValid = false;
-                    }
-                });
-                
-                if (!allValid) {
-                    alert('Please select winners for all pending matches before saving.');
-                    return;
-                }
-                
-                // Submit the form
-                document.getElementById('matchResultsForm').submit();
-            });
-        }
     });
 </script>
 @endsection

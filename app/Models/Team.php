@@ -50,7 +50,9 @@ class Team extends Model
 
     public function getTeamCaptainName(){
 
-        
+        $teamCaptain = Participant::where('id',$this->team_captain)->first();
+        $captainName = User::where('id',$teamCaptain->user_id)->first();
+        return $captainName->name ; 
 
     }
 }

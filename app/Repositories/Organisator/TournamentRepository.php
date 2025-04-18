@@ -24,8 +24,7 @@ public function displayTournaments($organisator_id)
     $tournaments = Tournament::where('is_validated', 1)
     ->where('organisator_id', $organisator_id)
     ->where('deleted',0)
-    ->paginate(2);
-    ;
+    ->paginate(4);
     return $tournaments;
 
 }
