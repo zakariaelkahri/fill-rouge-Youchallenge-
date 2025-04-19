@@ -3,6 +3,7 @@
 namespace App\Services\Organisator;
 
 use App\Models\Role;
+use App\Models\Team;
 use App\Models\Tournament;
 use App\Models\User;
 use App\Repositories\BuyerRepository;
@@ -37,7 +38,6 @@ class TournamentService
 
     public function store(array $data)
     {
-        // dd($data);
 
         $tournamentphoto = null;
 
@@ -79,8 +79,10 @@ class TournamentService
      public function showTournament($id){
 
          $tournament = Tournament::where('id',$id)->first();
+        $teams = Team::where('tournament_id',$tournament->id)->get();
+
         
-        return $tournament;
+        return [$tournament,$teams];
 
     }
 

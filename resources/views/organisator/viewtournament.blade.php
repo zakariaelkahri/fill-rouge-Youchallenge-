@@ -78,7 +78,7 @@
                                     Edit
                                 </a>
                                 @if(strtolower($tournament->status) == 'upcoming')
-                                <form action="" method="POST">
+                                <form action="{{route('organisator.start.tournament')}}" method="POST">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-play mr-2"></i>
@@ -281,30 +281,26 @@
                         
                         <!-- Participant list -->
                         <div class="divide-y divide-gray-700">
-                            {{-- @foreach($participants as $participant) --}}
+                            @foreach($teams as $team)
                             <div class="flex items-center py-3">
                                 <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                    {{-- @if(isset($participant->photo) && $participant->photo)
-                                        <img src="{{ $participant->getPhotoUrl() }}" alt="{{ $participant->name }}" class="w-full h-full object-cover">
-                                    @else --}}
-                                        <div class="w-full h-full bg-gray-600"></div>
-                                    {{-- @endif --}}
+                                        <img src="{{ $team->getPhotoUrl() }}" alt="{{ $team->name }}" class="w-full h-full object-cover">
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm font-medium text-white">
-                                        {{-- {{ $participant->name }} --}}
+                                        {{ $team->name }}
                                     </p>
                                 </div>
                             </div>
-                            {{-- @endforeach --}}
+                            @endforeach
                             
-                            {{-- @if($participants_count > count($participants)) --}}
+                            @if(1 > count($teams))
                             <div class="text-center py-2">
                                 <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">
-                                    View all participants
+                                    View all teams
                                 </a>
                             </div>
-                            {{-- @endif --}}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -369,10 +365,10 @@
                     <select id="team_a_id" name="team_a_id" required 
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team A</option>
-                        {{-- @foreach($participants as $participant) --}}
-                        {{-- {{ $participant->id }} --}}
-                            <option value="2">$participant->name</option>
-                        {{-- @endforeach --}}
+                        @foreach($teams as $team)
+                        {{ $team->id }}
+                            <option value="2">{{$team->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 
@@ -381,10 +377,10 @@
                     <select id="team_b_id" name="team_b_id" required 
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team B</option>
-                        {{-- @foreach($participants as $participant) --}}
-                        {{-- {{ $participant->id }} --}}
-                        <option value="2">$participant->name</option>
-                        {{-- @endforeach --}}
+                        @foreach($teams as $team)
+                        {{ $team->id }}
+                        <option value="2">{{$team->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 

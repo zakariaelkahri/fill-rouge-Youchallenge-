@@ -72,6 +72,7 @@ Route::get('/organisator/manage/tournament', [TournamentController::class, 'inde
 
 Route::get('/organisator/tournament/details/{tournament}', [TournamentController::class, 'show'])->name('organisator.tournamentdetails');
 
+Route::get('/organisator/start/tournament/{tournament}', [TournamentController::class, ''])->name('organisator.start.tournament');
 });
 
 // participant
