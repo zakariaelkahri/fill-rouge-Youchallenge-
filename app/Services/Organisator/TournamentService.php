@@ -78,7 +78,7 @@ class TournamentService
     }   
      public function showTournament($id){
 
-         $tournament = Tournament::where('id',$id)->first();
+        $tournament = Tournament::where('id',$id)->first();
         $teams = Team::where('tournament_id',$tournament->id)->get();
 
         

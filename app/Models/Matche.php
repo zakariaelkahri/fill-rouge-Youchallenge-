@@ -10,6 +10,7 @@ class Matche extends Model
     use HasFactory;
     protected $fillable = 
     [
+        'round_id',
         'team1_id',
         'team2_id',
         'winner_team',

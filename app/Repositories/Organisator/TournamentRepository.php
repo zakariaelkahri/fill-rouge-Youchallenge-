@@ -67,7 +67,7 @@ public function createRoundMatches($round){
 
     
     for($i=0 ; $i<$matche_number ; $i++){
-        if($i%2 == 0){
+        if($i%2 == 0 && isset($round_teams[$i + 1])){
 
             $data['round_id'] = $round->id;
             $data['team1_id'] = $round_teams[$i]->id;
@@ -76,10 +76,10 @@ public function createRoundMatches($round){
             
         }
     }
-    
-    
-    $matches = Matche::where('round_id',$round->id);
-    // dd($matches);
+    // dd('here');
+
+    $matches = Matche::where('round_id',$round->id)->get();
+    dd($matches);
     
     return $matches ;
 

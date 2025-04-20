@@ -26,24 +26,24 @@ class RoundController extends Controller
 
     public function create($id)
     {
-
                 try {
    
         $round = $this->tournamentService->createRound($id);
         $matches = $this->tournamentService->createRoundMatches($round);
+        // $tournament = Tournament::where('id',$id)->first();
         dd('here');
         Log::info('tournament created successfully' . $tournement->name);
 
 
-        if (!$round && $matches) {
-                return redirect()->route('organisator.tournamentdetails')->with('failed', 'round not created !');
+        if (!$round && $matches && $tournament) {
+                return redirect()->back()->with('failed', 'round not created !');
         }
         
-        return redirect()->route('organisator.tournamentdetails')->with('success', 'round 1 created successfully !');
+        return redirect()->back()->with('success', 'round 1 created successfully !');
     
     } catch (\Exception $e) {
         Log::error('round 1 not created: ' . $e->getMessage());
-        return redirect()->route('organisator.tournamentdetails')->with('failed', 'round not created !');
+        return redirect()->back()->with('failed', 'round not created !');
     }
 
     }
