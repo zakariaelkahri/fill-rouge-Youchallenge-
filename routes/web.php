@@ -43,6 +43,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
+
+
+
 // Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', function () {
@@ -51,6 +54,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/manageusers', [UserController::class, 'index'])->name('admin.manageusers')->middleware('nocache');
     Route::patch('/edite/status/{user}', [UserController::class, 'edite'])->name('admin.managestatus');
 });
+
+
+
+
 
 
 
@@ -75,6 +82,12 @@ Route::get('/organisator/tournament/details/{tournament}', [TournamentController
 
 Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'create'])->name('organisator.start.tournament');
 });
+
+
+
+
+
+
 
 // participant
 Route::middleware(['auth', 'role:participant'])->group(function(){

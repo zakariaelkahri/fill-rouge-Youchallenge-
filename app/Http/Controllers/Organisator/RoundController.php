@@ -26,46 +26,27 @@ class RoundController extends Controller
 
     public function create($id)
     {
-        
+
+                try {
+   
         $round = $this->tournamentService->createRound($id);
-        $round_one = $this->tournamentService->createRoundMatches($round);
+        $matches = $this->tournamentService->createRoundMatches($round);
         dd('here');
-            //     try {
-    //     $ = $this->tournamentService->store($data);
-    //     Log::info('tournament created successfully' . $tournement->name);
+        Log::info('tournament created successfully' . $tournement->name);
 
 
-    //     if (!$round) {
-                // return ;
-    //     }
+        if (!$round && $matches) {
+                return redirect()->route('organisator.tournamentdetails')->with('failed', 'round not created !');
+        }
         
-    //     return  redirect()->route('organisator.dashboard')->with('success', 'tournament created successfully!');
-    // } catch (\Exception $e) {
-    //     Log::error('creation tournament error: ' . $e->getMessage());
-    //     return redirect()->back()->withInput()->withErrors([$e->getMessage()]);
-    // }
-
+        return redirect()->route('organisator.tournamentdetails')->with('success', 'round 1 created successfully !');
+    
+    } catch (\Exception $e) {
+        Log::error('round 1 not created: ' . $e->getMessage());
+        return redirect()->route('organisator.tournamentdetails')->with('failed', 'round not created !');
     }
 
-
-
-    // public function index(){
-        
-    //     $organisator_id = Auth::user()->organisator->id;
-    //     $tournaments = $this->tournamentService->displayTournaments($organisator_id);
-    //     return view('organisator/managetournament',compact('tournaments'));
-    // }
-
-
-
-    // public function show($id){
-    //     $tournament_team = $this->tournamentService->showTournament($id);
-    //     $tournament = $tournament_team[0];
-    //     $teams = $tournament_team[1];
-    //     // dd($tournament_team);
-    //     return view('organisator/viewtournament',compact('tournament','teams'));
-        
-    // }
+    }
 
     
 
