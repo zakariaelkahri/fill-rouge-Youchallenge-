@@ -44,15 +44,16 @@
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-users w-5 text-center mr-2"></i>
-                        <span>{{ $tournament->current_participants }}/{{ $tournament->max_participants }} Teams</span>
+                        <span>{{ $tournament->particpated_teams }}/{{ $tournament->max_participants }} Teams</span>
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-trophy w-5 text-center mr-2"></i>
-                        <span>Prize: ${{ number_format($tournament->prize_pool) }}</span>
+                        <span>Prize: {{$tournament->reward}}</span>
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-user w-5 text-center mr-2"></i>
-                        <span>Organizer: {{ $tournament->organisator->name }}</span>
+
+                        <span>Organizer: {{ $tournament->organisator->user->name }}</span>
                     </div>
                 </div>
                 
@@ -60,7 +61,7 @@
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex-1">
                         @if($tournament->status == 'upcoming' && $tournament->current_participants < $tournament->max_participants)
-                            @if(true)
+                            @if(!$tournament->isParticipating(auth()->user()->id))
                                 <div class="bg-blue-900/30 border border-blue-700 rounded-lg p-4">
                                     <p class="text-blue-300">
                                         <i class="fas fa-info-circle mr-2"></i>
@@ -92,9 +93,12 @@
                             <button id="createTeamBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200">
                                 <i class="fas fa-users-cog mr-2"></i> Create Team
                             </button>
-                            <button id="joinTeamBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-200">
-                                <i class="fas fa-sign-in-alt mr-2"></i> Join Team
-                            </button>
+                            @if (!$tournament->isParticipating(auth()->user()->id) && count($teams) > 0)
+                                <button id="joinTeamBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-200">
+                                    <i class="fas fa-sign-in-alt mr-2"></i> Join Team
+                                </button>
+                            @endif
+        
                         </div>
                     @endif
                 </div>
@@ -160,23 +164,23 @@
 
             <h2 class="text-2xl font-bold text-white mb-4">Registered Teams ({{ $tournament->particpated_teams }}/{{ $tournament->max_participants }})</h2>
             
-            {{-- @if(count($participants) > 0)
+            @if(count($teams) > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @foreach($participants as $team)
+                    @foreach($teams as $team)
                         <div class="bg-gray-700 rounded-lg p-4 flex items-center">
                             <div class="h-12 w-12 rounded-full bg-gray-600 mr-4 flex-shrink-0">
-                                <img src="{{ $team->logo_url ?? asset('images/default-team.png') }}" alt="{{ $team->name }}" class="h-full w-full object-cover rounded-full">
+                                <img src="{{ $team->getPhotoUrl() ?? asset('images/default.png') }}" alt="{{ $team->name }}" class="h-full w-full object-cover rounded-full">
                             </div>
                             <div>
                                 <div class="text-white font-medium">{{ $team->name }}</div>
-                                <div class="text-xs text-gray-400">Captain: {{ $team->captain->name }}</div>
+                                <div class="text-xs text-gray-400">Captain: {{ $team->getTeamCaptainName() }}    <br> Member : {{  $team->participated_members.'/'.$tournament->team_mode }}</div>
                             </div>
                         </div>
                     @endforeach
                 </div>
-            @else --}}
+            @else
                 <p class="text-gray-400">No teams have registered yet. Be the first!</p>
-            {{-- @endif --}}
+            @endif
         </div>
         
         <!-- Tournament Bracket (for ongoing or completed tournaments) -->
@@ -231,7 +235,7 @@
                     {{-- <!-- You (Captain) --> --}}
                     <div class="p-3 bg-gray-700 rounded-lg border border-gray-600 flex items-center">
                         <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-600 mr-3">
-                            <img src="{{ asset('images/default.png') }}" alt="{{ auth()->user()->name }}" class="h-full w-full object-cover">
+                            <img src="{{ auth()->user()->getPhotoUrl() }}" alt="{{ auth()->user()->name }}" class="h-full w-full object-cover">
                         </div>
                         <div class="flex-1">
                             <p class="text-white font-medium">{{ auth()->user()->name }}</p>
@@ -261,13 +265,13 @@
                 </button>
             </div>
             
-            <form action="" method="POST">
+            <form action="{{route('participant.join.team')}}" method="POST">
                 @csrf
                 <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
                 
                 <div class="mb-4">
-                    <label for="invite_code" class="block text-sm font-medium text-gray-400 mb-1">Team Invite Code</label>
-                    <input type="text" id="invite_code" name="invite_code" required 
+                    <label for="invitation_code" class="block text-sm font-medium text-gray-400 mb-1">Team Invite Code</label>
+                    <input type="number" id="invitation_code" name="invitation_code" required 
                         class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                     <p class="mt-1 text-xs text-gray-400">
                         <i class="fas fa-info-circle mr-1"></i>
@@ -281,7 +285,42 @@
             </form>
         </div>
     </div>
+
+
 </div>
+
+@if (session('success'))
+<script>
+Swal.fire({
+    position: "center",
+    icon: "success",
+    title: @json(session('success') . ' 🎮'),
+    showConfirmButton: false,
+    timer: 2000,
+    customClass: {
+        popup: 'rounded-xl bg-gray-800 text-white'
+    },
+    background: '#1f2937', 
+});
+</script>
+@endif
+
+@if (session('joinfailed'))
+    <script>
+      Swal.fire({
+  position: "center", 
+  icon: "error",
+  title: "Oops...",
+  text: @json(session('joinfailed')),
+  footer: '<a href="#">Why do I have this issue?</a>',
+  showConfirmButton: true,
+  customClass: {
+    popup: 'rounded-xl shadow-lg'
+  }
+      });
+</script>
+
+@endif
 
 <style>
     .shadow-text {
@@ -411,5 +450,9 @@
             });
         });
     });
+
+
+
 </script>
+
 @endsection

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Team extends Model
 {
@@ -35,6 +36,30 @@ class Team extends Model
     public function tournament(){
 
         return $this->belongsTo(Tournament::class);
+
+    }
+
+    public function Rounds(){
+
+        return $this->belongsToMany(Round::class);
+
+    }
+    
+
+    public function getPhotoUrl()
+    {
+        if ($this->photo && Storage::disk('public')->exists($this->photo)) {
+            return Storage::url($this->photo);
+        }
+        
+        return asset('storage/images/default.png');
+    }
+
+    public function getTeamCaptainName(){
+
+        $teamCaptain = Participant::where('id',$this->team_captain)->first();
+        $captainName = User::where('id',$teamCaptain->user_id)->first();
+        return $captainName->name ; 
 
     }
 }

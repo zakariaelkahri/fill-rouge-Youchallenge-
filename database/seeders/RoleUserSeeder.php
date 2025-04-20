@@ -20,5 +20,19 @@ class RoleUserSeeder extends Seeder
         $user = User::Find(1);
         $user->roles()->syncWithoutDetaching(1);
 
+        $organisatorUsers = User::where('email', 'like', 'organisator%@example.com')->get();
+        foreach($organisatorUsers as $organisatorUser){
+
+        $organisatorUser->roles()->syncWithoutDetaching(2);
+
+        }
+
+        $participantUsers = User::where('email', 'like', 'participant%@example.com')->get();
+
+        foreach($participantUsers as $participantUser){
+
+        $participantUser->roles()->syncWithoutDetaching(3);
+            
+        }
     }
 }

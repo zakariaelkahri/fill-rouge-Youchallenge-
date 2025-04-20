@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Organisator\RoundController;
 use App\Http\Controllers\Organisator\TournamentController;
+use App\Http\Controllers\Participant\ParticipantController;
 use App\Http\Controllers\Participant\TeamController;
 use App\Http\Controllers\Participant\TournamentController as ParticipantTournamentController;
 
@@ -71,6 +73,7 @@ Route::get('/organisator/manage/tournament', [TournamentController::class, 'inde
 
 Route::get('/organisator/tournament/details/{tournament}', [TournamentController::class, 'show'])->name('organisator.tournamentdetails');
 
+Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'create'])->name('organisator.start.tournament');
 });
 
 // participant
@@ -83,7 +86,7 @@ Route::get('/participant/home', function () {
 Route::get('/participant/tournaments', [ParticipantTournamentController::class , 'index'])->name('participant.tournaments');
 Route::get('/participant/tournament/details/{tournament}', [ParticipantTournamentController::class , 'show'])->name('participant.tournament.details');
 Route::post('participant/create/team',[TeamController::class,'store'])->name('participant.team.create');
-
+Route::post('participant/join/team',[ParticipantController::class,'store'])->name('participant.join.team');
 
 });
 

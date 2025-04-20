@@ -15,11 +15,16 @@ class TeamRepository
 
 public function create($data)
 {
-    // dd($data);
     $team = Team::create($data);
-    // dd($team);
     return $team ;
 
+}
+
+public function join($team){
+
+    $participant = Auth::user()->participant;
+    $attach = $participant->teams()->syncWithoutDetaching($team->id);
+    return $attach ;
 }
 
 
