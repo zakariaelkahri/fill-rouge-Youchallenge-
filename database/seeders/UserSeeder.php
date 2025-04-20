@@ -3,91 +3,44 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        
+        // Optional: Your own user
         User::create([
-            'name'=>'zakaria',
-            'email'=>'zakaria@gmail.com',
-            'password'=>hash::make('Mimo20032016'),
-            'email_verified_at'=> now(),
-
+            'name' => 'zakaria',
+            'email' => 'zakaria@gmail.com',
+            'password' => Hash::make('Mimo20032016'),
+            'email_verified_at' => now(),
         ]);
-        // User::create([
-        //     'role_id'=>2,
-        //     'name'=>'hamza',
-        //     'email'=>'hamza@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-            
 
-        // ]);
+        // Create 2 organisers
+        for ($i = 1; $i <= 2; $i++) {
+            User::create([
+                'name' => "Organisator $i",
+                'email' => "organisator$i@example.com",
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'status' => 'active',
+                'remember_token' => Str::random(10),
+            ]);
+        }
 
-        //         User::create([
-        //     'role_id'=>4,
-        //     'name'=>'simo',
-        //     'email'=>'simo@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-            
-
-        // ]);
-        //         User::create([
-        //     'role_id'=>2,
-        //     'name'=>'issam',
-        //     'email'=>'issam@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-            
-
-        // ]); 
-        //        User::create([
-        //     'role_id'=>4,
-        //     'name'=>'anouar',
-        //     'email'=>'anouar@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-            
-
-        // ]);
-        //         User::create([
-        //     'role_id'=>3,
-        //     'name'=>'ayoub',
-        //     'email'=>'ayoub@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-            
-
-        // ]);
-        //         User::create([
-        //     'role_id'=>4,
-        //     'name'=>'abdo',
-        //     'email'=>'abdo@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-            
-
-        // ]); 
-        //        User::create([
-        //     'role_id'=>2,
-        //     'name'=>'yousef',
-        //     'email'=>'yousef@.com',
-        //     'password'=>hash::make('Mimo20032016'),
-        //     'email_verified_at'=> now(),
-        // ]);
-            
-
-
+        // Create 16 participants
+        for ($i = 1; $i <= 16; $i++) {
+            User::create([
+                'name' => "Participant $i",
+                'email' => "participant$i@example.com",
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'status' => 'active',
+                'remember_token' => Str::random(10),
+            ]);
+        }
     }
 }

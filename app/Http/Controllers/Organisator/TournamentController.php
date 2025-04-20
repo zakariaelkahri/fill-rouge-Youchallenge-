@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
-class matcheController extends Controller
+class TournamentController extends Controller
 {
     protected $tournamentService ;
 
@@ -81,6 +81,9 @@ class matcheController extends Controller
         
     }
 
+
+
+    }
+
     
 
-}

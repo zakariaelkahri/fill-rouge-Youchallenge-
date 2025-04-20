@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rounds', function (Blueprint $table) {
-            $table->id();
-            $table->integer('round')->default(1);
-            $table->enum('status',['not_started','started','finished'])->default('not_started');
-            $table->timestamps();
+        Schema::table('teams', function (Blueprint $table) {
+            $table->boolean('eliminated')->default(0);
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rounds');
+        Schema::table('teams', function (Blueprint $table) {
+            $table->dropColumn('eliminated');
+        });
     }
 };

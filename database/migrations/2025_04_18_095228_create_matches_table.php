@@ -18,9 +18,9 @@ return new class extends Migration
             $table->id();
             $table->integer('team1_id');
             $table->integer('team2_id');
-            $table->integer('winner_team');
-            $table->integer('loser_team');
-            $table->enum('status',['not_started','started','finished']);
+            $table->integer('winner_team')->nullable();
+            $table->integer('loser_team')->nullable();
+            $table->enum('status',['not_started','started','finished'])->default('not_started');
             
         });
     }

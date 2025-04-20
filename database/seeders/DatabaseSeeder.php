@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             PermissionRoleSeeder::class,
             UserSeeder::class,
             RoleUserSeeder::class,
+            OrganisatorSeeder::class,
+            ParticipantSeeder::class,
     ]);
        
 

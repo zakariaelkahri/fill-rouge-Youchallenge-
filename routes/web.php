@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Organisator\RoundController;
 use App\Http\Controllers\Organisator\TournamentController;
 use App\Http\Controllers\Participant\ParticipantController;
 use App\Http\Controllers\Participant\TeamController;
@@ -72,7 +73,7 @@ Route::get('/organisator/manage/tournament', [TournamentController::class, 'inde
 
 Route::get('/organisator/tournament/details/{tournament}', [TournamentController::class, 'show'])->name('organisator.tournamentdetails');
 
-Route::get('/organisator/start/tournament/{tournament}', [TournamentController::class, ''])->name('organisator.start.tournament');
+Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'create'])->name('organisator.start.tournament');
 });
 
 // participant

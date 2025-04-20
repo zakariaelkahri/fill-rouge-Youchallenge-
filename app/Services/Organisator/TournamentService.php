@@ -87,8 +87,24 @@ class TournamentService
     }
 
 
+    public function createRound($id){
+
+        $round = $this->tournamentRepository->createRound($id) ;
+        return $round ;
+
+    }
+
+    public function createRoundMatches($round){
+
+        $matches = $this->tournamentRepository->createRoundMatches($round) ;
+
+        return $matches ;
+
+    }
 
 
 
 
 }
+
+
