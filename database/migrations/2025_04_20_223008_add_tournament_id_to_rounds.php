@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('matches', function (Blueprint $table) {
-            $table->timestamps();
-
+        Schema::table('rounds', function (Blueprint $table) {
+            $table->foreignId('tournament_id')->constrained('tournaments')->onDelete('cascade')->after('id');
         });
     }
 
@@ -26,9 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('matches', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
-            $table->dropColumn('created_at');
+        Schema::table('rounds', function (Blueprint $table) {
+            $table->dropForeign('rounds_tournament_id_foreign');
+            $table->dropColumn('tournament_id');
         });
     }
 };

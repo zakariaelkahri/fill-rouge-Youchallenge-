@@ -76,8 +76,13 @@ class TournamentController extends Controller
         $tournament_team = $this->tournamentService->showTournament($id);
         $tournament = $tournament_team[0];
         $teams = $tournament_team[1];
-        // dd($tournament_team);
-        return view('organisator/viewtournament',compact('tournament','teams'));
+        $rounds = null;
+        if(isset($tournament_team[2]) && $tournament_team[2]->matches()->exists()){
+            $rounds = $tournament_team[2]->get();
+
+        }
+        // dd($rounds);
+        return view('organisator/viewtournament',compact('tournament','teams','rounds'));
         
     }
 

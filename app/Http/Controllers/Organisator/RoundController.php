@@ -30,13 +30,10 @@ class RoundController extends Controller
    
         $round = $this->tournamentService->createRound($id);
         $matches = $this->tournamentService->createRoundMatches($round);
-        // $tournament = Tournament::where('id',$id)->first();
-        dd('here');
-        Log::info('tournament created successfully' . $tournement->name);
+        Log::info('round and matchs created successfully' );
 
-
-        if (!$round && $matches && $tournament) {
-                return redirect()->back()->with('failed', 'round not created !');
+        if (!$round && $matches ) {
+                return redirect()->back()->with('failed', 'round is not created !');
         }
         
         return redirect()->back()->with('success', 'round 1 created successfully !');

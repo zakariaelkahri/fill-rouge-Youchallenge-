@@ -59,6 +59,11 @@ class Tournament extends Model
 
    }
 
+//    public function rounds()
+// {
+//     return $this->hasManyThrough(Round::class, Team::class);
+// }
+
 }
 
 

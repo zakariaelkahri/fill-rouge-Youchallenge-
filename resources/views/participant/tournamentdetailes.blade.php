@@ -305,6 +305,7 @@ Swal.fire({
 </script>
 @endif
 
+
 @if (session('joinfailed'))
     <script>
       Swal.fire({
