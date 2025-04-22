@@ -53,12 +53,11 @@ class RoundController extends Controller
     public function edite(UpdateRoundMatchesRequest $request){
 
         try{
-        $data = $request->only(       
+        $data = $request
+        ->only(       
             'round_id',
             'matches',
-            );
-
-            dd($data);
+        );
 
         $matche_data = [];
         $round = Round::where('id',$data['round_id'])->first();
@@ -69,7 +68,9 @@ class RoundController extends Controller
             if($matche->team1_id == $data['matches'][$data_match]['winner_id']){
 
                 $matche->winner_team = $matche->team1_id ;
-                $matche->loser_team = $matche->team2_id ;  
+                $matche->loser_team = $matche->team2_id ; 
+                $matche->status = 'finished';
+
                 $matche->save();
 
                 $loser = Team::where('id',$matche->team2_id)->first();
@@ -85,7 +86,8 @@ class RoundController extends Controller
 
             }elseif(($matche->team2_id == $data['matches'][$data_match]['winner_id'])){
                 $matche->winner_team = $matche->team2_id ;
-                $matche->loser_team = $matche->team1_id ;  
+                $matche->loser_team = $matche->team1_id ;
+                $matche->status = 'finished'; 
                 $matche->save();
 
                 $loser = Team::where('id',$matche->team1_id)->first();
@@ -102,10 +104,12 @@ class RoundController extends Controller
 
             }
 
-
-
-
+            
+            
         }
+        $round->status = 'finished';
+        $round->save();
+        return redirect()->back()->with('success', 'Data saved successfully !');
 
         } catch(\Exception $e){
             Log::error('round 1 not created: ' . $e->getMessage());

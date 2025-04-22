@@ -51,6 +51,13 @@ class Matche extends Model
 
     }
 
+    public function getResault($id){
+
+        $resault = Resault::where('match_id',$id)->first();
+        
+        return $resault;
+
+    }
 
 }
 

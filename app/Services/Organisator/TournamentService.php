@@ -80,7 +80,7 @@ class TournamentService
      public function showTournament($id){
 
         $tournament = Tournament::where('id',$id)->first();
-        $teams = Team::where('tournament_id',$tournament->id)->where('eliminated',0)->get();
+        $teams = Team::where('tournament_id',$tournament->id)->get();
         $rounds = Round::whereHas('teams', function ($query) use ($tournament) {
         $query->where('tournament_id', $tournament->id)->where('eliminated',0);
         })->first();

@@ -24,11 +24,11 @@ Route::get('/', function () {
     return view('accueil');
 });
 
-Route::get('/showloginform', function () {
+Route::get('/login', function () {
     return view('login');
 })->name('showloginform');
 
-Route::get('/showregisterform', function () {
+Route::get('/register', function () {
     return view('register');
 })->name('showregisterform');
 

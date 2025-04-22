@@ -184,6 +184,18 @@
                                             </div>
                                             
                                             <!-- Score Inputs -->
+                                            @if ($match->status == 'finished')
+                                                
+                                            <div class="flex items-center mx-4">
+                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][score_team1]" value="{{ $match->getResault($match->id)->score_team1 }}" 
+                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 score-input"
+                                                    {{  $match->status == 'finished' ? 'disabled' : '' }}>
+                                                <span class="text-gray-400 font-bold mx-2">:</span>
+                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][score_team2]" value="{{ $match->getResault($match->id)->score_team2 }}" 
+                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 score-input"
+                                                    {{  $match->status == 'finished' ? 'disabled' : '' }}>
+                                            </div>                                                
+                                            @else
                                             <div class="flex items-center mx-4">
                                                 <input type="number" min="0" name="matches[{{ $matchIndex }}][score_team1]" value="{{ $match->score_team1 }}" 
                                                     class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 score-input"
@@ -193,6 +205,7 @@
                                                     class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 score-input"
                                                     {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                             </div>
+                                            @endif
                                             
                                             <!-- Team B -->
                                             <div class="flex flex-col items-end flex-1">
@@ -223,12 +236,16 @@
                             </div>
                             
                             <!-- Submit Round Button -->
+                            @if ($round->status == 'not_started')
+                            
                             <div class="p-4 flex justify-end">
                                 <button type="submit" class="save-round-btn inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
                                     <i class="fas fa-save mr-2"></i>
                                     Save Round {{$round->round}}
                                 </button>
                             </div>
+                                
+                            @endif
                         </form>
                     </div>
                 </div>
