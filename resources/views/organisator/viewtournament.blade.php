@@ -131,233 +131,108 @@
             </div>
             
             @if(isset($rounds) && count($rounds) > 0)
-                <!-- Match Filters -->
-                <div class="flex flex-wrap gap-3 mb-4">
-                    <button type="button" class="match-filter-btn active px-3 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white" data-filter="all">
-                        All Matches
-                    </button>
-                    <button type="button" class="match-filter-btn px-3 py-2 text-sm font-medium rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600" data-filter="pending">
-                        Pending
-                    </button>
-                    <button type="button" class="match-filter-btn px-3 py-2 text-sm font-medium rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600" data-filter="completed">
-                        Completed
-                    </button>
-                </div>
-                
-                <!-- Rounds Section - One form per round -->
-                <div class="space-y-4 rounds-container">
-                    @foreach($rounds as $roundIndex => $round)
-                    <div class="round-container bg-gray-700/30 rounded-xl overflow-hidden">
-                        <!-- Round Header (Clickable) -->
-                        <div class="round-header bg-gray-700/70 p-4 flex items-center justify-between cursor-pointer" data-round-id="{{ $round->id }}">
-                            <span class="text-lg font-semibold text-white">Round {{ $roundIndex + 1 }}</span>
-                            <button type="button" class="toggle-round-btn p-2 text-gray-400 hover:text-white focus:outline-none" data-round-id="{{ $round->id }}">
-                                <i class="fas fa-chevron-down transition-transform duration-200 {{ $roundIndex === 0 ? 'rotate-180' : '' }}"></i>
-                            </button>
-                        </div>
-                        
-                        <!-- Round Matches (Hidden by default except first round) -->
-                        <div class="round-matches overflow-hidden bg-gray-700/50 {{ $roundIndex === 0 ? '' : 'hidden' }}" id="round-matches-{{ $round->id }}">
-                            <form class="round-form" action="" method="POST">
-                                {{-- {{ route('organisator.update.round', ['round' => $round->id]) }} --}}
-                                @csrf
-                                <input type="hidden" name="round_id" value="{{ $round->id }}">
-                                
-                                <div class="divide-y divide-gray-700">
-                                    @foreach($round->matches as $matchIndex => $match)
-                                    <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }}">
-                                        <div class="flex flex-wrap items-center gap-4">
-                                            <!-- Match Info -->
-                                            <div class="w-full sm:w-auto flex items-center mb-2 sm:mb-0">
-                                                <span class="text-gray-400 text-sm font-medium">Match #{{ $match->id }}</span>
-                                                <input type="hidden" name="matches[{{ $matchIndex }}][id]" value="{{ $match->id }}">
-                                            </div>
-                                            
-                                            <!-- Teams and Scores -->
-                                            <div class="flex-1 flex items-center">
-                                                <!-- Team A Name and Selection -->
-                                                <div class="flex flex-col items-start">
-                                                    <!-- Team name field -->
-                                                    <input type="text" name="matches[{{ $matchIndex }}][team_a_name]" 
-                                                        value="{{ $match->team_a_name ?? '' }}" placeholder="Team A name" 
-                                                        class="mb-2 w-full bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                                        {{ $match->status == 'completed' ? 'disabled' : '' }}>
-                                                        
-                                                    <!-- Team selection -->
-                                                    <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                                        data-team-id="{{ $match->team_a_id }}" data-match-index="{{ $matchIndex }}">
-                                                        <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
-                                                            {{-- Team A avatar --}}
-                                                        </div>
-                                                        <div class="font-medium text-white">{{ $match->team1_id }}</div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <!-- Score Inputs -->
-                                                <div class="flex items-center mx-4">
-                                                    <input type="number" min="0" name="matches[{{ $matchIndex }}][team_a_score]" value="{{ $match->team_a_score }}" 
-                                                        class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                                        {{ $match->status == 'completed' ? 'disabled' : '' }}>
-                                                    <span class="text-gray-400 font-bold mx-2">:</span>
-                                                    <input type="number" min="0" name="matches[{{ $matchIndex }}][team_b_score]" value="{{ $match->team_b_score }}" 
-                                                        class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                                        {{ $match->status == 'completed' ? 'disabled' : '' }}>
-                                                </div>
-                                                
-                                                <!-- Team B Name and Selection -->
-                                                <div class="flex flex-col items-end">
-                                                    <!-- Team name field -->
-                                                    <input type="text" name="matches[{{ $matchIndex }}][team_b_name]" 
-                                                        value="{{ $match->team_b_name ?? '' }}" placeholder="Team B name" 
-                                                        class="mb-2 w-full bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                                        {{ $match->status == 'completed' ? 'disabled' : '' }}>
-                                                        
-                                                    <!-- Team selection -->
-                                                    <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                                        data-team-id="{{ $match->team_b_id }}" data-match-index="{{ $matchIndex }}">
-                                                        <div class="font-medium text-white">{{ $match->team2_id }}</div>
-                                                        <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
-                                                            {{-- Team B avatar --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" name="matches[{{ $matchIndex }}][winner_id]" value="{{ $match->winner_id }}">
-                                            </div>
-                                            
-                                            <!-- Action Button -->
-                                            {{-- <div>
-                                                @if($match->status == 'pending')
-                                                    <button type="button" class="save-match-btn inline-flex items-center justify-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                            data-match-index="{{ $matchIndex }}" data-match-id="{{ $match->id }}">
-                                                        <i class="fas fa-check mr-1"></i> Submit
-                                                    </button>
-                                                @else
-                                                    <div class="flex items-center space-x-2">
-                                                        <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
-                                                        <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                                data-match-index="{{ $matchIndex }}" data-match-id="{{ $match->id }}">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                    </div>
-                                                @endif
-                                            </div> --}}
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                
-                                <!-- Submit Round Button -->
-                                <div class="p-4 flex justify-end">
-                                    <button type="submit" class="save-round-btn inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
-                                        <i class="fas fa-save mr-2"></i>
-                                        Save Round {{ $roundIndex + 1 }}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            @elseif(isset($matches) && count($matches) > 0)
-                <!-- Match Form - Legacy Format -->
-                <form id="matchResultsForm" action="" method="POST">
-                    @csrf
-                    
-                    <!-- Match Filters -->
-                    <div class="flex flex-wrap gap-3 mb-4">
-                        <button type="button" class="match-filter-btn active px-3 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white" data-filter="all">
-                            All Matches
-                        </button>
-                        <button type="button" class="match-filter-btn px-3 py-2 text-sm font-medium rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600" data-filter="pending">
-                            Pending
-                        </button>
-                        <button type="button" class="match-filter-btn px-3 py-2 text-sm font-medium rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600" data-filter="completed">
-                            Completed
+            
+            <!-- Rounds Section - One form per round -->
+            <div class="space-y-4 rounds-container">
+                @foreach($rounds as $roundIndex => $round)
+                <div class="round-container bg-gray-700/30 rounded-xl overflow-hidden">
+                    <!-- Round Header (Clickable) -->
+                    <div class="round-header bg-gray-700/70 p-4 flex items-center justify-between cursor-pointer" data-round-id="{{ $round->id }}">
+                        <span class="text-lg font-semibold text-white">Round {{ $round->round }}</span>
+                        <button type="button" class="toggle-round-btn p-2 text-gray-400 hover:text-white focus:outline-none" data-round-id="{{ $round->id }}">
+                            <i class="fas fa-chevron-down transition-transform duration-200 {{ $roundIndex === 0 ? 'rotate-180' : '' }}"></i>
                         </button>
                     </div>
                     
-                    <!-- Match List -->
-                    <div class="overflow-hidden bg-gray-700/50 rounded-xl">
-                        <div class="divide-y divide-gray-700" id="match-list">
-                            <!-- Match rows generated from database data -->
-                            @foreach($matches as $index => $match)
-                            <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }}">
-                                <div class="flex flex-wrap items-center gap-4">
-                                    <!-- Match Info -->
-                                    <div class="w-full sm:w-auto flex items-center mb-2 sm:mb-0">
-                                        <span class="text-gray-400 text-sm font-medium">Match #{{ $match->id }}</span>
-                                        <input type="hidden" name="matches[{{ $index }}][id]" value="{{ $match->id }}">
-                                    </div>
-                                    
-                                    <!-- Teams and Scores -->
-                                    <div class="flex-1 flex items-center">
-                                        <!-- Team A (clickable for winner selection) -->
-                                        <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                            data-team-id="{{ $match->team_a_id }}" data-match-index="{{ $index }}">
-                                            <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
-                                                {{-- @if(isset($match->team1->photo) && $match->teamA->photo)
-                                                    <img src="{{ $match->teamA->getPhotoUrl() }}" alt="{{ $match->teamA->name }}" class="h-10 w-10 object-cover rounded-full">
-                                                @endif --}}
-                                            </div>
-                                            <div class="font-medium text-white">{{ $match->team1_id }}</div>
+                    <!-- Round Matches (Hidden by default except first round) -->
+                    <div class="round-matches overflow-hidden bg-gray-700/50 {{ $roundIndex === 0 ? '' : 'hidden' }}" id="round-matches-{{ $round->id }}">
+                        <form class="round-form" action="" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            
+                            <input type="hidden" name="round_id" value="{{ $round->id }}">
+                            
+                            <div class="divide-y divide-gray-700">
+                                @foreach($round->matches as $matchIndex => $match)
+                                <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }}">
+                                    <div class="flex flex-wrap items-center gap-4">
+                                        <!-- Match Info -->
+                                        <div class="w-full sm:w-auto flex items-center mb-2 sm:mb-0">
+                                            <span class="text-gray-400 text-sm font-medium">Match #{{ $match->id }}</span>
+                                            <input type="hidden" name="matches[{{ $matchIndex }}][id]" value="{{ $match->id }}">
                                         </div>
                                         
-                                        <!-- Score Inputs -->
-                                        <div class="flex items-center mx-4">
-                                            <input type="number" min="0" name="matches[{{ $index }}][team_a_score]" value="{{ $match->team_a_score }}" 
-                                                class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                                {{ $match->status == 'completed' ? 'disabled' : '' }}>
-                                            <span class="text-gray-400 font-bold mx-2">:</span>
-                                            <input type="number" min="0" name="matches[{{ $index }}][team_b_score]" value="{{ $match->team_b_score }}" 
-                                                class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
-                                                {{ $match->status == 'completed' ? 'disabled' : '' }}>
-                                        </div>
-                                        
-                                        <!-- Team B (clickable for winner selection) -->
-                                        <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                            data-team-id="{{ $match->team_b_id }}" data-match-index="{{ $index }}">
-                                            <div class="font-medium text-white">{{ $match->team2_id }}</div>
-                                            <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
-                                                {{-- @if(isset($match->team2_id) && $match->team2_id)
-                                                    <img src="{{ $match->teamB->getPhotoUrl() }}" alt="{{ $match->teamB->name }}" class="h-10 w-10 object-cover rounded-full">
-                                                @endif --}}
+                                        <!-- Teams and Scores -->
+                                        <div class="flex-1 flex items-center">
+                                            <!-- Team A -->
+                                            <div class="flex flex-col items-start flex-1">
+                                                <!-- Team name field -->
+                                                <h3 class="mb-2 w-full bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600">
+                                                    {{ $match->getTeamName($match->team1_id) }}
+                                                </h3>
+ 
+                                                <!-- Team selection -->
+                                                <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
+                                                    data-team-id="{{ $match->team_a_id }}" data-match-index="{{ $matchIndex }}">
+                                                    <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
+                                                             <!-- Team photo display -->
+                                                             <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
+                                                                <img src="{{ $match->getTeamPhotoUrl($match->team1_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team A">
+                                                            </div>                                                      </div>
+                                                    <div class="font-medium text-white"></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <input type="hidden" name="matches[{{ $index }}][winner_id]" value="{{ $match->winner_id }}">
-                                    </div>
-                                    
-                                    <!-- Action Button -->
-                                    <div>
-                                        @if(false)
-                                        {{-- $match->status == 'pending' --}}
-                                            <button type="button" class="save-match-btn inline-flex items-center justify-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                    data-match-index="{{ $index }}" data-match-id="{{ $match->id }}">
-                                                <i class="fas fa-check mr-1"></i> Submit
-                                            </button>
-                                        @else
-                                            <div class="flex items-center space-x-2">
-                                                <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
-                                                <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                        data-match-index="{{ $index }}" data-match-id="{{ $match->id }}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
+                                            
+                                            <!-- Score Inputs -->
+                                            <div class="flex items-center mx-4">
+                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][team_a_score]" value="{{ $match->team_a_score }}" 
+                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
+                                                    {{ $match->status == 'completed' ? 'disabled' : '' }}>
+                                                <span class="text-gray-400 font-bold mx-2">:</span>
+                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][team_b_score]" value="{{ $match->team_b_score }}" 
+                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
+                                                    {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                             </div>
-                                        @endif
+                                            
+                                            <!-- Team B -->
+                                            <div class="flex flex-col items-end flex-1">
+                                                <!-- Team name field -->
+                                                <h3 class="mb-2 w-full bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600">
+                                                    {{ $match->getTeamName($match->team2_id) }}
+                                                </h3>
+  
+                                                <!-- Team selection -->
+                                                <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
+                                                    data-team-id="{{ $match->team_b_id }}" data-match-index="{{ $matchIndex }}">
+                                                    <div class="font-medium text-white"></div>
+                                                    <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
+                                                            <!-- Team photo display -->
+                                                            <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
+                                                                <img src="{{ $match->getTeamPhotoUrl($match->team2_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team A">
+                                                            </div>    
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="matches[{{ $matchIndex }}][winner_id]" value="{{ $match->winner_id }}">
+                                        </div>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
-                            @endforeach
-                        </div>
+                            
+                            <!-- Submit Round Button -->
+                            <div class="p-4 flex justify-end">
+                                <button type="submit" class="save-round-btn inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                    <i class="fas fa-save mr-2"></i>
+                                    Save Round {{$round->round}}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <!-- Submit All Button -->
-                    <div class="mt-4 flex justify-end">
-                        <button id="saveAllResultsBtn" type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
-                            <i class="fas fa-save mr-2"></i>
-                            Save All Changes
-                        </button>
-                    </div>
-                </form>
+                </div>
+                @endforeach
+            </div>
             @else
                 @if(strtolower($tournament->status) == 'upcoming')
                     <div class="text-center py-10 text-gray-400">

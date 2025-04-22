@@ -24,7 +24,7 @@ class RoundController extends Controller
         $this->tournamentService = $tournamentService;
     }
 
-    public function create($id)
+    public function store($id)
     {
                 try {
    
@@ -42,6 +42,13 @@ class RoundController extends Controller
         Log::error('round 1 not created: ' . $e->getMessage());
         return redirect()->back()->with('failed', 'round not created !');
     }
+
+    }
+
+
+    public function edite($request){
+
+
 
     }
 

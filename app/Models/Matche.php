@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use function PHPUnit\Framework\matches;
+
 class Matche extends Model
 {
     use HasFactory;
@@ -30,6 +32,26 @@ class Matche extends Model
         return $this->hasOne(Resault::class);
 
     }
+
+
+    public function getTeamName($id){
+
+        $team = Team::where('id',$id)->first();
+        $name = $team->name ;
+        return $name ;
+
+    }
+
+
+    public function getTeamPhotoUrl($id){
+
+        $team = Team::where('id',$id)->first();
+        $photo = $team->getPhotoUrl() ;
+        return $photo ;
+
+    }
+
+
 }
 
 

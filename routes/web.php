@@ -80,7 +80,9 @@ Route::get('/organisator/manage/tournament', [TournamentController::class, 'inde
 
 Route::get('/organisator/tournament/details/{tournament}', [TournamentController::class, 'show'])->name('organisator.tournamentdetails');
 
-Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'create'])->name('organisator.start.tournament');
+Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'store'])->name('organisator.start.tournament');
+
+Route::patch('/organisator/save/round', [RoundController::class, 'edite'])->name('organisator.store.round');
 });
 
 
