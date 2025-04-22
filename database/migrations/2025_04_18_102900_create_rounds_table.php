@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('rounds', function (Blueprint $table) {
             $table->id();
             $table->integer('round')->default(1);
-            $table->enum('status',['not_started','started','finished'])->default('not_started');
+            $table->enum('status',['not_started','finished'])->default('not_started');
             $table->timestamps();
         });
     }

@@ -82,7 +82,7 @@ Route::get('/organisator/tournament/details/{tournament}', [TournamentController
 
 Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'store'])->name('organisator.start.tournament');
 
-Route::patch('/organisator/save/round', [RoundController::class, 'edite'])->name('organisator.store.round');
+Route::patch('/organisator/save/round', [RoundController::class, 'edite'])->name('organisator.save.round');
 });
 
 

@@ -146,10 +146,9 @@
                     
                     <!-- Round Matches (Hidden by default except first round) -->
                     <div class="round-matches overflow-hidden bg-gray-700/50 {{ $roundIndex === 0 ? '' : 'hidden' }}" id="round-matches-{{ $round->id }}">
-                        <form class="round-form" action="" method="POST">
+                        <form class="round-form" action="{{route('organisator.save.round')}}" method="POST" id="round-form-{{ $round->id }}">
                             @csrf
-                            @method('PATCH')
-                            
+                            @method('PATCH')                            
                             <input type="hidden" name="round_id" value="{{ $round->id }}">
                             
                             <div class="divide-y divide-gray-700">
@@ -173,24 +172,25 @@
  
                                                 <!-- Team selection -->
                                                 <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                                    data-team-id="{{ $match->team_a_id }}" data-match-index="{{ $matchIndex }}">
+                                                    data-team-id="{{ $match->team1_id }}" data-match-index="{{ $matchIndex }}">
                                                     <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
-                                                             <!-- Team photo display -->
-                                                             <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
-                                                                <img src="{{ $match->getTeamPhotoUrl($match->team1_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team A">
-                                                            </div>                                                      </div>
-                                                    <div class="font-medium text-white"></div>
+                                                        <!-- Team photo display -->
+                                                        <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
+                                                            <img src="{{ $match->getTeamPhotoUrl($match->team1_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team A">
+                                                        </div>
+                                                    </div>
+                                                    <div class="font-medium text-white">Select as winner</div>
                                                 </div>
                                             </div>
                                             
                                             <!-- Score Inputs -->
                                             <div class="flex items-center mx-4">
-                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][team_a_score]" value="{{ $match->team_a_score }}" 
-                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
+                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][score_team1]" value="{{ $match->score_team1 }}" 
+                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 score-input"
                                                     {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                                 <span class="text-gray-400 font-bold mx-2">:</span>
-                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][team_b_score]" value="{{ $match->team_b_score }}" 
-                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20"
+                                                <input type="number" min="0" name="matches[{{ $matchIndex }}][score_team2]" value="{{ $match->score_team2 }}" 
+                                                    class="w-12 text-center bg-gray-700 text-white rounded-lg px-2 py-1 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 score-input"
                                                     {{ $match->status == 'completed' ? 'disabled' : '' }}>
                                             </div>
                                             
@@ -203,20 +203,21 @@
   
                                                 <!-- Team selection -->
                                                 <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors {{ $match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '' }}" 
-                                                    data-team-id="{{ $match->team_b_id }}" data-match-index="{{ $matchIndex }}">
-                                                    <div class="font-medium text-white"></div>
+                                                    data-team-id="{{ $match->team2_id }}" data-match-index="{{ $matchIndex }}">
+                                                    <div class="font-medium text-white">Select as winner</div>
                                                     <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
-                                                            <!-- Team photo display -->
-                                                            <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
-                                                                <img src="{{ $match->getTeamPhotoUrl($match->team2_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team A">
-                                                            </div>    
-
+                                                        <!-- Team photo display -->
+                                                        <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
+                                                            <img src="{{ $match->getTeamPhotoUrl($match->team2_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team B">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="matches[{{ $matchIndex }}][winner_id]" value="{{ $match->winner_id }}">
+                                            <input type="hidden" name="matches[{{ $matchIndex }}][winner_id]" value="{{ $match->winner_team }}" class="winner-input">
                                         </div>
                                     </div>
+                                    <!-- Error message container for this match -->
+                                    <div class="match-error-container mt-2"></div>
                                 </div>
                                 @endforeach
                             </div>
@@ -361,7 +362,7 @@
                 </button>
             </div>
             
-            <form action="" method="POST">
+            <form action="" method="POST" id="createMatchForm">
                 @csrf
                 <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
                 
@@ -371,10 +372,10 @@
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team A</option>
                         @foreach($teams as $team)
-                        {{ $team->id }}
-                            <option value="2">{{$team->name}}</option>
+                            <option value="{{ $team->id }}">{{ $team->name }}</option>
                         @endforeach
                     </select>
+                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="team_a_error"></div>
                 </div>
                 
                 <div class="mb-4">
@@ -383,16 +384,17 @@
                             class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="">Select Team B</option>
                         @foreach($teams as $team)
-                        {{ $team->id }}
-                        <option value="2">{{$team->name}}</option>
+                            <option value="{{ $team->id }}">{{ $team->name }}</option>
                         @endforeach
                     </select>
+                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="team_b_error"></div>
                 </div>
                 
                 <div class="mb-4">
                     <label for="match_time" class="block text-sm font-medium text-gray-400 mb-1">Match Time</label>
                     <input type="datetime-local" id="match_time" name="match_time" required 
                            class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
+                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="match_time_error"></div>
                 </div>
                 
                 <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg py-2 px-4 transition-colors duration-200">
@@ -478,20 +480,6 @@ Swal.fire({
         font-weight: 600;
     }
     
-    /* Match management styles */
-    .match-filter-btn.active {
-        background-color: #4f46e5;
-        color: white;
-    }
-    
-    .team-select {
-        transition: all 0.2s ease;
-    }
-    
-    .team-select:hover {
-        background-color: rgba(79, 70, 229, 0.1);
-    }
-
     /* Round toggle animation */
     .toggle-round-btn i {
         transition: transform 0.3s ease;
@@ -503,6 +491,23 @@ Swal.fire({
     
     .round-matches {
         transition: all 0.3s ease;
+    }
+    
+    /* Form validation styles */
+    .input-error {
+        border-color: #ef4444 !important;
+    }
+    
+    .error-message {
+        font-size: 0.875rem;
+        color: #ef4444;
+        margin-top: 0.25rem;
+    }
+    
+    /* Team selection highlight */
+    .team-select.selected {
+        background-color: rgba(22, 163, 74, 0.3);
+        border: 1px solid rgb(22, 163, 74);
     }
 </style>
 
@@ -532,35 +537,7 @@ Swal.fire({
             }
         });
         
-        // Match filtering
-        const filterButtons = document.querySelectorAll('.match-filter-btn');
-        const matchRows = document.querySelectorAll('.match-row');
-        
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                
-                // Update active button
-                filterButtons.forEach(btn => {
-                    btn.classList.remove('active', 'bg-indigo-600', 'text-white');
-                    btn.classList.add('bg-gray-700', 'text-gray-300', 'hover:bg-gray-600');
-                });
-                
-                this.classList.add('active', 'bg-indigo-600', 'text-white');
-                this.classList.remove('bg-gray-700', 'text-gray-300', 'hover:bg-gray-600');
-                
-                // Filter matches
-                matchRows.forEach(row => {
-                    if (filter === 'all' || row.classList.contains(filter)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-        });
-        
-        // Round toggle functionality - can click on header or just the arrow
+        // Round toggle functionality
         const roundHeaders = document.querySelectorAll('.round-header');
         const toggleButtons = document.querySelectorAll('.toggle-round-btn');
         
@@ -611,7 +588,7 @@ Swal.fire({
             }
         }
         
-        // Team selection for winner
+        // Team selection for winner - Fixed to properly set the winner
         const teamSelectors = document.querySelectorAll('.team-select');
         teamSelectors.forEach(team => {
             team.addEventListener('click', function() {
@@ -628,186 +605,189 @@ Swal.fire({
                 const winnerInput = matchRow.querySelector(`input[name="matches[${matchIndex}][winner_id]"]`);
                 winnerInput.value = teamId;
                 
-                // Update UI
-                matchRow.querySelectorAll('.team-select').forEach(t => {
-                    t.classList.remove('bg-green-900/30', 'border', 'border-green-700');
-                });
-                
-                this.classList.add('bg-green-900/30', 'border', 'border-green-700');
-            });
-        });
-        
-        // Individual save match buttons
-        const saveMatchButtons = document.querySelectorAll('.save-match-btn');
-        saveMatchButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const matchIndex = this.getAttribute('data-match-index');
-                const matchId = this.getAttribute('data-match-id');
-                const matchRow = this.closest('.match-row');
-                
-                const winnerId = matchRow.querySelector(`input[name="matches[${matchIndex}][winner_id]"]`).value;
-                const teamAScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_a_score]"]`).value;
-                const teamBScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_b_score]"]`).value;
-                
-                if (!winnerId) {
-                    alert('Please select a winner by clicking on a team.');
-                    return;
+                // Clear any existing error messages
+                const errorContainer = matchRow.querySelector('.match-error-container');
+                if (errorContainer) {
+                    errorContainer.innerHTML = '';
                 }
                 
-                // Change button to loading state
-                const originalHtml = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
-                this.disabled = true;
-                
-                // AJAX request to update single match
-                fetch(`/organisator/matches/${matchId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        winner_id: winnerId,
-                        team_a_score: teamAScore,
-                        team_b_score: teamBScore
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update match status
-                        matchRow.classList.remove('pending');
-                        matchRow.classList.add('completed');
-                        
-                        // Disable inputs
-                        matchRow.querySelectorAll('input[type="number"]').forEach(input => {
-                            input.disabled = true;
-                        });
-                        
-                        // Replace button with completed status
-                        this.parentNode.innerHTML = `
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
-                                <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                        data-match-index="${matchIndex}" data-match-id="${matchId}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </div>
-                        `;
-                        
-                        // Add event listener to new edit button
-                        addEditButtonListeners();
-                    } else {
-                        alert('Error updating match: ' + data.message);
-                        this.innerHTML = originalHtml;
-                        this.disabled = false;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while updating the match.');
-                    this.innerHTML = originalHtml;
-                    this.disabled = false;
+                // Update UI
+                matchRow.querySelectorAll('.team-select').forEach(t => {
+                    t.classList.remove('bg-green-900/30', 'border', 'border-green-700', 'selected');
                 });
+                
+                this.classList.add('bg-green-900/30', 'border', 'border-green-700', 'selected');
+                
+                // Show visual feedback
+                const notification = document.createElement('div');
+                notification.className = 'text-green-400 text-sm text-center mt-2 mb-0';
+                notification.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Team selected as winner';
+                
+                // Replace any existing notification
+                const existingNotification = matchRow.querySelector('.winner-notification');
+                if (existingNotification) {
+                    existingNotification.remove();
+                }
+                
+                notification.classList.add('winner-notification');
+                errorContainer.appendChild(notification);
+                
+                // Fade out notification after 2 seconds
+                setTimeout(() => {
+                    notification.style.transition = 'opacity 1s';
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 1000);
+                }, 2000);
             });
         });
         
-        // Edit match button functionality
-        function addEditButtonListeners() {
-            document.querySelectorAll('.edit-match-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const matchIndex = this.getAttribute('data-match-index');
-                    const matchId = this.getAttribute('data-match-id');
-                    const matchRow = this.closest('.match-row');
-                    
-                    // Enable editing
-                    matchRow.classList.add('editing');
-                    
-                    // Enable score inputs
-                    matchRow.querySelectorAll('input[type="number"]').forEach(input => {
-                        input.disabled = false;
-                    });
-                    
-                    // Replace edit button with save button
-                    this.parentNode.innerHTML = `
-                        <button type="button" class="save-match-btn inline-flex items-center justify-center px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                data-match-index="${matchIndex}" data-match-id="${matchId}">
-                            <i class="fas fa-check mr-1"></i> Update
-                        </button>
-                    `;
-                    
-                    // Add save button listener
-                    const newSaveBtn = matchRow.querySelector('.save-match-btn');
-                    newSaveBtn.addEventListener('click', function() {
-                        const winnerId = matchRow.querySelector(`input[name="matches[${matchIndex}][winner_id]"]`).value;
-                        const teamAScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_a_score]"]`).value;
-                        const teamBScore = matchRow.querySelector(`input[name="matches[${matchIndex}][team_b_score]"]`).value;
-                        
-                        if (!winnerId) {
-                            alert('Please select a winner by clicking on a team.');
-                            return;
-                        }
-                        
-                        // Loading state
-                        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
-                        this.disabled = true;
-                        
-                        // AJAX request to update match
-                        fetch(`/organisator/matches/${matchId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            },
-                            body: JSON.stringify({
-                                winner_id: winnerId,
-                                team_a_score: teamAScore,
-                                team_b_score: teamBScore
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Disable editing
-                                matchRow.classList.remove('editing');
-                                
-                                // Disable inputs
-                                matchRow.querySelectorAll('input[type="number"]').forEach(input => {
-                                    input.disabled = true;
-                                });
-                                
-                                // Replace with completed status
-                                this.parentNode.innerHTML = `
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-green-400 text-sm"><i class="fas fa-check-circle"></i> Complete</span>
-                                        <button type="button" class="edit-match-btn inline-flex items-center justify-center px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                                                data-match-index="${matchIndex}" data-match-id="${matchId}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </div>
-                                `;
-                                
-                                // Re-add edit button listeners
-                                addEditButtonListeners();
-                            } else {
-                                alert('Error updating match: ' + data.message);
-                                this.innerHTML = '<i class="fas fa-check mr-1"></i> Update';
-                                this.disabled = false;
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('An error occurred while updating the match.');
-                            this.innerHTML = '<i class="fas fa-check mr-1"></i> Update';
-                            this.disabled = false;
-                        });
-                    });
-                });
+        // Create Match Form Validation
+        const createMatchForm = document.getElementById('createMatchForm');
+        if (createMatchForm) {
+            createMatchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Reset errors
+                resetFormErrors(this);
+                
+                let isValid = true;
+                
+                // Validate team A
+                const teamA = document.getElementById('team_a_id');
+                if (!teamA.value) {
+                    showError(teamA, 'team_a_error', 'Please select Team A');
+                    isValid = false;
+                }
+                
+                // Validate team B
+                const teamB = document.getElementById('team_b_id');
+                if (!teamB.value) {
+                    showError(teamB, 'team_b_error', 'Please select Team B');
+                    isValid = false;
+                } else if (teamB.value === teamA.value) {
+                    showError(teamB, 'team_b_error', 'Teams cannot be the same');
+                    isValid = false;
+                }
+                
+                // Validate match time
+                const matchTime = document.getElementById('match_time');
+                if (!matchTime.value) {
+                    showError(matchTime, 'match_time_error', 'Please set a match time');
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    this.submit();
+                }
             });
         }
         
-        // Initialize edit button listeners
-        addEditButtonListeners();
+        // Round Form Validation with improved winner checking
+        const roundForms = document.querySelectorAll('.round-form');
+        roundForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // Remove existing error messages
+                const errorMessages = form.querySelectorAll('.error-message, .match-error-container .text-red-500');
+                errorMessages.forEach(msg => msg.remove());
+                
+                // Validate each match that's not completed
+                const pendingMatches = form.querySelectorAll('.match-row.pending');
+                pendingMatches.forEach(match => {
+                    const matchId = match.getAttribute('data-match-id');
+                    const errorContainer = match.querySelector('.match-error-container');
+                    
+                    // Get score inputs
+                    const teamAScoreInput = match.querySelector('input[name$="[score_team1]"]');
+                    const teamBScoreInput = match.querySelector('input[name$="[score_team2]"]');
+                    const winnerInput = match.querySelector('input[name$="[winner_id]"]');
+                    
+                    // Check if scores are filled
+                    if (teamAScoreInput.value === '' || teamBScoreInput.value === '') {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'error-message text-red-500 text-sm mt-2 text-center';
+                        errorDiv.textContent = 'Please enter scores for both teams';
+                        errorContainer.appendChild(errorDiv);
+                        
+                        teamAScoreInput.classList.add('input-error');
+                        teamBScoreInput.classList.add('input-error');
+                        isValid = false;
+                    }
+                    
+                    // Check winner selection
+                    if (!winnerInput.value || winnerInput.value === "0" || winnerInput.value === "") {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'error-message text-red-500 text-sm mt-2 text-center';
+                        errorDiv.textContent = 'Please select a winning team by clicking on one of the teams';
+                        errorContainer.appendChild(errorDiv);
+                        isValid = false;
+                    } else {
+                        // Verify winner selection matches the score
+                        const teamAId = match.querySelector('.team-select[data-team-id]').getAttribute('data-team-id');
+                        const teamBId = match.querySelectorAll('.team-select[data-team-id]')[1].getAttribute('data-team-id');
+                        
+                        const teamAScore = parseInt(teamAScoreInput.value) || 0;
+                        const teamBScore = parseInt(teamBScoreInput.value) || 0;
+                        
+                        // Only validate score matching if both scores are set
+                        if (teamAScoreInput.value !== '' && teamBScoreInput.value !== '') {
+                            if ((teamAScore > teamBScore && winnerInput.value != teamAId) || 
+                                (teamBScore > teamAScore && winnerInput.value != teamBId)) {
+                                
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'error-message text-red-500 text-sm mt-2 text-center';
+                                errorDiv.textContent = 'Winner selection does not match the scores';
+                                errorContainer.appendChild(errorDiv);
+                                isValid = false;
+                            } else if (teamAScore === teamBScore) {
+                                const warningDiv = document.createElement('div');
+                                warningDiv.className = 'text-yellow-400 text-sm mt-2 text-center';
+                                warningDiv.textContent = 'Scores are tied. Make sure this is intentional.';
+                                errorContainer.appendChild(warningDiv);
+                            }
+                        }
+                    }
+                });
+                
+                if (isValid) {
+                    this.submit();
+                } else {
+                    // Scroll to the first error
+                    const firstError = form.querySelector('.error-message');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        });
+        
+        // Helper function to show error
+        function showError(input, errorId, message) {
+            input.classList.add('input-error');
+            const errorElement = document.getElementById(errorId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+        
+        // Helper function to reset form errors
+        function resetFormErrors(form) {
+            const inputs = form.querySelectorAll('input, select');
+            const errorMessages = form.querySelectorAll('.error-message');
+            
+            inputs.forEach(input => {
+                input.classList.remove('input-error');
+            });
+            
+            errorMessages.forEach(msg => {
+                msg.textContent = '';
+                msg.classList.add('hidden');
+            });
+        }
     });
 </script>
 @endsection
