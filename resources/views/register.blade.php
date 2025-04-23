@@ -122,7 +122,7 @@
             <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">
                     Already have an account?
-                    <a href="{{ route('login') }}" class="text-green-600 hover:text-green-800 font-medium">Login here</a>
+                    <a href="{{ route('showloginform') }}" class="text-green-600 hover:text-green-800 font-medium">Login here</a>
                 </p>
             </div>
         </form>

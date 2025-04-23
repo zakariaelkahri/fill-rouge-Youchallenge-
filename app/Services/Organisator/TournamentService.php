@@ -2,6 +2,7 @@
 
 namespace App\Services\Organisator;
 
+use App\Models\Organisator;
 use App\Models\Role;
 use App\Models\Round;
 use App\Models\Team;
@@ -79,7 +80,9 @@ class TournamentService
     }   
      public function showTournament($id){
 
-        $tournament = Tournament::where('id',$id)->first();
+        $tournament = null;
+        $organisator = Organisator::where('user_id',Auth::user()->id)->first();
+        $tournament = Tournament::where('id',$id)->where('organisator_id',$organisator->id)->first();
         $teams = Team::where('tournament_id',$tournament->id)->get();
         $rounds = Round::whereHas('teams', function ($query) use ($tournament) {
         $query->where('tournament_id', $tournament->id)->where('eliminated',0);

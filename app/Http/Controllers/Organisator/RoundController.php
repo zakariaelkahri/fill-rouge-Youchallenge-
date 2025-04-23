@@ -34,6 +34,9 @@ class RoundController extends Controller
    
         $round = $this->tournamentService->createRound($id);
         $matches = $this->tournamentService->createRoundMatches($round);
+        $tournament = Tournament::where('id',$id)->first();
+        $tournament->status = 'ongoing';
+        $tournament->save();
         Log::info('round and matchs created successfully' );
 
         if (!$round && $matches ) {
@@ -52,26 +55,32 @@ class RoundController extends Controller
 
     public function edite(UpdateRoundMatchesRequest $request){
 
+
         try{
         $data = $request
         ->only(       
             'round_id',
+            'last_match',
             'matches',
         );
 
+        
         $matche_data = [];
         $round = Round::where('id',$data['round_id'])->first();
         $matches = $round->matches()->get();
+        $winner = null ;
         $data_match = 0 ;
+
         foreach($matches as $matche){
             
-            if($matche->team1_id == $data['matches'][$data_match]['winner_id']){
+            if($matche->team1_id == $data['matches'][$data_match]['winner_id'] ){
 
                 $matche->winner_team = $matche->team1_id ;
                 $matche->loser_team = $matche->team2_id ; 
                 $matche->status = 'finished';
-
                 $matche->save();
+
+                $winner = Team::where('id',$matche->team1_id)->first();
 
                 $loser = Team::where('id',$matche->team2_id)->first();
                 $loser->eliminated = 1;
@@ -90,6 +99,8 @@ class RoundController extends Controller
                 $matche->status = 'finished'; 
                 $matche->save();
 
+                $winner = Team::where('id',$matche->team2_id)->first();
+
                 $loser = Team::where('id',$matche->team1_id)->first();
                 $loser->eliminated = 1;
                 $loser->save(); 
@@ -107,9 +118,21 @@ class RoundController extends Controller
             
             
         }
+
+        // dd($winner);
+
         $round->status = 'finished';
         $round->save();
+
+        if($data['last_match'] != 1){
+
         return redirect()->back()->with('success', 'Data saved successfully !');
+
+        }else{
+
+            return redirect()->back()->with('success', '🎉🎉 👏👏👏 Congrats '.$winner->name.' the winner👏👏👏  🎉🎉');
+
+        }
 
         } catch(\Exception $e){
             Log::error('round 1 not created: ' . $e->getMessage());

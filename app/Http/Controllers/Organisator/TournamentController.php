@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Organisator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\AuthGates;
+use App\Http\Requests\CompleteTournamentRequest;
 use App\Http\Requests\StoreTournamentRequest;
 use App\Models\Organisator;
 use App\Models\Tournament;
@@ -73,22 +74,60 @@ class TournamentController extends Controller
 
 
     public function show($id){
+
+    
+        try{
         $tournament_team = $this->tournamentService->showTournament($id);
         $tournament = $tournament_team[0];
         $teams = $tournament_team[1];
         $rounds = null;
+
         if(isset($tournament_team[2]) && $tournament_team[2]->matches()->exists()){
             $rounds = $tournament_team[2]->get();
-
         }
-        // dd($rounds);
+
+
         return view('organisator/viewtournament',compact('tournament','teams','rounds'));
+
+    }catch(\Exception $e)
+    {
+            Log::error('you dont have access to this tournament: ' . $e->getMessage());
+            return redirect()->back()->with('failed', 'you dont have access ');
+
+    } 
+    }
+
+
+
+
+    public function edite(CompleteTournamentRequest $request){
+
+        try{
+
+        $id  = $request
+        ->only('id');  
+
+        $tournament = Tournament::where('id',$id)->first();
+        $tournament->status = 'completed';
+        $tournament->save();
+
+        return redirect()->back()->with('success', 'completed successfully');
+
+    }catch(\Exception $e)
+    {
         
+
+            Log::error('tournament completed failed: ' . $e->getMessage());
+            return redirect()->back()->with('failed', 'completed failed');
+
     }
 
 
 
     }
+   
+    
+}    
 
     
 

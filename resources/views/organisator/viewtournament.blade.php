@@ -65,8 +65,7 @@
                                     
                                     <span class="inline-flex items-center text-gray-400">
                                         <i class="fas fa-users mr-1"></i>
-                                        {{ $tournament->particpated_teams }}
-                                        /{{ $tournament->max_participants }} Participants
+                                        {{ $tournament->particpated_teams }}/{{ $tournament->max_participants }} Participants
                                     </span>
                                 </div>
                             </div>
@@ -81,7 +80,7 @@
                                 </a>
                                 @endif
                                 @if(strtolower($tournament->status) == 'upcoming')
-                                <form action="{{route('organisator.start.tournament',['tournament'=>$tournament])}}" method="POST">
+                                <form action="{{route('organisator.start.tournament',['tournament'=>$tournament->id])}}" method="POST">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-play mr-2"></i>
@@ -89,13 +88,17 @@
                                     </button>
                                 </form>
                                 @elseif(strtolower($tournament->status) == 'ongoing')
-                                <form action="" method="POST">
+                                <form action="{{route('organisator.tournament.complete')}}" method="POST">
                                     @csrf
+                                    @method('PATCH')
+
+                                    <input type="hidden" name="id" value="{{ $tournament->id }}">
                                     <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
                                         <i class="fas fa-flag-checkered mr-2"></i>
                                         Complete
                                     </button>
                                 </form>
+
                                 @endif
                             </div>
                         </div>
@@ -122,11 +125,28 @@
                     <i class="fas fa-gamepad text-indigo-400 mr-2"></i>
                     Match Management
                 </h2>
-                @if(strtolower($tournament->status) == 'ongoing')
-                <button id="createMatchBtn" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200">
-                    <i class="fas fa-plus mr-2"></i>
-                    Create Match
-                </button>
+                @php
+                    $next_round = true;
+                    if((isset($rounds) && count($rounds) > 0))
+                    {
+                        foreach ($rounds as $round)
+                        {
+                            if($round->status != 'finished')
+                            {
+                                $next_round = false;
+                            }
+                        }
+                    }
+                @endphp
+
+                @if ($next_round == true)
+                    <form action="{{route('organisator.start.tournament',['tournament'=>$tournament->id])}}" method="POST">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
+                            <i class="fas fa-play mr-2"></i>
+                            Next Round
+                        </button>
+                    </form>    
                 @endif
             </div>
             
@@ -150,6 +170,7 @@
                             @csrf
                             @method('PATCH')                            
                             <input type="hidden" name="round_id" value="{{ $round->id }}">
+                            <input type="hidden" name="last_match" value="{{ count($round->matches) }}">
                             
                             <div class="divide-y divide-gray-700">
                                 @foreach($round->matches as $matchIndex => $match)
@@ -236,7 +257,7 @@
                             </div>
                             
                             <!-- Submit Round Button -->
-                            @if ($round->status == 'not_started')
+                            @if ($round->status == 'not_started' && $tournament->status == 'ongoing')
                             
                             <div class="p-4 flex justify-end">
                                 <button type="submit" class="save-round-btn inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
@@ -288,43 +309,83 @@
                             <i class="fas fa-users text-indigo-400 mr-2"></i>
                             Participants
                         </h2>
-                        <span class="text-sm text-gray-400">
-                            {{ $tournament->particpated_teams }}
-                            /{{ $tournament->max_participants }}</span>
+                        <span class="text-sm text-gray-400">{{ $tournament->particpated_teams }}/{{ $tournament->max_participants }}</span>
                     </div>
                     
                     <div class="space-y-3">
                         <!-- Progress bar -->
                         <div class="w-full bg-gray-700 rounded-full h-2.5">
                             @php
-                                $participantPercentage = min(100, ($tournament->particpated_teams/ $tournament->max_participants) * 100);
+                                $participantPercentage = min(100, ($tournament->particpated_teams / $tournament->max_participants) * 100);
                             @endphp
                             <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ $participantPercentage }}%"></div>
                         </div>
                         
-                        <!-- Participant list -->
-                        <div class="divide-y divide-gray-700">
-                            @foreach($teams as $team)
-                            <div class="flex items-center py-3">
-                                <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                                        <img src="{{ $team->getPhotoUrl() }}" alt="{{ $team->name }}" class="w-full h-full object-cover">
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-white">
-                                        {{ $team->name }}
-                                    </p>
-                                </div>
+                        <!-- NEW: Qualified Teams Section -->
+                        <div class="mt-4 border-t border-gray-700 pt-4">
+                            <div class="flex items-center mb-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                <h3 class="text-sm font-semibold text-white">Qualified Teams</h3>
                             </div>
-                            @endforeach
                             
-                            @if(1 > count($teams))
-                            <div class="text-center py-2">
-                                <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">
-                                    View all teams
-                                </a>
+                            <div class="divide-y divide-gray-700">
+                                @php $qualifiedTeams = $teams->where('eliminated', false); @endphp
+                                
+                                @if($qualifiedTeams->count() > 0)
+                                    @foreach($qualifiedTeams as $team)
+                                    <div class="flex items-center py-2">
+                                        <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                            <img src="{{ $team->getPhotoUrl() }}" alt="{{ $team->name }}" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-white">
+                                                {{ $team->name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-sm text-gray-400 py-2">No qualified teams yet.</p>
+                                @endif
                             </div>
-                            @endif
                         </div>
+                        
+                        <!-- NEW: Eliminated Teams Section -->
+                        <div class="mt-4 border-t border-gray-700 pt-4">
+                            <div class="flex items-center mb-2">
+                                <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                                <h3 class="text-sm font-semibold text-white">Eliminated Teams</h3>
+                            </div>
+                            
+                            <div class="divide-y divide-gray-700">
+                                @php $eliminatedTeams = $teams->where('eliminated', true); @endphp
+                                
+                                @if($eliminatedTeams->count() > 0)
+                                    @foreach($eliminatedTeams as $team)
+                                    <div class="flex items-center py-2 opacity-75">
+                                        <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden grayscale">
+                                            <img src="{{ $team->getPhotoUrl() }}" alt="{{ $team->name }}" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-gray-400">
+                                                {{ $team->name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-sm text-gray-400 py-2">No eliminated teams yet.</p>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        @if(count($teams) > 5)
+                        <div class="text-center py-2 border-t border-gray-700 mt-3">
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">
+                                View all teams
+                            </a>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 
@@ -368,59 +429,6 @@
     </div>
 </main>
 
-<!-- Create Match Modal -->
-<div id="createMatchModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-    <div class="bg-gray-800 rounded-xl max-w-md w-full">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-white">Create New Match</h2>
-                <button type="button" class="closeModal text-gray-400 hover:text-white">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form action="" method="POST" id="createMatchForm">
-                @csrf
-                <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
-                
-                <div class="mb-4">
-                    <label for="team_a_id" class="block text-sm font-medium text-gray-400 mb-1">Team A</label>
-                    <select id="team_a_id" name="team_a_id" required 
-                            class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
-                        <option value="">Select Team A</option>
-                        @foreach($teams as $team)
-                            <option value="{{ $team->id }}">{{ $team->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="team_a_error"></div>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="team_b_id" class="block text-sm font-medium text-gray-400 mb-1">Team B</label>
-                    <select id="team_b_id" name="team_b_id" required 
-                            class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
-                        <option value="">Select Team B</option>
-                        @foreach($teams as $team)
-                            <option value="{{ $team->id }}">{{ $team->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="team_b_error"></div>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="match_time" class="block text-sm font-medium text-gray-400 mb-1">Match Time</label>
-                    <input type="datetime-local" id="match_time" name="match_time" required 
-                           class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
-                    <div class="error-message text-red-500 text-sm mt-1 hidden" id="match_time_error"></div>
-                </div>
-                
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg py-2 px-4 transition-colors duration-200">
-                    <i class="fas fa-plus mr-2"></i> Create Match
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
 
 @if (session('success'))
 <script>
@@ -525,6 +533,11 @@ Swal.fire({
     .team-select.selected {
         background-color: rgba(22, 163, 74, 0.3);
         border: 1px solid rgb(22, 163, 74);
+    }
+    
+    /* New styles for qualified/eliminated teams */
+    .grayscale {
+        filter: grayscale(100%);
     }
 </style>
 
