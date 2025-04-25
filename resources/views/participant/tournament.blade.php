@@ -107,6 +107,7 @@
                                 <i class="fas fa-sign-out-alt mr-2"></i> Exit Team
                             </button>
                         @endif
+                        
 
                         <!-- View Toggle Buttons -->
 
