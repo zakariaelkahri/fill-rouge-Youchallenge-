@@ -52,7 +52,6 @@
                     </div>
                     <div class="flex items-center text-gray-400">
                         <i class="fas fa-user w-5 text-center mr-2"></i>
-
                         <span>Organizer: {{ $tournament->organisator->user->name }}</span>
                     </div>
                 </div>
@@ -98,7 +97,17 @@
                                     <i class="fas fa-sign-in-alt mr-2"></i> Join Team
                                 </button>
                             @endif
-        
+                        </div>
+                    @elseif($tournament->status == 'upcoming' && $tournament->isParticipating(auth()->user()->id))
+                        <div class="flex space-x-3 ml-4">
+                            @if($tournament->isTeamCaptain(auth()->user()->id))
+                                <button id="showInviteCodeBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200">
+                                    <i class="fas fa-key mr-2"></i> Show Invite Code
+                                </button>
+                            @endif
+                            <button id="exitTeamBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition duration-200">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Exit Team
+                            </button>
                         </div>
                     @endif
                 </div>
@@ -123,7 +132,7 @@
                 </div>
                 
                 <!-- Match Schedule Section -->
-<!-- Simplified Match Schedule Section -->
+                <!-- Simplified Match Schedule Section -->
                 @if($tournament->status == 'ongoing' || $tournament->status == 'completed')
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-white mb-4">Matches</h2>
@@ -161,7 +170,6 @@
         
         <!-- Registered Teams -->
         <div class="bg-gray-800 rounded-xl p-6 mb-8">
-
             <h2 class="text-2xl font-bold text-white mb-4">Registered Teams ({{ $tournament->particpated_teams }}/{{ $tournament->max_participants }})</h2>
             
             @if(count($teams) > 0)
@@ -242,8 +250,6 @@
                             <p class="text-sm text-gray-400">You (Captain)</p>
                         </div>
                     </div>
-                    
-
                 </div>
                 
                 <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg py-3 px-4 transition duration-200">
@@ -285,8 +291,73 @@
             </form>
         </div>
     </div>
+</div>
 
+<!-- Show Invite Code Modal -->
+<div id="inviteCodeModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 rounded-xl max-w-md w-full">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-white">Team Invitation Code</h2>
+                <button class="closeModal text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="bg-gray-700 rounded-lg p-6 text-center mb-6">
+                <p class="text-gray-400 mb-2">Share this code with players you want to invite to your team:</p>
+                <div class="text-3xl font-bold text-white tracking-wider mb-2">{{ $tournament->isTeamCaptain(auth()->user()->id) ? $tournament->getCaptainTeam(auth()->user()->id)->invitation_code : '' }}</div>
+                <p class="text-xs text-gray-400">This code is unique to your team.</p>
+            </div>
+            
+            <button id="copyInviteCode" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg py-3 px-4 transition duration-200">
+                <i class="fas fa-copy mr-2"></i> Copy Invitation Code
+            </button>
+        </div>
+    </div>
+</div>
 
+<!-- Exit Team Confirmation Modal -->
+<div id="exitTeamModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 rounded-xl max-w-md w-full">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-white">Exit Team</h2>
+                <button class="closeModal text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="bg-red-900/30 border border-red-700 rounded-lg p-4 mb-6">
+                <p class="text-red-300">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Are you sure you want to leave your team? This action cannot be undone.
+                </p>
+                @if($tournament->isTeamCaptain(auth()->user()->id))
+                <p class="text-red-300 mt-2">
+                    <i class="fas fa-crown mr-2"></i>
+                    <strong>Warning:</strong> As the team captain, leaving will dissolve the team for all members.
+                </p>
+                @endif
+            </div>
+               
+            <form action=" {{ route('participant.exit.team') }}" method="POST">
+                @csrf
+                @method('DELETE')
+
+                <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
+                
+                <div class="flex space-x-3">
+                    <button type="button" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg py-3 px-4 transition duration-200 closeModal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg py-3 px-4 transition duration-200">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Exit Team
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 @if (session('success'))
@@ -320,7 +391,6 @@ Swal.fire({
   }
       });
 </script>
-
 @endif
 
 <style>
@@ -393,10 +463,15 @@ Swal.fire({
         // Get modal elements
         const createTeamModal = document.getElementById('createTeamModal');
         const joinTeamModal = document.getElementById('joinTeamModal');
+        const inviteCodeModal = document.getElementById('inviteCodeModal');
+        const exitTeamModal = document.getElementById('exitTeamModal');
         
         // Get buttons
         const createTeamBtn = document.getElementById('createTeamBtn');
         const joinTeamBtn = document.getElementById('joinTeamBtn');
+        const showInviteCodeBtn = document.getElementById('showInviteCodeBtn');
+        const exitTeamBtn = document.getElementById('exitTeamBtn');
+        const copyInviteCode = document.getElementById('copyInviteCode');
         
         // Get close buttons
         const closeButtons = document.querySelectorAll('.closeModal');
@@ -414,6 +489,42 @@ Swal.fire({
             joinTeamBtn.addEventListener('click', function() {
                 joinTeamModal.classList.remove('hidden');
                 joinTeamModal.classList.add('modal-enter');
+            });
+        }
+        
+        // Open Invite Code Modal for team captains
+        if (showInviteCodeBtn) {
+            showInviteCodeBtn.addEventListener('click', function() {
+                inviteCodeModal.classList.remove('hidden');
+                inviteCodeModal.classList.add('modal-enter');
+            });
+        }
+        
+        // Open Exit Team Modal
+        if (exitTeamBtn) {
+            exitTeamBtn.addEventListener('click', function() {
+                exitTeamModal.classList.remove('hidden');
+                exitTeamModal.classList.add('modal-enter');
+            });
+        }
+        
+        // Copy Invite Code functionality
+        if (copyInviteCode) {
+            copyInviteCode.addEventListener('click', function() {
+                const codeText = document.querySelector('#inviteCodeModal .text-3xl').textContent;
+                navigator.clipboard.writeText(codeText).then(function() {
+                    // Change button text temporarily
+                    const originalText = copyInviteCode.innerHTML;
+                    copyInviteCode.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                    copyInviteCode.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    copyInviteCode.classList.add('bg-green-600', 'hover:bg-green-700');
+                    
+                    setTimeout(function() {
+                        copyInviteCode.innerHTML = originalText;
+                        copyInviteCode.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                        copyInviteCode.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    }, 2000);
+                });
             });
         }
         
@@ -442,18 +553,21 @@ Swal.fire({
             if (event.target === joinTeamModal) {
                 closeModal(joinTeamModal);
             }
+            if (event.target === inviteCodeModal) {
+                closeModal(inviteCodeModal);
+            }
+            if (event.target === exitTeamModal) {
+                closeModal(exitTeamModal);
+            }
         });
         
         // Prevent closing when clicking inside modal content
-        document.querySelectorAll('#createTeamModal > div, #joinTeamModal > div').forEach(modalContent => {
+        document.querySelectorAll('[id$="Modal"] > div').forEach(modalContent => {
             modalContent.addEventListener('click', function(event) {
                 event.stopPropagation();
             });
         });
     });
-
-
-
 </script>
 
 @endsection

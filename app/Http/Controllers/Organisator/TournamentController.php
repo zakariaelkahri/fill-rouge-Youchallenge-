@@ -7,6 +7,7 @@ use App\Http\Middleware\AuthGates;
 use App\Http\Requests\CompleteTournamentRequest;
 use App\Http\Requests\StoreTournamentRequest;
 use App\Models\Organisator;
+use App\Models\Participant;
 use App\Models\Tournament;
 use Illuminate\Http\Request;
 use App\Services\Organisator\TournamentService;
@@ -74,20 +75,31 @@ class TournamentController extends Controller
 
 
     public function show($id){
-
-    
         try{
-        $tournament_team = $this->tournamentService->showTournament($id);
-        $tournament = $tournament_team[0];
-        $teams = $tournament_team[1];
-        $rounds = null;
+            $tournament_team = $this->tournamentService->showTournament($id);
+            $tournament = $tournament_team[0];
+            $teams = $tournament_team[1];
+            $rounds = null;
+            
+            if(isset($tournament_team[2]) && $tournament_team[2]->matches()->exists()){
+                $rounds = $tournament_team[2]->get();
+            }
+            
+            
+            $organisator = Organisator::where('user_id',Auth::user()->id)->exists();
+            $participant = Participant::where('user_id',Auth::user()->id)->exists();
+            
+            if($organisator){
+                
+                return view('organisator/viewtournament',compact('tournament','teams','rounds'));
+                
+            }elseif($participant){
+            // dd('rrr');
 
-        if(isset($tournament_team[2]) && $tournament_team[2]->matches()->exists()){
-            $rounds = $tournament_team[2]->get();
+            return view('participant/tournament',compact('tournament','teams','rounds'));
+
         }
 
-
-        return view('organisator/viewtournament',compact('tournament','teams','rounds'));
 
     }catch(\Exception $e)
     {
@@ -96,7 +108,6 @@ class TournamentController extends Controller
 
     } 
     }
-
 
 
 
@@ -115,7 +126,6 @@ class TournamentController extends Controller
 
     }catch(\Exception $e)
     {
-        
 
             Log::error('tournament completed failed: ' . $e->getMessage());
             return redirect()->back()->with('failed', 'completed failed');

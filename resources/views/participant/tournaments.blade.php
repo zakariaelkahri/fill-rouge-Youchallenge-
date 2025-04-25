@@ -13,7 +13,7 @@ Tournaments
                 <p class="text-gray-400 mt-2">Browse and join exciting esports competitions</p>
             </div>
             <div class="mt-4 md:mt-0">
-                <a href="#" class="inline-flex items-center justify-center px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+                <a href="{{route('participant.mytournaments')}}" class="inline-flex items-center justify-center px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
                     <i class="fas fa-trophy mr-2"></i>
                     My Tournaments
                 </a>

@@ -119,7 +119,6 @@ class RoundController extends Controller
             
         }
 
-        // dd($winner);
 
         $round->status = 'finished';
         $round->save();
@@ -129,8 +128,7 @@ class RoundController extends Controller
         return redirect()->back()->with('success', 'Data saved successfully !');
 
         }else{
-
-            return redirect()->back()->with('success', '🎉🎉 👏👏👏 Congrats '.$winner->name.' the winner👏👏👏  🎉🎉');
+            return redirect()->back()->with('lastRound', '🎉🎉 👏👏👏 Congrats '.$winner->name.' the winner👏👏👏  🎉🎉');
 
         }
 

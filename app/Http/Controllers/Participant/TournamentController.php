@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Participant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Participant;
+use App\Models\Tournament;
 use App\Services\Participant\TournamentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TournamentController extends Controller
 {
@@ -32,4 +35,24 @@ class TournamentController extends Controller
         return view('participant.tournamentdetailes',compact('tournament','teams')) ;
 
     }
+
+    public function showMyTournament(){
+        
+        $participant = Participant::where('user_id',Auth::user()->id)->first();
+        $teams = $participant->teams ;
+        $tournaments = [];
+        foreach($teams as $team){
+
+            $tournaments[] = Tournament::whereHas('teams',function ($query) use ($team) {
+
+                $query->where('id',$team->id);
+
+            })->first();
+
+        }        
+        
+        return view('participant.mytournaments',compact('tournaments')) ;
+
+    }
+
 }

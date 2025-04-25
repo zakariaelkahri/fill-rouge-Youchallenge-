@@ -34,12 +34,18 @@ class Matche extends Model
     }
 
 
-    public function getTeamName($id){
-
-        $team = Team::where('id',$id)->first();
-        $name = $team->name ;
-        return $name ;
-
+    public function getTeamName($id) {
+        if (!$id) {
+            return 'Unknown Team';
+        }
+        
+        $team = Team::where('id', $id)->first();
+        
+        if (!$team) {
+            return 'Team name Not Found';
+        }
+        
+        return $team->name;
     }
 
 

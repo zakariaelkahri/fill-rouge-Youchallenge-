@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Tournament extends Model
@@ -59,10 +60,44 @@ class Tournament extends Model
 
    }
 
-//    public function rounds()
-// {
-//     return $this->hasManyThrough(Round::class, Team::class);
-// }
+   public function isTeamCaptain($id)
+{
+    // dd('ddd');
+    $id = Participant::where('user_id',$id)->first()->id;
+
+    return $this->teams()->where('team_captain',$id)->exists();
+}
+
+
+   public function getCaptainTeam($id){
+
+    $id = Participant::where('user_id',$id)->first()->id;
+
+    return $this->teams()->where('team_captain',$id)->first();
+
+}
+
+public function isTeamCaptaine($id)
+{
+    $id = Participant::where('user_id',$id)->first()->id;
+
+    return $this->teams()->where('team_captain',$id)->exists();
+}
+
+public function getTeamName()
+{
+    $participant = Participant::where('user_id', Auth::id())->first();
+
+    if (!$participant) {
+        return null;
+    }
+
+    return $this->teams()
+        ->whereHas('participants', function ($query) use ($participant) {
+            $query->where('participant_id', $participant->id);
+        })
+        ->first();
+}
 
 }
 

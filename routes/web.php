@@ -86,6 +86,9 @@ Route::patch('/organisator/save/round', [RoundController::class, 'edite'])->name
 
 Route::patch('/organisator/tournament/complete', [TournamentController::class, 'edite'])->name('organisator.tournament.complete');
 
+
+
+
 });
 
 
@@ -102,9 +105,19 @@ Route::get('/participant/home', function () {
 })->name('participant.home');
 
 Route::get('/participant/tournaments', [ParticipantTournamentController::class , 'index'])->name('participant.tournaments');
+
+Route::get('/participant/mytournaments', [ParticipantTournamentController::class , 'showMyTournament'])->name('participant.mytournaments');
+
 Route::get('/participant/tournament/details/{tournament}', [ParticipantTournamentController::class , 'show'])->name('participant.tournament.details');
+
+Route::get('/participant/mytournament/details/{tournament}', [TournamentController::class, 'show'])->name('participant.mytournament.details');
+
 Route::post('participant/create/team',[TeamController::class,'store'])->name('participant.team.create');
+
 Route::post('participant/join/team',[ParticipantController::class,'store'])->name('participant.join.team');
+
+Route::delete('/participant/exit/tournament', [TeamController::class, 'destroy'])->name('participant.exit.team');
+
 
 });
 
