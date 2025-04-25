@@ -107,9 +107,9 @@
                                 <i class="fas fa-sign-out-alt mr-2"></i> Exit Team
                             </button>
                         @endif
-                        
-                        
+
                         <!-- View Toggle Buttons -->
+                        
                         <a href="{{ url()->current() }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition duration-200">
                             <i class="fas fa-info-circle mr-2"></i> Details
                         </a>
