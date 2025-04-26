@@ -111,7 +111,7 @@ class TournamentController extends Controller
 
 
 
-    public function edite(CompleteTournamentRequest $request){
+    public function edit(CompleteTournamentRequest $request){
 
         try{
 

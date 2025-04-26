@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('score_team2');
             $table->timestamps();
         });
-
+        
     }
 
     /**

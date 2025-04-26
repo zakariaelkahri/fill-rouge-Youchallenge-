@@ -34,16 +34,21 @@ public function displayTournaments($organisator_id)
 
 public function createRound($id)
 {    
-    $tournament = Tournament::findOrFail($id);;
-        
+    $data = [];
+    $tournament = Tournament::findOrFail($id);
 
+    
+    
+    
     $teams = $tournament->teams()->where('eliminated', 0)->get();
+
+    $data['tournament_id'] = $tournament->id ; 
+    $data['round'] = count($teams[0]->rounds) + 1;
     
-    $round = Round::create();
+    $round = Round::create($data);
+   
     $round = Round::where('id',$round->id)->first();
-    
-    // $tournament->status = 'ongoing';
-    
+        
     if($teams && $round){
 
         foreach($teams as $team){

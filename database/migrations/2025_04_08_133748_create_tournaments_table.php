@@ -26,7 +26,6 @@ return new class extends Migration
             $table->boolean('deleted')->default(0);
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
-            
             $table->timestamps();
             
         });

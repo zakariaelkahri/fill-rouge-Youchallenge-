@@ -30,30 +30,37 @@ class RoundController extends Controller
 
     public function store($id)
     {
-                try {
-   
-        $round = $this->tournamentService->createRound($id);
-        $matches = $this->tournamentService->createRoundMatches($round);
-        $tournament = Tournament::where('id',$id)->first();
-        $tournament->status = 'ongoing';
-        $tournament->save();
-        Log::info('round and matchs created successfully' );
-
-        if (!$round && $matches ) {
-                return redirect()->back()->with('failed', 'round is not created !');
-        }
+        try {
         
-        return redirect()->back()->with('success', 'round 1 created successfully !');
-    
-    } catch (\Exception $e) {
-        Log::error('round 1 not created: ' . $e->getMessage());
-        return redirect()->back()->with('failed', 'round not created !');
-    }
+            $tournament = Tournament::where('id',$id)->first();
+            if ($tournament->max_participants > $tournament->particpated_teams ) 
+            {
+                return redirect()->back()->with('failed', 'number of participated teams not enough ! wait for tournament to be Full . ');
+            }
+            // dd($tournament);
+            $round = $this->tournamentService->createRound($id);
+            $matches = $this->tournamentService->createRoundMatches($round);
+            $tournament->status = 'ongoing';
+            $tournament->save();
+            Log::info('round and matchs created successfully' );
+
+            if (!$round && $matches ) {
+                    return redirect()->back()->with('failed', 'round is not created !');
+            }     
+
+
+            
+            return redirect()->back()->with('success', 'round 1 created successfully !');
+        
+        } catch (\Exception $e) {
+            Log::error('round 1 not created: ' . $e->getMessage());
+            return redirect()->back()->with('failed', 'round not created !');
+        }
 
     }
 
 
-    public function edite(UpdateRoundMatchesRequest $request){
+    public function edit(UpdateRoundMatchesRequest $request){
 
 
         try{

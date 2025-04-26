@@ -21,7 +21,7 @@ class Organisator extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tournament()
+    public function tournaments()
     {
 
         return $this->hasMany(Tournament::class);

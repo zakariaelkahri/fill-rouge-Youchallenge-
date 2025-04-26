@@ -48,9 +48,6 @@ class TournamentService
             $tournamentphoto = $data['photo'];
             unset($data['photo']);
         }
-        if($data['format'] === 'FC25' ||$data['format'] === 'eFOOTBALL'){
-            $data['team_mode'] = 1;
-        }
         
         $data['organisator_id'] = Auth::user()->organisator->id;
 
@@ -104,13 +101,14 @@ class TournamentService
 
     public function createRound($id){
         
+        // dd($id);
 
         $round = $this->tournamentRepository->createRound($id) ;
 
         return $round ;
 
     }
-    
+
 
     public function createRoundMatches($round){
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Organisator\RoundController;
 use App\Http\Controllers\Organisator\TournamentController;
+use App\Http\Controllers\Organisator\TournamentDashboardController;
 use App\Http\Controllers\Participant\ParticipantController;
 use App\Http\Controllers\Participant\TeamController;
 use App\Http\Controllers\Participant\TournamentController as ParticipantTournamentController;
@@ -66,13 +67,16 @@ Route::middleware(['auth', 'role:organizator'])->group(function(){
 Route::get('/organisator/home', function () {
     return view('organisator/home');
 })->name('organisator.home');
-Route::get('/organisator/dashboard', function () {
-    return view('organisator/dashboard');
-})->name('organisator.dashboard');
 
 Route::get('/organisator/create/tournament', function () {
     return view('organisator/createtournament');
 })->name('organisator.createmytournament');
+
+Route::get('/organisator/dashboard',[TournamentDashboardController::class, 'index'] )->name('organisator.dashboard');
+
+Route::patch('/organisator/dashboard/delete',[TournamentDashboardController::class, 'delete'] )->name('organisator.tournament.delete');
+
+Route::put('/organisator/dashboard/edit',[TournamentDashboardController::class, 'edit'] )->name('organisator.tournament.edit');
 
 Route::post('/organisator/createtournament', [TournamentController::class, 'store'])->name('organisator.tournament.store');
 
@@ -82,9 +86,9 @@ Route::get('/organisator/tournament/details/{tournament}', [TournamentController
 
 Route::post('/organisator/start/tournament/{tournament}', [RoundController::class, 'store'])->name('organisator.start.tournament');
 
-Route::patch('/organisator/save/round', [RoundController::class, 'edite'])->name('organisator.save.round');
+Route::patch('/organisator/save/round', [RoundController::class, 'edit'])->name('organisator.save.round');
 
-Route::patch('/organisator/tournament/complete', [TournamentController::class, 'edite'])->name('organisator.tournament.complete');
+Route::patch('/organisator/tournament/complete', [TournamentController::class, 'edit'])->name('organisator.tournament.complete');
 
 
 

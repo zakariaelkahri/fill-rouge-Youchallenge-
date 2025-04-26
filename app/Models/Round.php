@@ -15,6 +15,7 @@ class Round extends Model
 
         'round',
         'status',
+        'tournament_id',
 
     ];
 

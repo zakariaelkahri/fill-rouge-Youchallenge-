@@ -82,7 +82,9 @@
                         @if(strtolower($tournament->status) == 'upcoming')
                         <form action="{{route('organisator.start.tournament',['tournament'=>$tournament->id])}}" method="POST">
                             @csrf
-                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full">
+                        {{-- @if(strtolower($tournament->status) == 'upcoming') --}}
+
+                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 w-full disabled">
                                 <i class="fas fa-play mr-2"></i>
                                 Start Tournament
                             </button>
