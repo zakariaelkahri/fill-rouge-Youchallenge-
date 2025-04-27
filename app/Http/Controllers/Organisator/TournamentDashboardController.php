@@ -68,8 +68,32 @@ class TournamentDashboardController extends Controller
             'start_date',
             'reward',
             'rules') ;
-
+            // dd($data);
+            
             $tournament = Tournament::where('id',$data['tournament_id'])->first();
+            $tournamentphoto = null;
+
+            if(isset($data['photo'])){
+                $tournamentphoto = $data['photo'];
+                unset($data['photo']);
+            }
+
+            if ($tournamentphoto && $tournamentphoto->isValid()) {
+                try {
+                    $filename = $tournament->id . '_' . time() . '.' . $tournamentphoto->getClientOriginalExtension();
+                    
+                    $path = $tournamentphoto->storeAs('tournament_photos', $filename, 'public');
+                    
+                    $tournament->update(['photo' => $path]);
+                    
+                    Log::info('tournament photo uploaded for tournament ID: ' . $tournament->id);
+                } catch (\Exception $e) {
+                    Log::error('tournament photo upload failed: ' . $e->getMessage());
+                }
+            }
+
+
+
             $tournament->update($data);
 
             return redirect()->back()->with('success', 'deleted succsessfully');

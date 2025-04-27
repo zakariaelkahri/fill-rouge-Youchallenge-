@@ -100,7 +100,7 @@
                         <div class="flex items-center text-gray-400">
 
                             <i class="fas fa-users w-5 text-center mr-2"></i>
-                            <span>16/{{$tournament->max_participants}}</span>
+                            <span>{{ $tournament->particpated_teams }}/{{ $tournament->max_participants }}</span>
                         </div>
                     </div>
                     <a href="{{route('organisator.tournamentdetails',['tournament'=>$tournament])}}" class="inline-flex items-center justify-center w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors">
@@ -112,8 +112,6 @@
             @endforeach
         </div>
         {!! $tournaments->links() !!}
-    
-        
     </div>
 </main>
 

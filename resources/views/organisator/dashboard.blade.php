@@ -14,10 +14,12 @@
                 <p class="text-gray-400 mt-2">Welcome back, {{ auth()->user()->name }}</p>
             </div>  
             <div class="mt-4 md:mt-0">
-                <button type="button" class="btn-primary flex items-center" data-modal-target="createTournamentModal" data-modal-toggle="createTournamentModal">
+                <a href="{{route('organisator.createmytournament')}}">
+                <button type="button"  class="btn-primary flex items-center" data-modal-target="createTournamentModal" data-modal-toggle="createTournamentModal">
                     <i class="fas fa-plus-circle mr-2"></i>
                     Create New Tournament
                 </button>
+            </a>
             </div>
         </div>
 
@@ -57,8 +59,8 @@
                 <div class="card-body">
                     <div class="flex justify-between">
                         <div>
-                            <p class="text-gray-400 text-sm">Total Participants</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">384</h3>
+                            <p class="text-gray-400 text-sm">Steel Not Validated</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('is_validated', 0)->count() }}</h3>
                         </div>
                         <div class="bg-purple-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
                             <i class="fas fa-users text-purple-400"></i>

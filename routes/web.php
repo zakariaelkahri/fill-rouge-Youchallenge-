@@ -23,7 +23,7 @@ use App\Http\Controllers\Participant\TournamentController as ParticipantTourname
 
 Route::get('/', function () {
     return view('accueil');
-});
+})->name('accueil');
 
 Route::get('/login', function () {
     return view('login');

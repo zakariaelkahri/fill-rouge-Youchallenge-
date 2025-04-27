@@ -58,7 +58,7 @@
                         </div>
                         <h3 class="text-xl font-bold mb-4 text-white">Create New Tournament</h3>
                         <p class="text-gray-300">Start a new tournament with our easy-to-use platform.</p>
-                        <a href="" class="mt-4 text-green-400 hover:text-green-300 inline-block">Create Tournament →</a>
+                        <a href="{{route('organisator.createmytournament')}}" class="mt-4 text-green-400 hover:text-green-300 inline-block">Create Tournament →</a>
                     </div>
                 </div>
             </div>

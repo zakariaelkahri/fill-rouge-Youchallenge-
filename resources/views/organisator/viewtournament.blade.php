@@ -72,14 +72,7 @@
                     
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-2">
-                        @if (strtolower($tournament->status) == 'upcoming')
-                            
-                        <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
-                            <i class="fas fa-edit mr-2"></i>
-                            Edit
-                        </a>
-                        @endif
-                        @if(strtolower($tournament->status) == 'upcoming')
+                        @if(strtolower($tournament->status) == 'upcoming' && $tournament->max_participants == $tournament->particpated_teams)
                         <form action="{{route('organisator.start.tournament',['tournament'=>$tournament->id])}}" method="POST">
                             @csrf
                         {{-- @if(strtolower($tournament->status) == 'upcoming') --}}
