@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\AuthGates;
 use App\Http\Requests\CompleteTournamentRequest;
 use App\Http\Requests\StoreTournamentRequest;
+use App\Http\Requests\UpdateTournamentRequest;
 use App\Models\Organisator;
 use App\Models\Participant;
 use App\Models\Tournament;
@@ -53,7 +54,7 @@ class TournamentDashboardController extends Controller
         }
     }
 
-    public function edit(Request $request){
+    public function edit(UpdateTournamentRequest $request){
 
         try
         {

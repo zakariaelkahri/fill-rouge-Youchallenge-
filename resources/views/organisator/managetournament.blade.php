@@ -38,7 +38,7 @@
                     <select id="format-filter" class="w-full bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20">
                         <option value="all">All Formats</option>
                         <option value="CSGO">CS:GO</option>
-                        <option value="DOTA2">DOTA 2</option>
+                        <option value="DOTA2">FC</option>
                         <option value="LOL">League of Legends</option>
                         <option value="VALORANT">Valorant</option>
                     </select>
