@@ -20,12 +20,12 @@ services:
     container_name: youchallenge_admin
     restart: always
     environment:
-      PMA_HOST: mysql  # Make sure this is set to the correct service name
+      PMA_HOST: mysql # Make sure this is set to the correct service name
       MYSQL_ROOT_PASSWORD: root_password
     ports:
       - "8089:80"
     networks:
-      - laravel_network  # Ensure both services are on the same network
+      - laravel_network # Ensure both services are on the same network
 
   php:
     build:
@@ -37,7 +37,7 @@ services:
     volumes:
       - ./project:/var/www/html
     ports:
-      - "8889:80"
+      - "8000:80"
     depends_on:
       - mysql
     networks:
@@ -45,6 +45,7 @@ services:
 
 volumes:
   db_data:
+
 
 networks:
   laravel_network:
