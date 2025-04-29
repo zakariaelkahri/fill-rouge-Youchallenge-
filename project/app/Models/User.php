@@ -55,4 +55,5 @@ class User extends Authenticatable
 
         return asset('public/storage/images/default.png');
     }
+    
 }
