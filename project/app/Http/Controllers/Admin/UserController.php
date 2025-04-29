@@ -101,6 +101,29 @@ class UserController extends Controller
     }
 
 
+    public function update(Request $request){
+
+        try{
+
+            $tournament_id = $request->only('tournament_id');
+            $is_validated = $request->only('is_validated');
+            
+            $tournament = Tournament::where('id',$tournament_id['tournament_id'])->first();
+            $tournament->is_validated = $is_validated['is_validated'];
+            $tournament->save();
+
+            return redirect()->back()->with('success','Validation Opiration Seccessfully');
+
+        }catch(\Exception $e){
+
+            return abort(404,'somthing went wrong!');
+
+        }
+
+
+    }
+
+
 
 
 }

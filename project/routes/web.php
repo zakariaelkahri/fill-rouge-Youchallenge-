@@ -56,9 +56,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('admin/show/statistics',[UserController::class, 'show'])->name('admin/statistics')->middleware('nocache'); 
 
-    // Route::get('admin/manage/tournaments',[UserController::class, 'update'])->name('admin/statistics')->middleware('nocache'); 
-
     Route::get('admin/tournments',[UserController::class, 'display'])->name('admin.tournaments')->middleware('nocache'); 
+
+    Route::patch('admin/update/tournament',[UserController::class, 'update'])->name('admin/apdate/tournament')->middleware('nocache'); 
 
 });
 
