@@ -286,10 +286,11 @@ function supprimerProduit(id){
     function search(name){
 
         for(let i = 0 ; i<products.length; i++){
-            if(commandes[i].name == name)
+
+            if(commandes[i].client == name)
             {
 
-                return commandes[i]
+                return commandes[i] 
     
             }
     
@@ -297,7 +298,36 @@ function supprimerProduit(id){
         return null
 
     }
-    
 
-    console.log('holla') 
+    // console.log(search('Zakaria El Kahri'))
 
+    function filterStatus(statut){
+
+        commandes = commandes.filter(commande => commande.statut == statut)
+        return commandes
+    }
+
+    //    console.log(filterStatus('en attente'))
+
+    function statistics(){
+
+        let CommandNumber = commandes.length
+        let rejectedCommandes = 0
+        let validatedCommandes = 0
+
+        for(let i = 0 ; i < commandes.length ; i++){
+
+            if(commandes[i].statut == 'rejected'){
+                rejectedCommandes++
+
+            }else if(commandes[i].statut == 'validated'){
+                validatedCommandes++
+
+            }
+        }
+
+        return [CommandNumber,rejectedCommandes,validatedCommandes]
+
+    }
+
+    console.log(statistics())
