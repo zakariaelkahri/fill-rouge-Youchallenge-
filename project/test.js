@@ -297,6 +297,7 @@ function supprimerProduit(id){
         return null
 
     }
+    
 
     console.log('holla') 
 
