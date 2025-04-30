@@ -33,7 +33,7 @@
                     </div>
                     <h3 class="text-xl font-bold mb-4 text-white">My Tournaments</h3>
                     <p class="text-gray-300">View all tournaments you've registered for.</p>
-                    <a href="#" class="mt-4 text-blue-400 hover:text-blue-300 inline-block">View My Tournaments →</a>
+                    <a href="{{route('participant.mytournaments')}}" class="mt-4 text-blue-400 hover:text-blue-300 inline-block">View My Tournaments →</a>
                 </div>
                 <div class="bg-gray-800 p-8 rounded-xl border-2 border-blue-700 hover:bg-gray-700 transition duration-300">
                     <div class="text-blue-500 mb-4">
@@ -111,7 +111,7 @@
                 </div>
             </div>
             <div class="text-center mt-10">
-                <a href="#" class="text-blue-400 hover:text-blue-300 inline-flex items-center">
+                <a href="{{route('participant.tournaments')}}" class="text-blue-400 hover:text-blue-300 inline-flex items-center">
                     View All Tournaments
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
