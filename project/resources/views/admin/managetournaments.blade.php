@@ -61,7 +61,8 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-700">
-                    @foreach ($tournaments as $tournament)
+                    @if ($tournaments)
+                          @foreach ($tournaments as $tournament)
                     <tr class="hover:bg-gray-700">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
@@ -85,7 +86,7 @@
                             {{ $tournament->particpated_teams }}/{{ $tournament->max_participants }}
                         </td>
                         <td class="px-6 py-4">
-                            <form action="" method="POST">
+                            <form action="{{route('admin/apdate/tournament')}}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" 
@@ -96,11 +97,14 @@
                                     <i class="fas {{ $tournament->is_validated ? 'fa-check-circle' : 'fa-times-circle' }} mr-2"></i>
                                     {{ $tournament->is_validated ? 'Validated' : 'Not Validated' }}
                                 </button>
-                                <input type="hidden" name="validation_status" value="{{ $tournament->is_validated ? '0' : '1' }}">
+                                <input type="hidden" name="tournament_id" value="{{ $tournament->id }}">
+                                <input type="hidden" name="is_validated" value="{{ $tournament->is_validated ? '0' : '1' }}">
                             </form>
                         </td>
-                    </tr>
+                    </tr>  
                     @endforeach
+                    @endif
+
                 </tbody>
             </table>
         </div>

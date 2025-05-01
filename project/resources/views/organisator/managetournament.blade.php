@@ -14,7 +14,7 @@
                 <p class="text-gray-400 mt-2">Control and monitor all your esports events</p>
             </div>
             <div class="mt-4 md:mt-0">
-                <a href="#" class="inline-flex items-center justify-center px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200">
+                <a href="{{route('organisator.createmytournament')}}" class="inline-flex items-center justify-center px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200">
                     <i class="fas fa-plus-circle mr-2"></i>
                     Create Tournament
                 </a>
