@@ -86,7 +86,7 @@ class UserController extends Controller
 
         try{
 
-            $tournaments = Tournament::all();
+            $tournaments = Tournament::paginate(3);
             // dd($tournaments);
 
             return view('admin.managetournaments',compact('tournaments'));

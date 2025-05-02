@@ -6,7 +6,7 @@
 
     <main class="relative">
         <section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url({{ asset('images/backgroundimg.jpg') }});">
-            <div class="absolute inset-0 bg-black opacity-60"></div>
+            <div class="absolute inset-0 bg-black opacity-50"></div>
             <div class="relative z-10 text-center px-4">
                 <h2 class="text-5xl font-bold mb-6 text-white drop-shadow-lg">Tournament Organizer Hub</h2>
                 <p class="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
