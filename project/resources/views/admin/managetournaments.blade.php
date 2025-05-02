@@ -108,6 +108,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $tournaments->links() }}
     </div>
 </div>
 
