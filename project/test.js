@@ -896,3 +896,46 @@ function hasEmployeesWithoutProjects(){
 }
 // console.log(hasEmployeesWithoutProjects())
 
+
+
+    function countEnglishSpeakingEmployees(){
+
+        let count = 0
+        for(let i = 1 ; i <employees.length ; i++)
+            {
+                for(let j = 1 ; j < employees[i].languages.length ; j++)
+                    {
+                        if(employees[i].languages[j] === "English"){
+
+                            count++
+                        }
+                
+                    }
+        
+            }
+            return count
+    }
+
+
+    // console.log(countEnglishSpeakingEmployees()) 
+
+    function getEmployeesByProject(project){
+
+        let employeesByProject = []
+        for(let i = 1 ; i <employees.length ; i++)
+            {
+                for(let j = 1 ; j < employees[i].languages.length ; j++)
+                    {
+                        if(employees[i].projects[j] === project){
+
+                            employeesByProject.push(employees[i])
+                            
+                        }
+                
+                    }
+        
+            }
+            return employeesByProject
+    }    
+
+    console.log(getEmployeesByProject("Project Gamma"))
