@@ -9,6 +9,7 @@ use function PHPUnit\Framework\matches;
 
 class Matche extends Model
 {
+
     use HasFactory;
     protected $fillable = 
     [
@@ -66,5 +67,7 @@ class Matche extends Model
     }
 
 }
+
+
 
 
