@@ -260,6 +260,55 @@ function firstLast(arr){
 
 
 // ---------------------------------------------
+// let ar = [1,2,3,4,5,3,1 ]
+// let ar2 =[1,2,3,4]
+
+// function test(arr,arr2){
+// let empty = []
+// // let pointer 
+// let bool = true
+
+// for(let i=0 ; i < arr.length ; i++){
+  
+//   if(arr[i] == arr2[0]){
+//   empty = [];
+//   for(let j=0 ; j < arr2.length ; j++){
+//     if(arr2[j] != arr[i]){
+      
+//       bool = false
+//       i = i - j
+//       break
+//     }else{
+//       bool = true
+//       empty.push(arr[i])
+//       i++
+//     if(arr2.length === empty.length){
+//     return bool
+//   }
+//     }
+    
+ 
+//   }
+
+//   }
+// }
+//   return bool
+// //   console.log(arr2 , empty)
+// // console.log(bool)
+//   }
+
+// console.log(test(ar,ar2))
+
+// -----------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 
