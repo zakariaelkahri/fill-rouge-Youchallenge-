@@ -260,12 +260,12 @@ function firstLast(arr){
 
 
 // ---------------------------------------------
-// let ar = [1,2,3,4,5,3,1 ]
-// let ar2 =[1,2,3,4]
+// let ar = [1,1,1,1,1,7,6,3,4,3]
+// let ar2 =[1,7,6,2]
 
 // function test(arr,arr2){
 // let empty = []
-// // let pointer 
+// let pointer
 // let bool = true
 
 // for(let i=0 ; i < arr.length ; i++){
@@ -274,7 +274,6 @@ function firstLast(arr){
 //   empty = [];
 //   for(let j=0 ; j < arr2.length ; j++){
 //     if(arr2[j] != arr[i]){
-      
 //       bool = false
 //       i = i - j
 //       break
@@ -293,13 +292,75 @@ function firstLast(arr){
 //   }
 // }
 //   return bool
-// //   console.log(arr2 , empty)
-// // console.log(bool)
+
 //   }
 
 // console.log(test(ar,ar2))
 
 // -----------------------------------------------------
+// let arr = [7,6,2,3,8,3,4,3,1,3,22,5,3]
+
+function test(arr){
+
+  let str  = []
+  let final  = []
+  // console.log(arr[arr.length-2])
+for(let i = 0 ; i < arr.length ; i+= arr[arr.length-1]){
+  // console.log(str,"a")
+  str  = []
+   // console.log(i)
+  for(let j = i ; j < i + arr[arr.length-1]  ; j++){
+    if(!arr[j] ){
+      break;
+    }
+    str.push(arr[j])
+  }
+  final.push(str)
+}
+  return final
+}
+
+// console.log(test(ar))
+
+// ------------------------------------------------
+
+
+// let rr = [2,4,6,3,9,5,7]
+
+// function bigMul(arr){
+// let max = arr[0] 
+// let indexes = []
+// for(let i = 0 ; i < arr.length-1 ; i++){
+//   let num = 0
+//   num = arr[i] * arr[i+1]
+//   if(max < num){
+//     indexes = []
+//     indexes.push(arr[i])
+//     indexes.push(arr[i+1])
+//     max = num
+//   }
+// }
+//   return [max ,indexes]
+// }
+
+// console.log(bigMul(rr))
+
+// ----------------------------------------
+
+    let rr = [7,6,2,3,8,3,4,3,1,3,22,5,3]
+    
+
+
+function fifthMax(arr){
+ 
+  
+
+}
+
+
+
+console.log(fifthMax(rr))
+
 
 
 
