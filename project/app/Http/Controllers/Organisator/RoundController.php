@@ -50,11 +50,11 @@ class RoundController extends Controller
 
 
             
-            return redirect()->back()->with('success', 'round 1 created successfully !');
+            return redirect()->back()->with('success', 'Round created successfully !');
         
         } catch (\Exception $e) {
             Log::error('round 1 not created: ' . $e->getMessage());
-            return redirect()->back()->with('failed', 'round not created !');
+            return redirect()->back()->with('failed', 'Round not created !');
         }
 
     }

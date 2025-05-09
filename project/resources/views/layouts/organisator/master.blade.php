@@ -47,9 +47,9 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
     @include('partials.organisator.nav')
-    <div class="flex-grow pt-16">
+    {{-- <div class="flex-grow pt-16"> --}}
         @yield('organisator-main')
-    </div>
+    {{-- </div> --}}
     @include('partials.organisator.footer')
     
     <script>

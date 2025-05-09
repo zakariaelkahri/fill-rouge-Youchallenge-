@@ -50,10 +50,11 @@ class User extends Authenticatable
     {
         if ($this->photo && Storage::disk('public')->exists($this->photo)) {
             $url = Storage::url($this->photo);
-            return asset('public/' . $url);
+            return asset($url);
         }
 
-        return asset('public/storage/images/default.png');
+        return asset('storage/images/default.png');
+        
     }
     
 }

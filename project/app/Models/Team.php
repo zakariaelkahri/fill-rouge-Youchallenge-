@@ -50,10 +50,10 @@ class Team extends Model
     {
         if ($this->photo && Storage::disk('public')->exists($this->photo)) {
             $url = Storage::url($this->photo);
-            return asset('public/' . $url);
-                }
-        
-        return asset('public/storage/images/default.png');
+            return asset($url);
+        }
+
+        return asset('storage/images/default.png');
     }
 
     public function getTeamCaptainName(){
@@ -63,6 +63,7 @@ class Team extends Model
         return $captainName->name ; 
 
     }
+
 
 
 

@@ -7,29 +7,29 @@
 @section('organisator-main')
 <main class="bg-gray-900 min-h-screen py-8 px-4">
 <div class="container mx-auto">
-<!-- Back Button -->
-<div class="mb-6">
+
+    <div class="mb-6">
     <a href="{{route('organisator.managetournament')}}" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-200">
         <i class="fas fa-arrow-left mr-2"></i>
         Back to Tournaments
     </a>
 </div>
 
-<!-- Tournament Header -->
+
 <div class="relative rounded-xl overflow-hidden mb-8">
     <div class="absolute inset-0">
         <img src="{{ $tournament->getPhotoUrl() }}" alt="{{ $tournament->name }}" class="w-full h-full object-cover blur-sm opacity-50">
     </div>
     <div class="relative bg-gradient-to-r from-gray-900 via-gray-900/80 to-transparent p-8">
         <div class="flex flex-col md:flex-row items-start gap-6">
-            <!-- Tournament Image -->
+
             <div class="w-full md:w-1/3 lg:w-1/4">
                 <div class="rounded-lg overflow-hidden shadow-lg border-4 border-gray-700">
                     <img src="{{ $tournament->getPhotoUrl() }}" alt="{{ $tournament->name }}" class="w-full aspect-video object-cover">
                 </div>
             </div>
 
-            <!-- Tournament Info -->
+
             <div class="w-full md:w-2/3 lg:w-3/4">
                 <div class="flex justify-between items-start">
                     <div>
@@ -40,7 +40,7 @@
                                 {{ $tournament->format }}
                             </span>
                             
-                            <!-- Status Badge -->
+
                             @if(strtolower($tournament->status) == 'upcoming')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-900 text-blue-300">
                                     <span class="w-2 h-2 rounded-full bg-blue-400 mr-1"></span>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     
-                    <!-- Action Buttons -->
+
                     <div class="flex flex-col sm:flex-row gap-2">
                         @if(strtolower($tournament->status) == 'upcoming' && $tournament->max_participants == $tournament->particpated_teams)
                         <form action="{{route('organisator.start.tournament',['tournament'=>$tournament->id])}}" method="POST">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
                 
-                <!-- Reward Info -->
+
                 <div class="mt-4 mb-6">
                     <h3 class="text-xl font-bold text-white mb-2">
                         <i class="fas fa-trophy text-yellow-500 mr-2"></i>
@@ -113,7 +113,7 @@
     </div>
 </div>
 
-<!-- Tournament Match Management Section -->
+
 <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-white">
@@ -147,11 +147,11 @@
     
     @if(isset($rounds) && count($rounds) > 0)
     
-    <!-- Rounds Section - One form per round -->
+
     <div class="space-y-4 rounds-container">
         @foreach($rounds as $roundIndex => $round)
         <div class="round-container bg-gray-700/30 rounded-xl overflow-hidden">
-            <!-- Round Header (Clickable) -->
+
             <div class="round-header bg-gray-700/70 p-4 flex items-center justify-between cursor-pointer" data-round-id="{{ $round->id }}">
                 <span class="text-lg font-semibold text-white">Round {{ $round->round }}</span>
                 <button type="button" class="toggle-round-btn p-2 text-gray-400 hover:text-white focus:outline-none" data-round-id="{{ $round->id }}">
@@ -159,7 +159,7 @@
                 </button>
             </div>
             
-            <!-- Round Matches (Hidden by default except first round) -->
+
             <div class="round-matches overflow-hidden bg-gray-700/50 {{ $roundIndex === 0 ? '' : 'hidden' }}" id="round-matches-{{ $round->id }}">
                 <form class="round-form" action="{{route('organisator.save.round')}}" method="POST" id="round-form-{{ $round->id }}">
                     @csrf
@@ -171,28 +171,28 @@
                         @foreach($round->matches as $matchIndex => $match)
                         <div class="p-4 hover:bg-gray-700/80 transition duration-200 match-row {{ $match->status == 'completed' ? 'completed' : 'pending' }}" data-match-id="{{ $match->id }}">
                             <div class="flex flex-wrap items-center gap-4">
-                                <!-- Match Info -->
+
                                 <div class="w-full sm:w-auto flex items-center mb-2 sm:mb-0">
                                     <span class="text-gray-400 text-sm font-medium">Match #{{ $match->id }}</span>
                                     <input type="hidden" name="matches[{{ $matchIndex }}][id]" value="{{ $match->id }}">
                                 </div>
                                 
-                                <!-- Teams and Scores -->
+
                                 <div class="flex-1 flex items-center">
-                                    <!-- Team A -->
+
                                     <div class="flex flex-col items-start flex-1">
-                                        <!-- Team name field -->
+
                                         <h3 class="mb-2 w-full bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600">
                                             {{ $match->getTeamName($match->team1_id) }}
                                         </h3>
 
-                                        <!-- Team selection - Enhanced with winner highlight -->
+
                                         <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors 
                                             {{ ($match->status == 'finished' && $match->winner_id == $match->team1_id) ? 'bg-green-900/50 border-2 border-green-600 winner-highlight' : 
                                                 ($match->winner_id == $match->team_a_id ? 'bg-green-900/30 border border-green-700' : '') }}" 
                                             data-team-id="{{ $match->team1_id }}" data-match-index="{{ $matchIndex }}">
                                             <div class="h-10 w-10 bg-gray-600 rounded-full mr-3 flex-shrink-0">
-                                                <!-- Team photo display -->
+
                                                 <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
                                                     <img src="{{ $match->getTeamPhotoUrl($match->team1_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team A">
                                                 </div>
@@ -206,7 +206,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Score Inputs -->
+
                                     @if ($match->status == 'finished')
                                         
                                     <div class="flex items-center mx-4">
@@ -230,14 +230,14 @@
                                     </div>
                                     @endif
                                     
-                                    <!-- Team B -->
+
                                     <div class="flex flex-col items-end flex-1">
-                                        <!-- Team name field -->
+
                                         <h3 class="mb-2 w-full bg-gray-700 text-white text-sm rounded px-2 py-1 border border-gray-600">
                                             {{ $match->getTeamName($match->team2_id) }}
                                         </h3>
 
-                                        <!-- Team selection - Enhanced with winner highlight -->
+
                                         <div class="team-select cursor-pointer flex items-center p-2 rounded-lg transition-colors 
                                             {{ ($match->status == 'finished' && $match->winner_id == $match->team2_id) ? 'bg-green-900/50 border-2 border-green-600 winner-highlight' : 
                                                 ($match->winner_id == $match->team_b_id ? 'bg-green-900/30 border border-green-700' : '') }}" 
@@ -249,7 +249,7 @@
                                                 @endif
                                             </div>
                                             <div class="h-10 w-10 bg-gray-600 rounded-full ml-3 flex-shrink-0">
-                                                <!-- Team photo display -->
+
                                                 <div class="h-10 w-10 rounded-full border border-gray-600 overflow-hidden flex-shrink-0 bg-gray-800">
                                                     <img src="{{ $match->getTeamPhotoUrl($match->team2_id) ?? asset('images/default-team.png') }}" class="h-full w-full object-cover" alt="Team B">
                                                 </div>
@@ -259,10 +259,10 @@
                                     <input type="hidden" name="matches[{{ $matchIndex }}][winner_id]" value="{{ $match->winner_team }}" class="winner-input">
                                 </div>
                             </div>
-                            <!-- Error message container for this match -->
+
                             <div class="match-error-container mt-2"></div>
                             
-                            <!-- Winner indicator for completed matches -->
+
                             @if($match->status == 'finished')
                                 <div class="mt-3 text-center">
                                     <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-900/30 text-green-400 border border-green-600">
@@ -276,7 +276,7 @@
                         @endforeach
                     </div>
                     
-                    <!-- Submit Round Button -->
+
                     @if ($round->status == 'not_started' && $tournament->status == 'ongoing')
                     
                     <div class="p-4 flex justify-end">
@@ -305,9 +305,9 @@
     @endif
 </div>
 
-<!-- Main Content Grid -->
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Left Column - Rules -->
+
     <div class="lg:col-span-2">
         <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
             <h2 class="text-2xl font-bold text-white mb-4">
@@ -320,9 +320,9 @@
         </div>
     </div>
 
-    <!-- Right Column - Participants & Timeline -->
+
     <div>
-        <!-- Participants Card -->
+
         <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-white">
@@ -333,7 +333,7 @@
             </div>
             
             <div class="space-y-3">
-                <!-- Progress bar -->
+
                 <div class="w-full bg-gray-700 rounded-full h-2.5">
                     @php
                         $participantPercentage = min(100, ($tournament->particpated_teams / $tournament->max_participants) * 100);
@@ -341,7 +341,7 @@
                     <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ $participantPercentage }}%"></div>
                 </div>
                 
-                <!-- NEW: Qualified Teams Section -->
+
                 <div class="mt-4 border-t border-gray-700 pt-4">
                     <div class="flex items-center mb-2">
                         <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
@@ -370,7 +370,7 @@
                     </div>
                 </div>
                 
-                <!-- NEW: Eliminated Teams Section -->
+
                 <div class="mt-4 border-t border-gray-700 pt-4">
                     <div class="flex items-center mb-2">
                         <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
@@ -409,7 +409,7 @@
             </div>
         </div>
         
-        <!-- Tournament Timeline -->
+
         <div class="bg-gray-800 rounded-xl shadow-lg p-6">
             <h2 class="text-xl font-bold text-white mb-4">
                 <i class="fas fa-calendar-alt text-indigo-400 mr-2"></i>

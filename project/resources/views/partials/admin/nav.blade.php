@@ -3,13 +3,12 @@
         <!-- Logo and Title -->
         <div class="flex items-center space-x-3">
             <div class="bg-white p-2 rounded-full">
-                <img src="{{ asset('public/images/logo.png', true) }}" alt="YouChallenge Logo" class="h-8 w-8 rounded-full">
+                <img src="{{ asset('images/logo.png') }}" alt="YouChallenge Logo" class="h-8 w-8 rounded-full">
             </div>
             <h1 class="text-3xl font-bold text-white">YouChallenge</h1>
             <span class="text-green-200 text-sm bg-green-900 px-3 py-1 rounded-full">Admin Portal</span>
         </div>
 
-        <!-- Burger Menu Button (visible on mobile) -->
         <button 
             id="burger-menu-button" 
             class="text-white text-2xl md:hidden focus:outline-none">

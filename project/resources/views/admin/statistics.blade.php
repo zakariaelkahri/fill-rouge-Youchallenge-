@@ -11,18 +11,6 @@
         <h2 class="text-2xl font-bold mt-5 text-green-400">Statistics</h2>
         <div class="bg-gray-800 rounded-lg shadow-lg mt-4 p-6 border border-gray-700">
             <div class="grid grid-cols-2 gap-4">
-                {{-- @php
-                    $statistics = [
-                        ['label' => 'Total Users', 'value' => 150, 'icon' => 'users'],
-                        ['label' => 'Total Tournaments', 'value' => 25, 'icon' => 'trophy'],
-                        ['label' => 'Total Active Tournaments', 'value' => 10, 'icon' => 'play-circle'],
-                        ['label' => 'Total Teams', 'value' => 40, 'icon' => 'users-cog'],
-                        ['label' => 'Total Players', 'value' => 300, 'icon' => 'user-friends'],
-                        ['label' => 'Total Matches', 'value' => 100, 'icon' => 'futbol'],
-                        ['label' => 'Total Completed Matches', 'value' => 75, 'icon' => 'check-circle'],
-                        ['label' => 'Players Registered This Month', 'value' => 25, 'icon' => 'calendar-alt'],
-                    ];
-                @endphp --}}
                 @foreach ($statistics as $stat)
                     <div class="flex items-center p-4 bg-white text-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow border border-gray-200">
                         <div class="flex items-center justify-center w-12 h-12 bg-green-500 rounded-full text-white">

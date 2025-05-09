@@ -25,46 +25,40 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
             <!-- Total Tournaments Card -->
-            <div class="card border-l-4 border-green-500">
-                <div class="card-body">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm">Total Tournaments</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->count() }}</h3>
-                        </div>
-                        <div class="bg-green-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
-                            <i class="fas fa-trophy text-green-400"></i>
-                        </div>
+            <div class="card border-l-4 border-green-500 flex">
+                <div class="card-body flex items-center">
+                    <div class="pl-6 flex-1">
+                        <p class="text-gray-400 text-sm">Total Tournaments</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->count() }}</h3>
+                    </div>
+                    <div class="bg-green-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center ml-4">
+                        <i class="fas fa-trophy text-green-400"></i>
                     </div>
                 </div>
             </div>
 
             <!-- Active Tournaments Card -->
-            <div class="card border-l-4 border-blue-500">
-                <div class="card-body">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm">Active Tournaments</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('status', 'ongoing')->count() }}</h3>
-                        </div>
-                        <div class="bg-blue-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
-                            <i class="fas fa-calendar-alt text-blue-400"></i>
-                        </div>
+            <div class="card border-l-4 border-blue-500 flex">
+                <div class="card-body flex items-center">
+                    <div class="pl-6 flex-1">
+                        <p class="text-gray-400 text-sm">Active Tournaments</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('status', 'ongoing')->count() }}</h3>
+                    </div>
+                    <div class="bg-blue-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center ml-4">
+                        <i class="fas fa-calendar-alt text-blue-400"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Total Participants Card -->
-            <div class="card border-l-4 border-purple-500">
-                <div class="card-body">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm">Steel Not Validated</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('is_validated', 0)->count() }}</h3>
-                        </div>
-                        <div class="bg-purple-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
-                            <i class="fas fa-users text-purple-400"></i>
-                        </div>
+            <!-- Steel Not Validated Card -->
+            <div class="card border-l-4 border-purple-500 flex">
+                <div class="card-body flex items-center">
+                    <div class="pl-6 flex-1">
+                        <p class="text-gray-400 text-sm">Steel Not Validated</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('is_validated', 0)->count() }}</h3>
+                    </div>
+                    <div class="bg-purple-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center ml-4">
+                        <i class="fas fa-users text-purple-400"></i>
                     </div>
                 </div>
             </div>
@@ -141,6 +135,7 @@
                                             data-tournament-name="{{ $tournament->name }}"
                                             data-tournament-format="{{ $tournament->format }}"
                                             data-tournament-max-participants="{{ $tournament->max_participants }}"
+                                            data-tournament-team-mode="{{ $tournament->team_mode ?? '' }}"
                                             data-tournament-reward="{{ $tournament->reward }}"
                                             data-tournament-rules="{{ $tournament->rules }}"
                                             data-tournament-start-date="{{ $tournament->start_date ? date('Y-m-d\TH:i', strtotime($tournament->start_date)) : '' }}"
@@ -193,9 +188,7 @@
                 @csrf
                 @method('PUT')
                 @if (count($tournaments) > 0)
-
                     <input type="hidden" id="update_tournament_id" name="tournament_id" value={{$tournament->id}}>   
-
                 @endif
                 <div class="p-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -223,7 +216,17 @@
                             </select>
                             <p class="error-message text-red-500 text-xs mt-1 hidden"></p>
                         </div>
-
+                        <!-- TEAM MODE SELECT -->
+                        <div>
+                            <label for="update_team_mode" class="block mb-2 text-sm font-medium text-white">Team Mode</label>
+                            <select id="update_team_mode" name="team_mode" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="">Select team mode</option>
+                                <option value="1">Solo</option>
+                                <option value="2">Duo</option>
+                                <option value="4">Squad</option>
+                            </select>
+                            <p class="error-message text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
                         <div>
                             <label for="update_start_date" class="block mb-2 text-sm font-medium text-white">Start Date</label>
                             <input type="datetime-local" id="update_start_date" name="start_date" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
@@ -372,7 +375,14 @@ popup: 'rounded-xl shadow-lg'
                     showError(maxParticipantsInput, 'Please select max participants');
                     isValid = false;
                 }
-                
+
+                // Team mode validation (if required)
+                // const teamModeInput = form.querySelector('[name="team_mode"]');
+                // if (teamModeInput && (!teamModeInput.value || teamModeInput.value === '')) {
+                //     showError(teamModeInput, 'Please select team mode');
+                //     isValid = false;
+                // }
+
                 // Start date validation
                 const startDateInput = form.querySelector('[name="start_date"]');
                 if (startDateInput && (!startDateInput.value || startDateInput.value === '')) {
@@ -422,6 +432,7 @@ popup: 'rounded-xl shadow-lg'
         const name = button.getAttribute('data-tournament-name');
         const format = button.getAttribute('data-tournament-format');
         const maxParticipants = button.getAttribute('data-tournament-max-participants');
+        const teamMode = button.getAttribute('data-tournament-team-mode');
         const reward = button.getAttribute('data-tournament-reward');
         const rules = button.getAttribute('data-tournament-rules');
         const status = button.getAttribute('data-tournament-status');
@@ -432,6 +443,7 @@ popup: 'rounded-xl shadow-lg'
         document.getElementById('update_name').value = name;
         document.getElementById('update_format').value = format;
         document.getElementById('update_max_participants').value = maxParticipants;
+        document.getElementById('update_team_mode').value = teamMode;
         document.getElementById('update_reward').value = reward;
         document.getElementById('update_rules').value = rules;
         document.getElementById('update_status').value = status;
