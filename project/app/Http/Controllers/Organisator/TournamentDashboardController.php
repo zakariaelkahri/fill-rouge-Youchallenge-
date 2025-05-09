@@ -55,7 +55,6 @@ class TournamentDashboardController extends Controller
     }
 
     public function edit(UpdateTournamentRequest $request){
-        // dd("test");
         try
         {
 
