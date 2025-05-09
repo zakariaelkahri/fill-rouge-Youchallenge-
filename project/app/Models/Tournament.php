@@ -46,7 +46,7 @@ class Tournament extends Model
         return asset($url);
     }
 
-    return asset('storage/images/default.png');
+    return asset('storage/images/youchallenge.png');
    }
 
 

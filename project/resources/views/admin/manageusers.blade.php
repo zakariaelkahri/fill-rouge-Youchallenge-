@@ -22,9 +22,9 @@
             </div>
         </div>
 
-        <!-- Status Indicators -->
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <!-- Example for a single indicator -->
+
             <div class="bg-gray-700 p-4 rounded-lg border border-gray-600 flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-300">Total Users</p>
@@ -34,10 +34,10 @@
                     <i class="fas fa-users text-xl text-white"></i>
                 </div>
             </div>
-            <!-- Repeat for other indicators -->
+
         </div>
 
-        <!-- Users Table -->
+
         <div class="overflow-x-auto rounded-lg border border-gray-700">
             <table class="w-full text-left text-sm bg-gray-900 text-gray-300">
                 <thead class="bg-gray-700 text-gray-300">

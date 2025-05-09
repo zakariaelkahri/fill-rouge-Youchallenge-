@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tournament Registration</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 <body class="bg-green-50 flex flex-col min-h-screen">
-    <!-- Navigation Bar -->
+
     <nav class="bg-green-700 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -32,7 +31,7 @@
                     <a href="{{ route('showregisterform') }}" class="bg-white text-green-700 hover:bg-green-100 px-4 py-2 rounded-md text-sm font-medium">Register</a>
                     <a href="{{ route('showloginform') }}" class="ml-4 text-white hover:bg-green-600 px-3 py-2 rounded-md text-sm font-medium">Login</a>
                 </div>
-                <!-- Mobile menu button -->
+
                 <div class="flex items-center md:hidden">
                     <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-green-600 focus:outline-none">
                         <i class="fas fa-bars"></i>
@@ -41,7 +40,7 @@
             </div>
         </div>
         
-        <!-- Mobile menu -->
+
         <div class="hidden mobile-menu md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600">Home</a>
@@ -54,7 +53,7 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+
     <div class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md border-2 border-green-600">
             <div class="flex justify-center mb-6">
@@ -64,7 +63,7 @@
             </div>
             <h2 class="text-3xl font-bold mb-6 text-center text-green-700">Join Tournament Hub</h2>
 
-            <!-- Display Validation Errors -->
+
             @if ($errors->any())
                 <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                     <ul>
@@ -75,11 +74,11 @@
                 </div>
             @endif
 
-            <!-- Registration Form -->
-            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
-                @csrf <!-- CSRF Token for Security -->
 
-                <!-- Role Selection -->
+            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+
+
+
                 <div class="mb-4">
                     <label for="role" class="block text-sm font-medium text-green-700">Select Role</label>
                     <div class="mt-1 relative rounded-md shadow-sm">
@@ -99,7 +98,7 @@
                     </div>
                 </div>
                 
-                <!-- Name Field -->
+
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-green-700">Full Name</label>
                     <div class="mt-1 relative rounded-md shadow-sm">
@@ -118,7 +117,7 @@
                     </div>
                 </div>
 
-                <!-- Email Field -->
+
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-green-700">Email Address</label>
                     <div class="mt-1 relative rounded-md shadow-sm">
@@ -137,7 +136,7 @@
                     </div>
                 </div>
 
-                <!-- Photo Upload Field -->
+
                 <div class="mb-4">
                     <label for="photo" class="block text-sm font-medium text-green-700">Profile Photo</label>
                     <div class="mt-1 relative">
@@ -161,7 +160,7 @@
                     </div>
                 </div>
 
-                <!-- Password Field -->
+
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-green-700">Password</label>
                     <div class="mt-1 relative rounded-md shadow-sm">
@@ -179,7 +178,7 @@
                     </div>
                 </div>
 
-                <!-- Confirmation Password Field -->
+
                 <div class="mb-6">
                     <label for="password_confirmation" class="block text-sm font-medium text-green-700">Confirm Password</label>
                     <div class="mt-1 relative rounded-md shadow-sm">
@@ -197,7 +196,7 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
+
                 <button
                     type="submit"
                     class="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300 flex items-center justify-center"
@@ -206,7 +205,7 @@
                     Register
                 </button>
 
-                <!-- Login Link -->
+
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Already have an account?
@@ -217,11 +216,11 @@
         </div>
     </div>
 
-    <!-- Footer -->
+
     <footer class="bg-green-700 text-white">
         <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- First Column: Logo & Description -->
+
                 <div>
                     <div class="flex items-center mb-4">
                         <i class="fas fa-trophy text-yellow-300 text-2xl mr-2"></i>
@@ -233,7 +232,7 @@
                     </p>
                 </div>
                 
-                <!-- Second Column: Quick Links -->
+
                 <div>
                     <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
                     <ul class="space-y-2 text-green-100">
@@ -244,7 +243,7 @@
                     </ul>
                 </div>
                 
-                <!-- Third Column: Contact Info -->
+
                 <div>
                     <h3 class="font-semibold text-lg mb-4">Contact Us</h3>
                     <ul class="space-y-2 text-green-100">
@@ -267,10 +266,9 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Mobile Menu Toggle and File Name Display -->
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
+
             const mobileMenuButton = document.querySelector('.mobile-menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
             
@@ -278,7 +276,7 @@
                 mobileMenu.classList.toggle('hidden');
             });
 
-            // File input display
+
             const photoInput = document.getElementById('photo');
             const fileNameSpan = document.querySelector('.file-name');
             
