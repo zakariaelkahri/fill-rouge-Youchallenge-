@@ -16,14 +16,17 @@ class UpdateTournamentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tournament_id'    => 'nullable|integer|exists:tournaments,id',
-            'name'             => 'required|string|max:255',
-            'format'           => 'required|in:FC25,VALORANT,CSGO,eFOOTBALL',
-            'max_participants' => 'required|in:8,16,32',
-            'photo'            => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'start_date'       => 'nullable|date|after_or_equal:today',
-            'reward'           => 'nullable|string',
-            'rules'            => 'nullable|string',
+            'tournament_id'      => ['required', 'integer', 'exists:tournaments,id'],
+            'name'               => ['required', 'string', 'min:3', 'max:255'],
+            'format'             => ['required', 'string', 'in:FC25,VALORANT,CSGO,eFOOTBALL'],
+            'max_participants'   => ['required', 'integer', 'in:8,16,32'],
+            'start_date'         => ['required', 'date'],
+            'photo'              => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], 
+            'reward'             => ['nullable', 'string', 'max:1000'],
+            'rules'              => ['nullable', 'string', 'max:2000'],
+            'team_mode'          => ['required', 'string', 'in:1,2,4'],
         ];
     }
+
+
 }
