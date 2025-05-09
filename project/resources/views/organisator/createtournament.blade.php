@@ -16,7 +16,7 @@
                     <form id="tournamentForm" method="POST" action="{{ route('organisator.tournament.store') }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         @csrf
         
-                        <!-- Tournament Name -->
+
                         <div class="col-span-1 md:col-span-2">
                             <label for="name" class="text-lg font-semibold text-green-400 mb-2 block">Tournament Name</label>
                             <input type="text" id="name" name="name" value="{{ old('name') }}" required
@@ -27,7 +27,7 @@
                             @enderror
                         </div>
         
-                        <!-- Tournament Banner Upload -->
+
                         <div class="col-span-1">
                             <label for="photo" class="text-lg font-semibold text-green-400 mb-2 block">Tournament Banner</label>
                             <div class="w-full h-48 bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg flex items-center justify-center relative cursor-pointer" id="dropArea">
@@ -43,7 +43,7 @@
                             @enderror
                         </div>
         
-                        <!-- Game Selection -->
+
                         <div class="col-span-1">
                             <label for="format" class="text-lg font-semibold text-green-400 mb-2 block">Select Game</label>
                             <select id="format" name="format" required
@@ -58,7 +58,7 @@
                             @enderror
                         </div>
         
-                        <!-- Team Mode -->
+
                         <div class="col-span-1">
                             <label for="team_mode" class="text-lg font-semibold text-green-400 mb-2 block">Team Mode</label>
                             <select id="team_mode" name="team_mode" required
@@ -72,7 +72,7 @@
                             @enderror
                         </div>
         
-                        <!-- Max Participants -->
+
                         <div class="col-span-1">
                             <label for="max_participants" class="text-lg font-semibold text-green-400 mb-2 block">Maximum Teams</label>
                             <select id="max_participants" name="max_participants" required
@@ -86,7 +86,7 @@
                             @enderror
                         </div>
         
-                        <!-- Start Date & Time -->
+
                         <div class="col-span-1">
                             <label for="start_date" class="text-lg font-semibold text-green-400 mb-2 block">Start Date & Time</label>
                             <input type="datetime-local" id="start_date" name="start_date" value="{{ old('start_date') }}" required
@@ -96,7 +96,7 @@
                             @enderror
                         </div>
         
-                        <!-- Rewards -->
+
                         <div class="col-span-1 md:col-span-2">
                             <label for="reward" class="text-lg font-semibold text-green-400 mb-2 block">Rewards (Optional)</label>
                             <textarea id="reward" name="reward" rows="3"
@@ -107,7 +107,7 @@
                             @enderror
                         </div>
         
-                        <!-- Rules -->
+
                         <div class="col-span-1 md:col-span-2">
                             <label for="rules" class="text-lg font-semibold text-green-400 mb-2 block">Rules (Optional)</label>
                             <textarea id="rules" name="rules" rows="5"
@@ -118,7 +118,7 @@
                             @enderror
                         </div>
         
-                        <!-- Submit Button -->
+
                         <div class="col-span-1 md:col-span-2 flex justify-center pt-6">
                             <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
                                 Create Tournament

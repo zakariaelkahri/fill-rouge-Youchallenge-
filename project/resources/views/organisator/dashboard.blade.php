@@ -7,7 +7,7 @@
 @section('organisator-main')
 <main class="bg-gray-900 min-h-screen py-8 px-4">
     <div class="container mx-auto">
-        <!-- Dashboard Header -->
+
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-white">My Tournament Dashboard</h1>
@@ -24,7 +24,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-            <!-- Total Tournaments Card -->
+
             <div class="card border-l-4 border-green-500">
                 <div class="card-body">
                     <div class="flex justify-between">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <!-- Active Tournaments Card -->
+
             <div class="card border-l-4 border-blue-500">
                 <div class="card-body">
                     <div class="flex justify-between">
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <!-- Total Participants Card -->
+
             <div class="card border-l-4 border-purple-500">
                 <div class="card-body">
                     <div class="flex justify-between">
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <!-- Tournament List Section -->
+
         <div class="card mb-8">
             <div class="card-header flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white">My Tournaments</h3>
@@ -175,12 +175,12 @@
     </div>
 </main>
 
-<!-- Update Tournament Modal -->
+
 <div id="updateTournamentModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-2xl max-h-full">
-        <!-- Modal content -->
+
         <div class="relative bg-gray-800 rounded-lg shadow">
-            <!-- Modal header -->
+
             <div class="flex items-center justify-between p-4 border-b border-gray-700 rounded-t">
                 <h3 class="text-xl font-semibold text-white">Update Tournament</h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="updateTournamentModal">
@@ -188,7 +188,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <!-- Modal body -->
+
             <form id="updateTournamentForm" method="POST" action="{{route('organisator.tournament.edit')}}" enctype="multipart/form-data" class="validate-form">
                 @csrf
                 @method('PUT')
@@ -247,7 +247,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Modal footer -->
+
                 <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-700 rounded-b">
                     <button type="button" class="text-gray-300 bg-gray-700 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-600 rounded-lg border border-gray-600 text-sm font-medium px-5 py-2.5" data-modal-hide="updateTournamentModal">Cancel</button>
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">Update Tournament</button>
@@ -257,12 +257,12 @@
     </div>
 </div>
 
-<!-- Delete Tournament Modal -->
+
 <div id="deleteTournamentModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-md max-h-full">
-        <!-- Modal content -->
+
         <div class="relative bg-gray-800 rounded-lg shadow">
-            <!-- Modal header -->
+
             <div class="flex items-center justify-between p-4 border-b border-gray-700 rounded-t">
                 <h3 class="text-xl font-semibold text-white">Delete Tournament</h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="deleteTournamentModal">
@@ -270,7 +270,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <!-- Modal body -->
+
             <div class="p-6 text-center">
                 <svg class="mx-auto mb-4 w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -334,22 +334,23 @@ popup: 'rounded-xl shadow-lg'
 @push('organisator-scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Form validation
+
         const forms = document.querySelectorAll('.validate-form');
         forms.forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Reset previous errors
+              
+                Reset previous errors
                 form.querySelectorAll('.error-message').forEach(msg => {
                     msg.textContent = '';
                     msg.classList.add('hidden');
                 });
                 
-                // Perform validation
+
                 let isValid = true;
                 
-                // Name validation
+
                 const nameInput = form.querySelector('[name="name"]');
                 if (nameInput && nameInput.value.trim() === '') {
                     showError(nameInput, 'Tournament name is required');
@@ -359,28 +360,28 @@ popup: 'rounded-xl shadow-lg'
                     isValid = false;
                 }
                 
-                // Format validation
+
                 const formatInput = form.querySelector('[name="format"]');
                 if (formatInput && (!formatInput.value || formatInput.value === '')) {
                     showError(formatInput, 'Please select a tournament format');
                     isValid = false;
                 }
                 
-                // Max participants validation
+
                 const maxParticipantsInput = form.querySelector('[name="max_participants"]');
                 if (maxParticipantsInput && (!maxParticipantsInput.value || maxParticipantsInput.value === '')) {
                     showError(maxParticipantsInput, 'Please select max participants');
                     isValid = false;
                 }
                 
-                // Start date validation
+
                 const startDateInput = form.querySelector('[name="start_date"]');
                 if (startDateInput && (!startDateInput.value || startDateInput.value === '')) {
                     showError(startDateInput, 'Start date is required');
                     isValid = false;
                 }
                 
-                // Photo validation (only for new uploads)
+
                 const photoInput = form.querySelector('[name="photo"]');
                 if (photoInput && photoInput.files.length > 0) {
                     const file = photoInput.files[0];
@@ -390,15 +391,15 @@ popup: 'rounded-xl shadow-lg'
                     if (!validTypes.includes(fileType)) {
                         showError(photoInput, 'Photo must be a valid image (JPEG, PNG)');
                         isValid = false;
-                    } else if (file.size > 2 * 1024 * 1024) { // 2MB
+
                         showError(photoInput, 'Photo size cannot exceed 2MB');
                         isValid = false;
                     }
                 }
                 
-                // If form is valid, submit it
+
                 if (isValid) {
-                    // For update form, set the proper action URL
+
                     if (form.id === 'updateTournamentForm') {
                         const tournamentId = document.getElementById('update_tournament_id').value;
                         form.action = `/organisator/tournaments/${tournamentId}`;
@@ -416,7 +417,7 @@ popup: 'rounded-xl shadow-lg'
         }
     });
     
-    // Populate update form with tournament data
+
     function populateUpdateForm(button) {
         const tournamentId = button.getAttribute('data-tournament-id');
         const name = button.getAttribute('data-tournament-name');
@@ -427,7 +428,7 @@ popup: 'rounded-xl shadow-lg'
         const status = button.getAttribute('data-tournament-status');
         const startDate = button.getAttribute('data-tournament-start-date');
         
-        // Set form values
+
         document.getElementById('update_tournament_id').value = tournamentId;
         document.getElementById('update_name').value = name;
         document.getElementById('update_format').value = format;
@@ -437,11 +438,11 @@ popup: 'rounded-xl shadow-lg'
         document.getElementById('update_status').value = status;
         document.getElementById('update_start_date').value = startDate;
         
-        // Set form action dynamically
+
         document.getElementById('updateTournamentForm').action = `/organisator/tournaments/${tournamentId}`;
     }
     
-    // Confirm delete
+
     function confirmDelete(button) {
         const tournamentId = button.getAttribute('data-tournament-id');
         const tournamentName = button.getAttribute('data-tournament-name');

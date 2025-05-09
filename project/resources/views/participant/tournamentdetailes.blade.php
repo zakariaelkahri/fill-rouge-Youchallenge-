@@ -14,6 +14,8 @@
             </a>
         </div>
 
+     
+
         <!-- Tournament Card -->
         <div class="bg-gray-800 rounded-xl overflow-hidden mb-8">
             <!-- Tournament Image -->
@@ -98,9 +100,11 @@
                                 </button>
                             @endif
                         </div>
-                    @elseif($tournament->status == 'upcoming' && $tournament->isParticipating(auth()->user()->id))
+                       
+                    @elseif($tournament->status == 'upcoming' && $tournament->isParticipating(auth()->user()->id) )
+                    
                         <div class="flex space-x-3 ml-4">
-                            @if($tournament->isTeamCaptain(auth()->user()->id))
+                            @if($tournament->isTeamCaptain(auth()->user()->id) &&  $tournament->team_mode != 1)
                                 <button id="showInviteCodeBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200">
                                     <i class="fas fa-key mr-2"></i> Show Invite Code
                                 </button>

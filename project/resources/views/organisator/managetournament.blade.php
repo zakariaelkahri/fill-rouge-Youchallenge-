@@ -7,7 +7,7 @@
 @section('organisator-main')
 <main class="bg-gray-900 min-h-screen py-8 px-4">
     <div class="container mx-auto">
-        {{-- <!-- Dashboard Header --> --}}
+
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-white">Manage Tournaments</h1>
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        {{-- <!-- Tournament Filter Section --> --}}
+
         <div class="bg-gray-800 rounded-xl p-4 mb-8">
             <div class="flex flex-wrap gap-4 items-center">
                 <div class="flex-1 min-w-[200px]">
@@ -57,7 +57,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             @foreach ($tournaments as $tournament)
-            {{-- <!-- Tournament Card --> --}}
+
             <div class="bg-gray-800 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg">
                 <div class="relative">
                     <img src="{{ $tournament->getPhotoUrl() }}" alt="{{$tournament->format}}" class="w-full h-48 object-cover">
@@ -115,7 +115,7 @@
     </div>
 </main>
 
-{{-- <!-- CSS for status indicators --> --}}
+
 <style>
     /* Animation for status indicators */
     .animate-pulse {
@@ -140,7 +140,7 @@
     }
 </style>
 
-{{-- <!-- JavaScript for filter functionality --> --}}
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Filter functionality can be implemented here
