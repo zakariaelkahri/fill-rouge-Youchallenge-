@@ -55,7 +55,7 @@ class TournamentDashboardController extends Controller
     }
 
     public function edit(UpdateTournamentRequest $request){
-
+        // dd("test");
         try
         {
 
@@ -69,7 +69,6 @@ class TournamentDashboardController extends Controller
             'start_date',
             'reward',
             'rules') ;
-            // dd($data);
             
             $tournament = Tournament::where('id',$data['tournament_id'])->first();
             $tournamentphoto = null;

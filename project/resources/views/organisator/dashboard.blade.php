@@ -7,7 +7,7 @@
 @section('organisator-main')
 <main class="bg-gray-900 min-h-screen py-8 px-4">
     <div class="container mx-auto">
-
+        <!-- Dashboard Header -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-white">My Tournament Dashboard</h1>
@@ -24,53 +24,47 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-
-            <div class="card border-l-4 border-green-500">
-                <div class="card-body">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm">Total Tournaments</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->count() }}</h3>
-                        </div>
-                        <div class="bg-green-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
-                            <i class="fas fa-trophy text-green-400"></i>
-                        </div>
+            <!-- Total Tournaments Card -->
+            <div class="card border-l-4 border-green-500 flex">
+                <div class="card-body flex items-center">
+                    <div class="pl-6 flex-1">
+                        <p class="text-gray-400 text-sm">Total Tournaments</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->count() }}</h3>
+                    </div>
+                    <div class="bg-green-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center ml-4">
+                        <i class="fas fa-trophy text-green-400"></i>
                     </div>
                 </div>
             </div>
 
-
-            <div class="card border-l-4 border-blue-500">
-                <div class="card-body">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm">Active Tournaments</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('status', 'ongoing')->count() }}</h3>
-                        </div>
-                        <div class="bg-blue-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
-                            <i class="fas fa-calendar-alt text-blue-400"></i>
-                        </div>
+            <!-- Active Tournaments Card -->
+            <div class="card border-l-4 border-blue-500 flex">
+                <div class="card-body flex items-center">
+                    <div class="pl-6 flex-1">
+                        <p class="text-gray-400 text-sm">Active Tournaments</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('status', 'ongoing')->count() }}</h3>
+                    </div>
+                    <div class="bg-blue-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center ml-4">
+                        <i class="fas fa-calendar-alt text-blue-400"></i>
                     </div>
                 </div>
             </div>
 
-
-            <div class="card border-l-4 border-purple-500">
-                <div class="card-body">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm">Steel Not Validated</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('is_validated', 0)->count() }}</h3>
-                        </div>
-                        <div class="bg-purple-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center">
-                            <i class="fas fa-users text-purple-400"></i>
-                        </div>
+            <!-- Steel Not Validated Card -->
+            <div class="card border-l-4 border-purple-500 flex">
+                <div class="card-body flex items-center">
+                    <div class="pl-6 flex-1">
+                        <p class="text-gray-400 text-sm">Steel Not Validated</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">{{ $tournaments->where('is_validated', 0)->count() }}</h3>
+                    </div>
+                    <div class="bg-purple-900/50 rounded-full p-2 h-10 w-10 flex items-center justify-center ml-4">
+                        <i class="fas fa-users text-purple-400"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-
+        <!-- Tournament List Section -->
         <div class="card mb-8">
             <div class="card-header flex justify-between items-center">
                 <h3 class="text-xl font-bold text-white">My Tournaments</h3>
@@ -141,6 +135,7 @@
                                             data-tournament-name="{{ $tournament->name }}"
                                             data-tournament-format="{{ $tournament->format }}"
                                             data-tournament-max-participants="{{ $tournament->max_participants }}"
+                                            data-tournament-team-mode="{{ $tournament->team_mode ?? '' }}"
                                             data-tournament-reward="{{ $tournament->reward }}"
                                             data-tournament-rules="{{ $tournament->rules }}"
                                             data-tournament-start-date="{{ $tournament->start_date ? date('Y-m-d\TH:i', strtotime($tournament->start_date)) : '' }}"
@@ -175,12 +170,12 @@
     </div>
 </main>
 
-
+<!-- Update Tournament Modal -->
 <div id="updateTournamentModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-2xl max-h-full">
-
+        <!-- Modal content -->
         <div class="relative bg-gray-800 rounded-lg shadow">
-
+            <!-- Modal header -->
             <div class="flex items-center justify-between p-4 border-b border-gray-700 rounded-t">
                 <h3 class="text-xl font-semibold text-white">Update Tournament</h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="updateTournamentModal">
@@ -188,14 +183,12 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-
+            <!-- Modal body -->
             <form id="updateTournamentForm" method="POST" action="{{route('organisator.tournament.edit')}}" enctype="multipart/form-data" class="validate-form">
                 @csrf
                 @method('PUT')
                 @if (count($tournaments) > 0)
-
                     <input type="hidden" id="update_tournament_id" name="tournament_id" value={{$tournament->id}}>   
-
                 @endif
                 <div class="p-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -223,7 +216,17 @@
                             </select>
                             <p class="error-message text-red-500 text-xs mt-1 hidden"></p>
                         </div>
-
+                        <!-- TEAM MODE SELECT -->
+                        <div>
+                            <label for="update_team_mode" class="block mb-2 text-sm font-medium text-white">Team Mode</label>
+                            <select id="update_team_mode" name="team_mode" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="">Select team mode</option>
+                                <option value="1">Solo</option>
+                                <option value="2">Duo</option>
+                                <option value="4">Squad</option>
+                            </select>
+                            <p class="error-message text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
                         <div>
                             <label for="update_start_date" class="block mb-2 text-sm font-medium text-white">Start Date</label>
                             <input type="datetime-local" id="update_start_date" name="start_date" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
@@ -247,7 +250,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Modal footer -->
                 <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-700 rounded-b">
                     <button type="button" class="text-gray-300 bg-gray-700 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-600 rounded-lg border border-gray-600 text-sm font-medium px-5 py-2.5" data-modal-hide="updateTournamentModal">Cancel</button>
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">Update Tournament</button>
@@ -257,12 +260,12 @@
     </div>
 </div>
 
-
+<!-- Delete Tournament Modal -->
 <div id="deleteTournamentModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-md max-h-full">
-
+        <!-- Modal content -->
         <div class="relative bg-gray-800 rounded-lg shadow">
-
+            <!-- Modal header -->
             <div class="flex items-center justify-between p-4 border-b border-gray-700 rounded-t">
                 <h3 class="text-xl font-semibold text-white">Delete Tournament</h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="deleteTournamentModal">
@@ -270,7 +273,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-
+            <!-- Modal body -->
             <div class="p-6 text-center">
                 <svg class="mx-auto mb-4 w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -334,23 +337,22 @@ popup: 'rounded-xl shadow-lg'
 @push('organisator-scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
+        // Form validation
         const forms = document.querySelectorAll('.validate-form');
         forms.forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-              
-                Reset previous errors
+                // Reset previous errors
                 form.querySelectorAll('.error-message').forEach(msg => {
                     msg.textContent = '';
                     msg.classList.add('hidden');
                 });
                 
-
+                // Perform validation
                 let isValid = true;
                 
-
+                // Name validation
                 const nameInput = form.querySelector('[name="name"]');
                 if (nameInput && nameInput.value.trim() === '') {
                     showError(nameInput, 'Tournament name is required');
@@ -360,28 +362,35 @@ popup: 'rounded-xl shadow-lg'
                     isValid = false;
                 }
                 
-
+                // Format validation
                 const formatInput = form.querySelector('[name="format"]');
                 if (formatInput && (!formatInput.value || formatInput.value === '')) {
                     showError(formatInput, 'Please select a tournament format');
                     isValid = false;
                 }
                 
-
+                // Max participants validation
                 const maxParticipantsInput = form.querySelector('[name="max_participants"]');
                 if (maxParticipantsInput && (!maxParticipantsInput.value || maxParticipantsInput.value === '')) {
                     showError(maxParticipantsInput, 'Please select max participants');
                     isValid = false;
                 }
-                
 
+                // Team mode validation (if required)
+                // const teamModeInput = form.querySelector('[name="team_mode"]');
+                // if (teamModeInput && (!teamModeInput.value || teamModeInput.value === '')) {
+                //     showError(teamModeInput, 'Please select team mode');
+                //     isValid = false;
+                // }
+
+                // Start date validation
                 const startDateInput = form.querySelector('[name="start_date"]');
                 if (startDateInput && (!startDateInput.value || startDateInput.value === '')) {
                     showError(startDateInput, 'Start date is required');
                     isValid = false;
                 }
                 
-
+                // Photo validation (only for new uploads)
                 const photoInput = form.querySelector('[name="photo"]');
                 if (photoInput && photoInput.files.length > 0) {
                     const file = photoInput.files[0];
@@ -391,15 +400,15 @@ popup: 'rounded-xl shadow-lg'
                     if (!validTypes.includes(fileType)) {
                         showError(photoInput, 'Photo must be a valid image (JPEG, PNG)');
                         isValid = false;
-
+                    } else if (file.size > 2 * 1024 * 1024) { // 2MB
                         showError(photoInput, 'Photo size cannot exceed 2MB');
                         isValid = false;
                     }
                 }
                 
-
+                // If form is valid, submit it
                 if (isValid) {
-
+                    // For update form, set the proper action URL
                     if (form.id === 'updateTournamentForm') {
                         const tournamentId = document.getElementById('update_tournament_id').value;
                         form.action = `/organisator/tournaments/${tournamentId}`;
@@ -417,32 +426,34 @@ popup: 'rounded-xl shadow-lg'
         }
     });
     
-
+    // Populate update form with tournament data
     function populateUpdateForm(button) {
         const tournamentId = button.getAttribute('data-tournament-id');
         const name = button.getAttribute('data-tournament-name');
         const format = button.getAttribute('data-tournament-format');
         const maxParticipants = button.getAttribute('data-tournament-max-participants');
+        const teamMode = button.getAttribute('data-tournament-team-mode');
         const reward = button.getAttribute('data-tournament-reward');
         const rules = button.getAttribute('data-tournament-rules');
         const status = button.getAttribute('data-tournament-status');
         const startDate = button.getAttribute('data-tournament-start-date');
         
-
+        // Set form values
         document.getElementById('update_tournament_id').value = tournamentId;
         document.getElementById('update_name').value = name;
         document.getElementById('update_format').value = format;
         document.getElementById('update_max_participants').value = maxParticipants;
+        document.getElementById('update_team_mode').value = teamMode;
         document.getElementById('update_reward').value = reward;
         document.getElementById('update_rules').value = rules;
         document.getElementById('update_status').value = status;
         document.getElementById('update_start_date').value = startDate;
         
-
+        // Set form action dynamically
         document.getElementById('updateTournamentForm').action = `/organisator/tournaments/${tournamentId}`;
     }
     
-
+    // Confirm delete
     function confirmDelete(button) {
         const tournamentId = button.getAttribute('data-tournament-id');
         const tournamentName = button.getAttribute('data-tournament-name');
