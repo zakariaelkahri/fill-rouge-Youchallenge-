@@ -347,13 +347,47 @@ for(let i = 0 ; i < arr.length ; i+= arr[arr.length-1]){
 
 // ----------------------------------------
 
+// let arr = [7,6,2,3,8,3,4,3,1,3,22,5,3]
+
+// function test(arr){
+
+//   let str  = []
+//   let final  = []
+//   // console.log(arr[arr.length-2])
+// for(let i = 0 ; i < arr.length ; i+= arr[arr.length-1]){
+//   // console.log(str,"a")
+//   str  = []
+//    // console.log(i)
+//   for(let j = i ; j < i + arr[arr.length-1]  ; j++){
+//     if(!arr[j] ){
+//       break;
+//     }
+//     str.push(arr[j])
+//   }
+//   final.push(str)
+// }
+//   return final
+// }
+
+// console.log(test(ar))
+
+
+
+
+
+
+
+
+
+// ---------------------------------------------------
+
     let rr = [7,6,2,3,8,3,4,3,1,3,22,5,3]
     
 
 
 function fifthMax(arr){
  
-  
+
 
 }
 
